@@ -1,9 +1,13 @@
+import {BrowserRouter, Route, Routes} from "react-router-dom";
+import Frontpage from '/view/frontpage'
 
 function App() {
     return(
-        <div>
-            <h1>Hello world</h1>
-        </div>
+       <BrowserRouter>
+           <Routes>
+               <Route path={"frontpage"} element={<Frontpage/>}/>
+           </Routes>
+       </BrowserRouter>
     )
 }
 export default App;
