@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Spring Initializr product">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Spring Initializr product.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
