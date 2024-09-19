@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8084
 
 spring:
   application:
@@ -7,4 +7,30 @@ spring:
 
   config:
     import: "optional:consul:"
-
+  cloud:
+    gateway:
+      routes:
+        - id: product
+          uri: lb://products
+          predicates:
+            - Path=/products,/products/**
+        - id: product-shop
+          uri: lb://shop
+          predicates:
+            - Path=/shop,/shop/**
+      globcors:
+        cors-configurations:
+          '[/**]':
+            allowed-origins:
+              - "http://localhost:3000"
+            allowed-headers:
+              - "*"
+            allowed-methods:
+              - "GET"
+              - "POST"
+              - "OPTIONS"
+      default-filters:
+        - name: Retry
+          args:
+            retries: 3
+            methods: GET, POST, OPTIONS
