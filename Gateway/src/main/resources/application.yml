@@ -33,4 +33,4 @@ spring:
         - name: Retry
           args:
             retries: 3
-            methods: GET, POST, OPTIONS
+            methods: GET, POST
