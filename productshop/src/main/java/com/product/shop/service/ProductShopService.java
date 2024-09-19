@@ -3,6 +3,8 @@ package com.product.shop.service;
 import com.product.shop.clients.ShopClient;
 import com.product.shop.dtos.shopDTO;
 import com.product.shop.model.shopProduct;
+import com.product.shop.model.user;
+import com.product.shop.repos.ProductShopInterface;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -10,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class ProductExample implements ProductInterface {
+public class ProductShopService implements ProductShopInterface {
 
     private final ShopClient shopClient;
     @Override
@@ -27,5 +29,4 @@ public class ProductExample implements ProductInterface {
         log.info("Returning product: {}", response);
         return response;
     }
-
 }

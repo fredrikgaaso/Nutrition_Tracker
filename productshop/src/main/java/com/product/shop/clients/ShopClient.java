@@ -39,4 +39,5 @@ public class ShopClient {
 
         return response.getBody();
     }
+
 }

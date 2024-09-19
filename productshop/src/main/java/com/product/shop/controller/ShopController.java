@@ -1,7 +1,7 @@
 package com.product.shop.controller;
 
 import com.product.shop.model.shopProduct;
-import com.product.shop.service.ProductExample;
+import com.product.shop.service.ProductShopService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/shop")
 public class ShopController {
 
-    private final ProductExample productExample;
+    private final ProductShopService productExample;
 
     @GetMapping("/{id}")
     public shopProduct communicationSolver(@PathVariable long id) {
