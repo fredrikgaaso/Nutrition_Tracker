@@ -2,16 +2,16 @@ package com.product.shop.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import lombok.Generated;
+import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.Setter;
 
+@Entity
 @Getter
 @Setter
-@Entity
-public class user {
+public class shopUser {
     @Id
-    @Generated
     private Long id;
-    private Long money;
+    private String name;
+    private int wallet;
 }

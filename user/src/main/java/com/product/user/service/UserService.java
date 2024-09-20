@@ -1,6 +1,6 @@
 package com.product.user.service;
 
-import com.product.user.model.user;
+import com.product.user.model.Users;
 import com.product.user.repos.UserRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,10 +12,12 @@ import org.springframework.stereotype.Service;
 public class UserService  {
 
     private final UserRepo userRepo;
-    user getOneUser(Long id){
-        return null;
+    public Users getUserById(Long id){
+       return userRepo.getUserById(id);
     }
-    user addNewUser(user user){
+    public Users addNewUser(Users user){
+        log.info("dette er brukeren som blir lagt til: " + user.getName() + user.getId());
+        userRepo.save(user);
         return user;
     }
 }

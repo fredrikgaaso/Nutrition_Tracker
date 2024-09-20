@@ -6,12 +6,12 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class shopDTO {
+public class productDTO {
     private String name;
     private int price;
     private long id;
 
-    public shopProduct returnText() {
+    public shopProduct getProduct() {
         shopProduct shopProduct = new shopProduct();
         shopProduct.setId(this.id);
         shopProduct.setName(this.name);

@@ -1,24 +1,22 @@
 package com.product.user.controller;
 
-import com.product.user.model.user;
+import com.product.user.model.Users;
 import com.product.user.service.UserService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/user")
 public class UserController {
     private final UserService userService;
-
-    public user getOneUser(Long id) {
-        return null;
+    @GetMapping("/{id}")
+    public Users getUserById(@PathVariable Long id) {
+        return userService.getUserById(id);
     }
 
-    public user addNewUser(user user) {
-        return user;
+    @PostMapping("/add")
+    public Users addNewUser(@RequestBody Users user) {
+        return userService.addNewUser(user);
     }
 }

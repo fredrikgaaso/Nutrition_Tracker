@@ -1,18 +1,21 @@
 package com.product.user.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import lombok.Generated;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Entity
-public class user {
+@RequiredArgsConstructor
+public class Users {
+
     @Id
-    @Generated
+    @GeneratedValue
     private Long id;
     private String name;
-    private Long wallet;
+    private int wallet;
 }

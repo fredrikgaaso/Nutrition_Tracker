@@ -1,13 +1,12 @@
 package com.product.shop.controller;
 
+import com.product.shop.model.shopCart;
 import com.product.shop.model.shopProduct;
+import com.product.shop.model.shopUser;
 import com.product.shop.service.ProductShopService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -18,17 +17,30 @@ public class ShopController {
     private final ProductShopService productExample;
 
     @GetMapping("/{id}")
-    public shopProduct communicationSolver(@PathVariable long id) {
+    public shopProduct productCommunicationSolver(@PathVariable long id) {
 
         log.info("Calling productExample.getText() with Sometext: {}", id);
-        shopProduct st = productExample.getOneProduct(id);
+        shopProduct shopProduct = productExample.getOneProduct(id);
 
-        if (st == null) {
+        if (shopProduct == null) {
             log.error("ProductExample returned null for Sometext");
             throw new IllegalStateException("The returned Sometext is null");
         }
 
-        log.info("Received response: id={}, name={}, price={}", st.getId(), st.getName(), st.getPrice());
-        return st;
+        log.info("Received response: id={}, name={}, price={}", shopProduct.getId(), shopProduct.getName(), shopProduct.getPrice());
+        return shopProduct;
+    }
+
+    @GetMapping("/user/{id}")
+    public shopUser userCommunicationSolver(@PathVariable long id) {
+        shopUser shopUser = productExample.getOneUser(id);
+
+        if (shopUser == null) {
+            log.error("getOneUser returned null");
+            throw new IllegalStateException("The returned user is null");
+        }
+        log.info("Received response: id={}, name={}, wallet={}", shopUser.getId(), shopUser.getName(), shopUser.getWallet());
+
+        return shopUser;
     }
 }
