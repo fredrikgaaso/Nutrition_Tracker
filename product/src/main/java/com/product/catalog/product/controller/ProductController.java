@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 public class ProductController {
     private final ProductService productService;
     @GetMapping("/{id}")
-    public Product getProductById(@PathVariable Long id) {
+    public Product findOneProductById(@PathVariable Long id) {
         return productService.findOneProductById(id);
     }
     @PostMapping("/add")

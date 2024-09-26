@@ -1,15 +1,15 @@
 package com.product.shop.service;
 
-import com.product.shop.clients.shopProductClient;
-import com.product.shop.clients.shopUserClient;
-import com.product.shop.dtos.productDTO;
+import com.product.shop.clients.ShopProductClient;
+import com.product.shop.clients.ShopUserClient;
+import com.product.shop.dtos.ProductDTO;
 import com.product.shop.dtos.userDTO;
-import com.product.shop.model.shopCart;
-import com.product.shop.model.shopProduct;
-import com.product.shop.model.shopUser;
-import com.product.shop.repos.shopCartRepo;
-import com.product.shop.repos.shopProductRepo;
-import com.product.shop.repos.shopUserRepo;
+import com.product.shop.model.ShopCart;
+import com.product.shop.model.ShopProduct;
+import com.product.shop.model.ShopUser;
+import com.product.shop.repos.ShopCartRepo;
+import com.product.shop.repos.ShopProductRepo;
+import com.product.shop.repos.ShopUserRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,20 +18,20 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @RequiredArgsConstructor
 public class ProductShopService {
-    private final shopProductClient productClient;
-    private final shopUserClient userClient;
-    private final shopUserRepo userRepo;
-    private final shopProductRepo productRepo;
+    private final ShopProductClient productClient;
+    private final ShopUserClient userClient;
+    private final ShopUserRepo userRepo;
+    private final ShopProductRepo productRepo;
 
-    public shopProduct getOneProduct(Long shopId){
+    public ShopProduct getOneProduct(Long shopId){
         log.info("Input product: {}", shopId);
 
-        productDTO s = productClient.remoteGetOneProduct(shopId);
+        ProductDTO s = productClient.remoteGetOneProduct(shopId);
 
         log.info("shopDTO received from ShopClient: {}", s);
 
 
-        shopProduct response = s.getProduct();
+        ShopProduct response = s.getProduct();
 
         log.info("Returning product: {}", response);
 
@@ -40,20 +40,52 @@ public class ProductShopService {
         return response;
     }
 
-
-    public shopUser getOneUser(Long userId){
+    public ShopUser getOneUser(Long userId){
         log.info("Input user: {}", userId);
 
         userDTO s = userClient.remoteGetOneUser(userId);
         log.info("userDTO received from userClient: {}", s);
 
-        shopUser response = s.getUser();
+        ShopUser response = s.getUser();
 
         log.info("Returning user: {}", response);
 
         userRepo.save(response);
 
         return response;
+    }
+    private final ShopCartRepo cartRepo;
+
+    public ShopCart createNewCart(Long userId) {
+        ShopUser user = userClient.remoteGetOneUser(userId).getUser();
+        if (user == null) {
+            log.warn("User got: " + user.getName());
+        }
+        ShopCart cart = new ShopCart();
+        cart.setUser(user);
+        return cartRepo.save(cart);
+    }
+    public String addProductToCart(Long cartId, Long productId) {
+        ShopCart cart = cartRepo.findOneCartById(cartId);
+        ProductDTO product = productClient.remoteGetOneProduct(productId);
+        if (isProductInCart(cart, productId)) {
+            return "product is already in cart";
+        }
+        cart.getProductList().add(product.getProduct());
+        cartRepo.save(cart);
+        return "product added to cart";
+    }
+    public ShopCart getOneShopCart(Long id) {
+        return cartRepo.findOneCartById(id);
+    }
+
+    public boolean isProductInCart(ShopCart cart, Long productId) {
+        for (ShopProduct product : cart.getProductList()) {
+            if (product.getId().equals(productId)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

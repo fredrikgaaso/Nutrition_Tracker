@@ -1,4 +1,4 @@
-package com.product.catalog.product.AMQP;
+package com.product.shop.AMQP;
 
 import org.springframework.amqp.core.ExchangeBuilder;
 import org.springframework.amqp.core.TopicExchange;

@@ -1,11 +1,11 @@
 package com.product.shop.repos;
 
-import com.product.shop.model.shopCart;
+import com.product.shop.model.ShopCart;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface shopCartRepo extends JpaRepository<shopCart,Long>  {
+public interface ShopCartRepo extends JpaRepository<ShopCart,Long>  {
 
-    shopCart findOneCartById(Long userId);
+    ShopCart findOneCartById(Long userId);
 }

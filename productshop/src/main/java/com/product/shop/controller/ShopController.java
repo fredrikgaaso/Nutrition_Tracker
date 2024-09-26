@@ -1,8 +1,8 @@
 package com.product.shop.controller;
 
-import com.product.shop.model.shopCart;
-import com.product.shop.model.shopProduct;
-import com.product.shop.model.shopUser;
+import com.product.shop.model.ShopCart;
+import com.product.shop.model.ShopProduct;
+import com.product.shop.model.ShopUser;
 import com.product.shop.service.ProductShopService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/shop")
 public class ShopController {
 
-    private final ProductShopService productExample;
+    private final ProductShopService productService;
 
     @GetMapping("/{id}")
-    public shopProduct productCommunicationSolver(@PathVariable long id) {
+    public ShopProduct findOneProductById(@PathVariable long id) {
 
         log.info("Calling productExample.getText() with Sometext: {}", id);
-        shopProduct shopProduct = productExample.getOneProduct(id);
+        ShopProduct shopProduct = productService.getOneProduct(id);
 
         if (shopProduct == null) {
             log.error("ProductExample returned null for Sometext");
@@ -32,8 +32,8 @@ public class ShopController {
     }
 
     @GetMapping("/user/{id}")
-    public shopUser userCommunicationSolver(@PathVariable long id) {
-        shopUser shopUser = productExample.getOneUser(id);
+    public ShopUser findOneUserById(@PathVariable long id) {
+        ShopUser shopUser = productService.getOneUser(id);
 
         if (shopUser == null) {
             log.error("getOneUser returned null");
@@ -42,5 +42,18 @@ public class ShopController {
         log.info("Received response: id={}, name={}, wallet={}", shopUser.getId(), shopUser.getName(), shopUser.getWallet());
 
         return shopUser;
+    }
+
+    @GetMapping("/cart/{id}")
+    public ShopCart findOneCartById(@PathVariable Long id) {
+        return productService.getOneShopCart(id);
+    }
+    @PostMapping("/cart/create/{userId}")
+    public ShopCart createNewCart(@PathVariable Long userId) {
+        return productService.createNewCart(userId);
+    }
+    @PostMapping("/cart/add/{cartId}/{productId}")
+    public void addProductToCart(@PathVariable Long cartId,@PathVariable Long productId) {
+        productService.addProductToCart(cartId, productId);
     }
 }

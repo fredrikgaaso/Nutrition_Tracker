@@ -1,6 +1,6 @@
 package com.product.shop.clients;
 
-import com.product.shop.dtos.productDTO;
+import com.product.shop.dtos.userDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -10,25 +10,25 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 @Slf4j
-public class shopProductClient {
+public class ShopUserClient {
     private final String restServiceUrl;
 
     private final RestTemplate restTemplate;
 
-    public shopProductClient(
-            RestTemplateBuilder restTemplateBuilder, @Value("${shop.service.url}") final String url
+    public ShopUserClient(
+            RestTemplateBuilder restTemplateBuilder, @Value("${user.service.url}") final String url
     ){
         this.restTemplate = restTemplateBuilder.build();
         this.restServiceUrl = url;
     }
 
-    public productDTO remoteGetOneProduct(Long shopId){
-        String callUrl = restServiceUrl + "/products/" + shopId;
+    public userDTO remoteGetOneUser(Long shopId){
+        String callUrl = restServiceUrl + "/user/" + shopId;
 
-        ResponseEntity<productDTO> response;
+        ResponseEntity<userDTO> response;
 
         try {
-            response = restTemplate.getForEntity(callUrl, productDTO.class);
+            response = restTemplate.getForEntity(callUrl, userDTO.class);
             log.info("returned " + response);
             log.info("Response received from external service: {}", response.getBody());
         }

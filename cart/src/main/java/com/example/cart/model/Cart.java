@@ -1,23 +1,20 @@
-package com.product.user.model;
+package com.example.cart.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import jakarta.persistence.Id;
 
+@Entity
 @Getter
 @Setter
-@Entity
 @RequiredArgsConstructor
-public class Users {
-
+public class Cart {
     @Id
     @GeneratedValue
     private Long id;
-    private String name;
-    private int wallet;
 
+    private User user
 }

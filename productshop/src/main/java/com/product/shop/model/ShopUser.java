@@ -6,13 +6,11 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Setter
 @Getter
-public class shopProduct {
+@Setter
+public class ShopUser {
     @Id
     private Long id;
     private String name;
-    private int price;
-
-
+    private int wallet;
 }
