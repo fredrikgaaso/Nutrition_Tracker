@@ -4,10 +4,21 @@ server:
 spring:
   application:
     name: gateway
-
   config:
     import: "optional:consul:"
   cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false
+    consul:
+      enabled: true
+      discovery:
+        query-passing: true
+      config:
+        data-key: application.yml
+        prefix: config
+        format: yaml
+        default-context: defaults
     gateway:
       routes:
         - id: product
@@ -18,7 +29,11 @@ spring:
           uri: lb://shop
           predicates:
             - Path=/shop,/shop/**
-      globcors:
+        - id: user
+          uri: lb://user
+          predicates:
+            - Path=/user,/user/**
+      globalcors:
         cors-configurations:
           '[/**]':
             allowed-origins:
@@ -29,6 +44,7 @@ spring:
               - "GET"
               - "POST"
               - "OPTIONS"
+            allow-credentials: true
       default-filters:
         - name: Retry
           args:
