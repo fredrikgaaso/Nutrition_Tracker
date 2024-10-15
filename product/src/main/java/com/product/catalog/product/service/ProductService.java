@@ -4,6 +4,9 @@ import com.product.catalog.product.model.Product;
 import com.product.catalog.product.repos.ProductRepo;
 import lombok.*;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ProductService {
@@ -17,4 +20,10 @@ public class ProductService {
     public Product findOneProductById(Long id) {
         return productRepo.findOneProductById(id);
     }
+
+    public List<Product> findAllProducts() {
+        return productRepo.findAll();
+    }
 }
+
+// https://www.matvaretabellen.no/api/nb/foods.json

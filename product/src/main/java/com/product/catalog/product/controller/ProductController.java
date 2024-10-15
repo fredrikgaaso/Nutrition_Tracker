@@ -1,10 +1,14 @@
 package com.product.catalog.product.controller;
 
 import com.product.catalog.product.model.Product;
+import com.product.catalog.product.service.ProductApiService;
 import com.product.catalog.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -12,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/products")
 public class ProductController {
     private final ProductService productService;
+    private final ProductApiService productApiService;
     @GetMapping("/{id}")
     public Product findOneProductById(@PathVariable Long id) {
         return productService.findOneProductById(id);
@@ -20,6 +25,11 @@ public class ProductController {
     public Product addProduct(@RequestBody Product product) {
         return productService.addOneProduct(product);
     }
-
+    @GetMapping("/list")
+    public ResponseEntity<List<Product>> getAllProducts() {
+        productApiService.fetchAndSaveProducts();
+        List<Product> products = productService.findAllProducts();
+        return ResponseEntity.ok(products);
+    }
 
 }

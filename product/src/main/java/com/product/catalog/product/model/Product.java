@@ -1,5 +1,6 @@
 package com.product.catalog.product.model;
 
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -7,6 +8,8 @@ import lombok.Generated;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -16,7 +19,8 @@ public class Product {
     @Id
     @GeneratedValue
     private Long id;
-    private String name;
-    private int price;
+    private String productName;
+    @ElementCollection
+    private List<Nutrient> nutritionalInfo;
 
 }
