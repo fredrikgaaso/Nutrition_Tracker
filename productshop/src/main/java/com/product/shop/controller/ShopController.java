@@ -14,26 +14,26 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/shop")
 public class ShopController {
 
-    private final ProductShopService productService;
+    private final ProductShopService shopService;
 
     @GetMapping("/{id}")
     public ShopProduct findOneProductById(@PathVariable long id) {
 
         log.info("Calling productExample.getText() with Sometext: {}", id);
-        ShopProduct shopProduct = productService.getOneProduct(id);
+        ShopProduct shopProduct = shopService.getOneProduct(id);
 
         if (shopProduct == null) {
             log.error("ProductExample returned null for Sometext");
             throw new IllegalStateException("The returned Sometext is null");
         }
 
-        log.info("Received response: id={}, name={}, price={}", shopProduct.getId(), shopProduct.getName(), shopProduct.getPrice());
+        log.info("Received response: id={}, name={}, nutrition={}, calories={}", shopProduct.getId(), shopProduct.getProductName(), shopProduct.getNutritionalInfo(), shopProduct.getCalories());
         return shopProduct;
     }
 
     @GetMapping("/user/{id}")
     public ShopUser findOneUserById(@PathVariable long id) {
-        ShopUser shopUser = productService.getOneUser(id);
+        ShopUser shopUser = shopService.getOneUser(id);
 
         if (shopUser == null) {
             log.error("getOneUser returned null");
@@ -46,14 +46,14 @@ public class ShopController {
 
     @GetMapping("/cart/{id}")
     public ShopCart findOneCartById(@PathVariable Long id) {
-        return productService.getOneShopCart(id);
+        return shopService.getOneShopCart(id);
     }
     @PostMapping("/cart/create/{userId}")
     public ShopCart createNewCart(@PathVariable Long userId) {
-        return productService.createNewCart(userId);
+        return shopService.createNewCart(userId);
     }
     @PostMapping("/cart/add/{cartId}/{productId}")
     public void addProductToCart(@PathVariable Long cartId,@PathVariable Long productId) {
-        productService.addProductToCart(cartId, productId);
+        shopService.addProductToCart(cartId, productId);
     }
 }

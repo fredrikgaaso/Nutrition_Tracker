@@ -27,7 +27,7 @@ public class ProductController {
     }
     @GetMapping("/list")
     public ResponseEntity<List<Product>> getAllProducts() {
-        productApiService.fetchAndSaveProducts();
+        productApiService.fetchAndSaveProducts(); //change to not save everytime
         List<Product> products = productService.findAllProducts();
         return ResponseEntity.ok(products);
     }

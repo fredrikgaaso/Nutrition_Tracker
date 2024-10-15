@@ -3,16 +3,12 @@ package com.product.catalog.product.service;
 import com.product.catalog.product.model.Nutrient;
 import com.product.catalog.product.model.Product;
 import com.product.catalog.product.repos.ProductRepo;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,24 +27,32 @@ public class ProductApiService {
 
     public void fetchAndSaveProducts(){
         String apiUrl = "https://www.matvaretabellen.no/api/nb/foods.json";
-        Map<String, Object> response = restTemplate.getForObject(apiUrl, Map.class);
+        Map response = restTemplate.getForObject(apiUrl, Map.class);
         try {
             response = restTemplate.getForObject(apiUrl, Map.class);
             if (response != null && response.containsKey("foods")) {
-                List<Map<String, Object>> foods = (List<Map<String, Object>>) response.get("foods");
+
+                Object products = response.get("foods");
+
+                List<Map<String, Object>> foods = (List<Map<String, Object>>) products;
 
                 for (Map<String, Object> food : foods) {
+                 //   log.info("Food item {}", food);
                     String productName = (String) food.get("foodName");
 
                     Product product = new Product();
-                    product.setProductName(productName);
+                    double calories = extractCalories(food);
 
-                    Map<String, Object> nutrientMap = (Map<String, Object>) food.get("nutrientsInfo");
-                    if (nutrientMap != null) {
-                        List<Nutrient> nutrientsList = extractNutritionalInfo(nutrientMap);
+                    product.setProductName(productName);
+                    product.setCalories(calories);
+
+                    Object nutrientsInfo = food.get("constituents");
+                    List<Map<String, Object>> constituents = (List<Map<String, Object>>) nutrientsInfo;
+                    if (constituents != null) {
+                        List<Nutrient> nutrientsList = extractNutritionalInfo(constituents);
                         product.setNutritionalInfo(nutrientsList);
                     } else {
-                        log.info("Nutrients info is missing for product: " + productName);
+                        log.warn("Nutrients info is missing for product: {}", productName);
                     }
 
                     productRepo.save(product);
@@ -57,18 +61,39 @@ public class ProductApiService {
                 log.info("No 'foods' found in the response or response is null");
             }
         } catch (Exception e) {
-            log.error("Error fetching products: " + e.getMessage());
+            log.error("Error fetching products: {}", e.getMessage());
         }
     }
-    private List<Nutrient> extractNutritionalInfo(Map<String, Object> nutrients) {
+    private List<Nutrient> extractNutritionalInfo(List<Map<String, Object>> constituents) {
         List<Nutrient> nutrientList = new ArrayList<>();
-        for (Map.Entry<String, Object> entry : nutrients.entrySet()) {
-            Nutrient nutrient = new Nutrient();
-            nutrient.setNutrientName(entry.getKey());
-            nutrient.setNutrientValue((Double) entry.getValue());
+        for (Map<String, Object> constituent : constituents) {
 
+            Nutrient nutrient = new Nutrient();
+            String nutrientId = (String) constituent.get("nutrientId");
+
+            if (constituent.get("quantity") != null) {
+                double quantity = (Double) constituent.get("quantity");
+                nutrient.setNutrientValue(quantity);
+
+            } else {
+                nutrient.setNutrientValue(0.0);
+            }
+
+            nutrient.setNutrientName(nutrientId);
             nutrientList.add(nutrient);
         }
         return nutrientList;
+    }
+
+    private double extractCalories(Map<String, Object> food) {
+        Map<String, Object> caloriesMap = (Map<String, Object>) food.get("calories");
+
+        if (caloriesMap != null && caloriesMap.get("quantity") != null) {
+            Object calories = caloriesMap.get("quantity");
+            return((Number) calories).doubleValue();
+        }
+        log.info("Calories not found in the response or response is null: {}", caloriesMap);
+
+        return 0.0;
     }
 }

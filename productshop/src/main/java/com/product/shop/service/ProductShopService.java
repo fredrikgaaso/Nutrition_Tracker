@@ -26,12 +26,12 @@ public class ProductShopService {
     public ShopProduct getOneProduct(Long shopId){
         log.info("Input product: {}", shopId);
 
-        ProductDTO s = productClient.remoteGetOneProduct(shopId);
+        ProductDTO productDTO = productClient.remoteGetOneProduct(shopId);
 
-        log.info("shopDTO received from ShopClient: {}", s);
+        log.info("shopDTO received from ShopClient: {}", productDTO);
 
 
-        ShopProduct response = s.getProduct();
+        ShopProduct response = productDTO.getProduct();
 
         log.info("Returning product: {}", response);
 
@@ -43,10 +43,10 @@ public class ProductShopService {
     public ShopUser getOneUser(Long userId){
         log.info("Input user: {}", userId);
 
-        userDTO s = userClient.remoteGetOneUser(userId);
-        log.info("userDTO received from userClient: {}", s);
+        userDTO userDTO = userClient.remoteGetOneUser(userId);
+        log.info("userDTO received from userClient: {}", userDTO);
 
-        ShopUser response = s.getUser();
+        ShopUser response = userDTO.getUser();
 
         log.info("Returning user: {}", response);
 
@@ -65,15 +65,14 @@ public class ProductShopService {
         cart.setUser(user);
         return cartRepo.save(cart);
     }
-    public String addProductToCart(Long cartId, Long productId) {
+    public void addProductToCart(Long cartId, Long productId) {
         ShopCart cart = cartRepo.findOneCartById(cartId);
         ProductDTO product = productClient.remoteGetOneProduct(productId);
         if (isProductInCart(cart, productId)) {
-            return "product is already in cart";
+            return;
         }
         cart.getProductList().add(product.getProduct());
         cartRepo.save(cart);
-        return "product added to cart";
     }
     public ShopCart getOneShopCart(Long id) {
         return cartRepo.findOneCartById(id);

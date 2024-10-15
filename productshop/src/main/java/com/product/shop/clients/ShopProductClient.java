@@ -16,7 +16,7 @@ public class ShopProductClient {
     private final RestTemplate restTemplate;
 
     public ShopProductClient(
-            RestTemplateBuilder restTemplateBuilder, @Value("${shop.service.url}") final String url
+            RestTemplateBuilder restTemplateBuilder, @Value("${product.service.url}") final String url
     ){
         this.restTemplate = restTemplateBuilder.build();
         this.restServiceUrl = url;

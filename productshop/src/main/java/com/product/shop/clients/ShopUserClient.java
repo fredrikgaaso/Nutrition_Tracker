@@ -15,6 +15,7 @@ public class ShopUserClient {
 
     private final RestTemplate restTemplate;
 
+
     public ShopUserClient(
             RestTemplateBuilder restTemplateBuilder, @Value("${user.service.url}") final String url
     ){
@@ -22,8 +23,8 @@ public class ShopUserClient {
         this.restServiceUrl = url;
     }
 
-    public userDTO remoteGetOneUser(Long shopId){
-        String callUrl = restServiceUrl + "/user/" + shopId;
+    public userDTO remoteGetOneUser(Long userId){
+        String callUrl = restServiceUrl + "/user/" + userId;
 
         ResponseEntity<userDTO> response;
 
