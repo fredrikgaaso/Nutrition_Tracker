@@ -48,10 +48,12 @@ public class ShopController {
     public ShopCart findOneCartById(@PathVariable Long id) {
         return shopService.getOneShopCart(id);
     }
+
     @PostMapping("/cart/create/{userId}")
     public ShopCart createNewCart(@PathVariable Long userId) {
         return shopService.createNewCart(userId);
     }
+
     @PostMapping("/cart/add/{cartId}/{productId}")
     public void addProductToCart(@PathVariable Long cartId,@PathVariable Long productId) {
         shopService.addProductToCart(cartId, productId);

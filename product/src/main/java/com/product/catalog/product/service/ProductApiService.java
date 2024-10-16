@@ -16,8 +16,8 @@ import java.util.Map;
 @Slf4j
 public class ProductApiService {
 
-    private RestTemplate restTemplate;
-    private ProductRepo productRepo;
+    private final RestTemplate restTemplate;
+    private final ProductRepo productRepo;
 
     public ProductApiService(RestTemplateBuilder builder, ProductRepo productRepo) {
         this.restTemplate = builder.build();

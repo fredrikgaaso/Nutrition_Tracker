@@ -15,16 +15,21 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/products")
 public class ProductController {
+
     private final ProductService productService;
     private final ProductApiService productApiService;
+
+
     @GetMapping("/{id}")
     public Product findOneProductById(@PathVariable Long id) {
         return productService.findOneProductById(id);
     }
+
     @PostMapping("/add")
     public Product addProduct(@RequestBody Product product) {
         return productService.addOneProduct(product);
     }
+
     @GetMapping("/list")
     public ResponseEntity<List<Product>> getAllProducts() {
         productApiService.fetchAndSaveProducts(); //change to not save everytime

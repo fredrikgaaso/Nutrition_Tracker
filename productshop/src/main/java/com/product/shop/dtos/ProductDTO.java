@@ -10,17 +10,17 @@ import java.util.List;
 @Getter
 @Setter
 public class ProductDTO {
-    private String name;
-    private double calories;
     private long id;
-    private List<Nutrient> nutrientList;
+    private String productName;
+    private List<Nutrient> nutritionalInfo;
+    private double calories;
 
     public ShopProduct getProduct() {
         ShopProduct shopProduct = new ShopProduct();
         shopProduct.setId(this.id);
-        shopProduct.setProductName(this.name);
+        shopProduct.setProductName(this.productName);
         shopProduct.setCalories(this.calories);
-        shopProduct.setNutritionalInfo(this.nutrientList);
+        shopProduct.setNutritionalInfo(this.nutritionalInfo);
 
         return shopProduct;
     }
