@@ -1,11 +1,13 @@
 import {BrowserRouter, Route, Routes} from "react-router-dom";
-import Frontpage from '/view/frontpage'
+import SearchBar from './view/searchBar'
+import ShoppingCart from "./view/shoppingCart";
 
 function App() {
     return(
        <BrowserRouter>
            <Routes>
-               <Route path={"frontpage"} element={<Frontpage/>}/>
+               <Route path={"searchbar"} element={<SearchBar/>}/>
+               <Route path={"ShoppingCart"} element={<ShoppingCart/>}/>
            </Routes>
        </BrowserRouter>
     )

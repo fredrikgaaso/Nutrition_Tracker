@@ -14,6 +14,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/products")
+@CrossOrigin(origins = "http://localhost:1234")
 public class ProductController {
 
     private final ProductService productService;
@@ -31,10 +32,13 @@ public class ProductController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<List<Product>> getAllProducts() {
+    public ResponseEntity<List<Product>> fetchAllProducts() {
         productApiService.fetchAndSaveProducts(); //change to not save everytime
         List<Product> products = productService.findAllProducts();
         return ResponseEntity.ok(products);
     }
-
+    @GetMapping("/all")
+    public List<Product> getAllProductsAll() {
+        return productService.findAllProducts();
+    }
 }

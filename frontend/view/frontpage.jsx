@@ -1,8 +1,0 @@
-function frontpage(){
-return (
-    <div>
-        <h1>Hello world!</h1>
-    </div>
-)
-}
-export default frontpage;

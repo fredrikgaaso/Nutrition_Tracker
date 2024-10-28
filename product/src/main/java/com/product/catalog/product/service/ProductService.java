@@ -22,8 +22,8 @@ public class ProductService {
     }
 
     public List<Product> findAllProducts() {
+        List<Product> products = productRepo.findAll();
         return productRepo.findAll();
+
     }
 }
-
-// https://www.matvaretabellen.no/api/nb/foods.json

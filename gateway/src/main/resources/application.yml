@@ -37,7 +37,7 @@ spring:
         cors-configurations:
           '[/**]':
             allowed-origins:
-              - "http://localhost:3000"
+              - "http://localhost:1234"
             allowed-headers:
               - "*"
             allowed-methods:
