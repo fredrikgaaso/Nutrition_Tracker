@@ -13,4 +13,5 @@ public class ShopUser {
     private Long id;
     private String name;
     private int wallet;
+    private String password;
 }

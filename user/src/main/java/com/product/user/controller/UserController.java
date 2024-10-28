@@ -3,11 +3,17 @@ package com.product.user.controller;
 import com.product.user.model.Users;
 import com.product.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.Authenticator;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/user")
+@CrossOrigin(origins = "http://localhost:1234")
 public class UserController {
     private final UserService userService;
 
@@ -22,9 +28,14 @@ public class UserController {
     }
 
     @PostMapping("/admin")
-    public void adminAddNewUser() {
+    public void addAdminUser() {
         String userName = "admin";
         int wallet = 10000;
-        userService.addAdminUser(userName, wallet);
+        String password = "admin";
+        userService.addAdminUser(userName, wallet, password);
+    }
+    @PostMapping("/all")
+    public List<Users> usersList(@RequestBody Users user) {
+        return userService.getAllUsers();
     }
 }

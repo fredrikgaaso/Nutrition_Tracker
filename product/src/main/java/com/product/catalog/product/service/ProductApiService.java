@@ -37,7 +37,6 @@ public class ProductApiService {
                 List<Map<String, Object>> foods = (List<Map<String, Object>>) products;
 
                 for (Map<String, Object> food : foods) {
-                 //   log.info("Food item {}", food);
                     String productName = (String) food.get("foodName");
 
                     Product product = new Product();
