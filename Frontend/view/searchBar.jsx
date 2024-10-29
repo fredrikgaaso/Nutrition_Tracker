@@ -49,7 +49,7 @@ const SearchBar = () => {
                 type="text"
                 value={searchInput}
                 onChange={handleChange}
-                placeholder="Search... bla"
+                placeholder="Search..."
             />
                 <table>
                     <thead>
