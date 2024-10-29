@@ -34584,7 +34584,7 @@ const SearchBar = ()=>{
                 type: "text",
                 value: searchInput,
                 onChange: handleChange,
-                placeholder: "Search..."
+                placeholder: "Search... bla"
             }, void 0, false, {
                 fileName: "view/searchBar.jsx",
                 lineNumber: 48,
