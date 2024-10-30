@@ -20,4 +20,6 @@ mvn spring-boot:run -Dspring-boot.run.arguments="--server.port=NEW_PORT_NUMBER"
 npm install axios
 
 
+<strong>How to make rabbitmq viable</strong><br>
+Make rabbitmq message for when i add a product to a cart.
 
