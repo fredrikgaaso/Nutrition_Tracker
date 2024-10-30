@@ -34,8 +34,8 @@ public class UserController {
         String password = "admin";
         userService.addAdminUser(userName, wallet, password);
     }
-    @PostMapping("/all")
-    public List<Users> usersList(@RequestBody Users user) {
+    @GetMapping("/all")
+    public List<Users> usersList() {
         return userService.getAllUsers();
     }
 }

@@ -34584,7 +34584,7 @@ const SearchBar = ()=>{
                 type: "text",
                 value: searchInput,
                 onChange: handleChange,
-                placeholder: "Search... bla"
+                placeholder: "Search..."
             }, void 0, false, {
                 fileName: "view/searchBar.jsx",
                 lineNumber: 48,
@@ -34683,8 +34683,7 @@ const SearchBar = ()=>{
                 fileName: "view/searchBar.jsx",
                 lineNumber: 54,
                 columnNumber: 17
-            }, undefined),
-            ")"
+            }, undefined)
         ]
     }, void 0, true, {
         fileName: "view/searchBar.jsx",
@@ -39873,9 +39872,8 @@ const SimpleLogin = ()=>{
     }, []);
     const handleLogin = (e)=>{
         e.preventDefault();
-        const user = users.find((user)=>user.name === username && user.password === password);
-        if (user) setMessage("Login successful!");
-        else setMessage("Invalid username or password");
+        for(let i = 0; i < user.length; i++)if (username === user[i].name && password === user[i].password) setMessage("Login successful");
+        else setMessage("Login not successful");
     };
     return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
         children: [

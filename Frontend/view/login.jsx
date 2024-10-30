@@ -24,20 +24,20 @@ const SimpleLogin = () => {
     const handleLogin = (e) => {
         e.preventDefault();
 
-        const user = users.find((user) => user.name === username && user.password === password)
+        for (let i = 0; i < user.length; i++) {
+            if (username === user[i].name && password === user[i].password) {
+                setMessage("Login successful")
+            }else{
+                setMessage("Login not successful")
+            }
 
-        if (user){
-            setMessage("Login successful!")
-        }
-        else {
-            setMessage("Invalid username or password")
         }
     };
 
     return (
         <div>
             <h2>Login</h2>
-            <form onSubmit={handleLogin}>
+            <form  onSubmit={handleLogin}>
                 <div>
                     <label>Username:</label>
                     <input

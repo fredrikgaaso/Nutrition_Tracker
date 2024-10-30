@@ -77,7 +77,7 @@ const SearchBar = () => {
                     ))}
                     </tbody>
                 </table>
-            )
+
         </div>
     )
 };

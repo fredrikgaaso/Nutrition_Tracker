@@ -26,8 +26,10 @@ public class ProductApiService {
 
 
     public void fetchAndSaveProducts(){
+
         String apiUrl = "https://www.matvaretabellen.no/api/nb/foods.json";
-        Map response = restTemplate.getForObject(apiUrl, Map.class);
+        restTemplate.getForObject(apiUrl, Map.class);
+        Map response;
         try {
             response = restTemplate.getForObject(apiUrl, Map.class);
             if (response != null && response.containsKey("foods")) {
@@ -44,8 +46,8 @@ public class ProductApiService {
 
                     product.setProductName(productName);
                     product.setCalories(calories);
-
                     Object nutrientsInfo = food.get("constituents");
+
                     List<Map<String, Object>> constituents = (List<Map<String, Object>>) nutrientsInfo;
                     if (constituents != null) {
                         List<Nutrient> nutrientsList = extractNutritionalInfo(constituents);
@@ -65,6 +67,7 @@ public class ProductApiService {
     }
     private List<Nutrient> extractNutritionalInfo(List<Map<String, Object>> constituents) {
         List<Nutrient> nutrientList = new ArrayList<>();
+
         for (Map<String, Object> constituent : constituents) {
 
             Nutrient nutrient = new Nutrient();
