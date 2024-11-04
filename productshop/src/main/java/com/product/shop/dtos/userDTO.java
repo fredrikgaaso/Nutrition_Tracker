@@ -19,6 +19,7 @@ public class userDTO {
         shopUser.setName(this.name);
         shopUser.setPassword(this.password);
         shopUser.setWallet(this.wallet);
+        shopUser.setCartId(this.cartId);
         return shopUser;
     }
 

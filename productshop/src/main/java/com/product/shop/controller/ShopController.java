@@ -17,11 +17,11 @@ public class ShopController {
 
     private final ProductShopService shopService;
 
-    @GetMapping("/{id}")
-    public ShopProduct findOneProductById(@PathVariable long id) {
+    @GetMapping("/{productId}")
+    public ShopProduct findOneProductById(@PathVariable long productId) {
 
-        log.info("Calling productExample.getText() with Sometext: {}", id);
-        ShopProduct shopProduct = shopService.getOneProduct(id);
+        log.info("Calling productExample.getText() with Sometext: {}", productId);
+        ShopProduct shopProduct = shopService.getOneProduct(productId);
 
         if (shopProduct == null) {
             log.error("ProductExample returned null for Sometext");
@@ -32,28 +32,41 @@ public class ShopController {
         return shopProduct;
     }
 
-    @GetMapping("/user/{id}")
-    public ShopUser findOneUserById(@PathVariable long id) {
-        ShopUser shopUser = shopService.getOneUser(id);
+    @GetMapping("/user/{userId}")
+    public ShopUser findOneUserById(@PathVariable long userId) {
+        ShopUser shopUser = shopService.getOneUser(userId);
 
         if (shopUser == null) {
             log.error("getOneUser returned null");
             throw new IllegalStateException("The returned user is null");
         }
         log.info("Received response: id={}, name={}, wallet={}", shopUser.getId(), shopUser.getName(), shopUser.getWallet());
-
+       // shopService.createNewCart(userId);
         return shopUser;
     }
 
-    @GetMapping("/cart/{id}")
-    public ShopCart findOneCartById(@PathVariable Long id) {
+  /*  @GetMapping("/cart/{id}")
+    public ShopCart findOneCartById(@PathVariable Long id) {        //trying to have cart in own service
         return shopService.getOneShopCart(id);
+    }*/
+    @GetMapping("/cart/{cartId}")
+    public ShopCart findOneCartById(@PathVariable long cartId) {
+        log.info("CartId: {}", cartId);
+        ShopCart shopCart = shopService.getOneCart(cartId);
+
+        if (shopCart == null) {
+            log.error("returned null");
+            throw new IllegalStateException("The returned shopCart is null");
+        }
+
+        log.info("Received response: id={}, userId={}", shopCart.getId(), shopCart.getUserId());
+        return shopCart;
     }
 
-    @PostMapping("/cart/create/{userId}")
-    public ShopCart createNewCart(@PathVariable Long userId) {
+  /*  @PostMapping("/cart/create/{userId}")
+    public ShopCart createNewCart(@PathVariable Long userId) {      //trying to have cart in own service
         return shopService.createNewCart(userId);
-    }
+    }*/
 
     @PostMapping("/cart/add/{cartId}/{productId}")
     public void addProductToCart(@PathVariable Long cartId,@PathVariable Long productId) {

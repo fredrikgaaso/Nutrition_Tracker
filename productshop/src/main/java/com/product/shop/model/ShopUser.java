@@ -1,7 +1,6 @@
 package com.product.shop.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,4 +13,5 @@ public class ShopUser {
     private String name;
     private int wallet;
     private String password;
+    private Long cartId;
 }

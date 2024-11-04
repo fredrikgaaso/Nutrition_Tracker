@@ -11,10 +11,8 @@ import java.util.List;
 public class ShopCart {
 
     @Id
-    @GeneratedValue
     private Long id;
-    @OneToOne
-    private ShopUser user;
+    private Long userId;
     @OneToMany
     private List<ShopProduct> productList;
 }
