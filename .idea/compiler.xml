@@ -8,6 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="productshop" />
+        <module name="shoppingCart" />
         <module name="Product" />
         <module name="user" />
         <module name="gateway" />
@@ -19,6 +20,7 @@
       <module name="Product" options="-parameters" />
       <module name="gateway" options="-parameters" />
       <module name="productshop" options="-parameters" />
+      <module name="shoppingCart" options="-parameters" />
       <module name="user" options="-parameters" />
     </option>
   </component>

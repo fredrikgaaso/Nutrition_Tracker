@@ -81,12 +81,12 @@ public class ProductShopService {
             return shopCartRepo.save(cart);
     }*/
     public void addProductToCart(Long cartId, Long productId) {
-        cartDTO cart = cartClient.remoteGetOneCart(cartId);
+        ShopCart cart = shopCartRepo.findOneCartById(cartId);
         ProductDTO product = productClient.remoteGetOneProduct(productId);
         log.info("Input product: {}", product.getProductName());
         log.info("Input cart: {}", cart.getId());
         cart.getProductList().add(product.getProduct());
-        log.info("cart list: {}", cart.getProductList().getFirst());
+        log.info("cart list: {}", cart.getProductList());
         shopCartRepo.save(cart);
     }
   /*  public ShopCart getOneShopCart(Long id) {

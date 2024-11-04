@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import {redirect} from "react-router-dom";
 
 const SimpleLogin = () => {
     const [user, setUser] = useState([]);
@@ -26,6 +27,7 @@ const SimpleLogin = () => {
 
         for (let i = 0; i < user.length; i++) {
             if (username === user[i].name && password === user[i].password) {
+                window.location.href='/searchBar'
                 setMessage("Login successful")
             }else{
                 setMessage("Login not successful")

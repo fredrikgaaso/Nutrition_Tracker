@@ -39851,6 +39851,7 @@ var _react = require("react");
 var _reactDefault = parcelHelpers.interopDefault(_react);
 var _axios = require("axios");
 var _axiosDefault = parcelHelpers.interopDefault(_axios);
+var _reactRouterDom = require("react-router-dom");
 var _s = $RefreshSig$();
 const SimpleLogin = ()=>{
     _s();
@@ -39872,8 +39873,10 @@ const SimpleLogin = ()=>{
     }, []);
     const handleLogin = (e)=>{
         e.preventDefault();
-        for(let i = 0; i < user.length; i++)if (username === user[i].name && password === user[i].password) setMessage("Login successful");
-        else setMessage("Login not successful");
+        for(let i = 0; i < user.length; i++)if (username === user[i].name && password === user[i].password) {
+            window.location.href = "/searchBar";
+            setMessage("Login successful");
+        } else setMessage("Login not successful");
     };
     return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
         children: [
@@ -39881,7 +39884,7 @@ const SimpleLogin = ()=>{
                 children: "Login"
             }, void 0, false, {
                 fileName: "view/login.jsx",
-                lineNumber: 39,
+                lineNumber: 41,
                 columnNumber: 13
             }, undefined),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("form", {
@@ -39893,7 +39896,7 @@ const SimpleLogin = ()=>{
                                 children: "Username:"
                             }, void 0, false, {
                                 fileName: "view/login.jsx",
-                                lineNumber: 42,
+                                lineNumber: 44,
                                 columnNumber: 21
                             }, undefined),
                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("input", {
@@ -39903,13 +39906,13 @@ const SimpleLogin = ()=>{
                                 required: true
                             }, void 0, false, {
                                 fileName: "view/login.jsx",
-                                lineNumber: 43,
+                                lineNumber: 45,
                                 columnNumber: 21
                             }, undefined)
                         ]
                     }, void 0, true, {
                         fileName: "view/login.jsx",
-                        lineNumber: 41,
+                        lineNumber: 43,
                         columnNumber: 17
                     }, undefined),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -39918,7 +39921,7 @@ const SimpleLogin = ()=>{
                                 children: "Password:"
                             }, void 0, false, {
                                 fileName: "view/login.jsx",
-                                lineNumber: 51,
+                                lineNumber: 53,
                                 columnNumber: 21
                             }, undefined),
                             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("input", {
@@ -39928,13 +39931,13 @@ const SimpleLogin = ()=>{
                                 required: true
                             }, void 0, false, {
                                 fileName: "view/login.jsx",
-                                lineNumber: 52,
+                                lineNumber: 54,
                                 columnNumber: 21
                             }, undefined)
                         ]
                     }, void 0, true, {
                         fileName: "view/login.jsx",
-                        lineNumber: 50,
+                        lineNumber: 52,
                         columnNumber: 17
                     }, undefined),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
@@ -39942,26 +39945,26 @@ const SimpleLogin = ()=>{
                         children: "Login"
                     }, void 0, false, {
                         fileName: "view/login.jsx",
-                        lineNumber: 59,
+                        lineNumber: 61,
                         columnNumber: 17
                     }, undefined)
                 ]
             }, void 0, true, {
                 fileName: "view/login.jsx",
-                lineNumber: 40,
+                lineNumber: 42,
                 columnNumber: 13
             }, undefined),
             message && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
                 children: message
             }, void 0, false, {
                 fileName: "view/login.jsx",
-                lineNumber: 61,
+                lineNumber: 63,
                 columnNumber: 25
             }, undefined)
         ]
     }, void 0, true, {
         fileName: "view/login.jsx",
-        lineNumber: 38,
+        lineNumber: 40,
         columnNumber: 9
     }, undefined);
 };
@@ -39976,6 +39979,6 @@ $RefreshReg$(_c, "SimpleLogin");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-dev-runtime":"iTorj","react":"21dqq","axios":"jo6P5","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"km3Ru"}]},["dlFZn","1xC6H","g9R30"], "g9R30", "parcelRequiredc7f")
+},{"react/jsx-dev-runtime":"iTorj","react":"21dqq","axios":"jo6P5","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"km3Ru","react-router-dom":"9xmpe"}]},["dlFZn","1xC6H","g9R30"], "g9R30", "parcelRequiredc7f")
 
 //# sourceMappingURL=index.d498c491.js.map

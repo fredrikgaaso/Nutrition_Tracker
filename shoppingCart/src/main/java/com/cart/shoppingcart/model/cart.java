@@ -14,4 +14,6 @@ public class cart {
     @GeneratedValue
     private Long id;
     private Long userId;
+    @OneToMany
+    List<products> productsList;
 }
