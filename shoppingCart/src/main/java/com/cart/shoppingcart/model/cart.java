@@ -1,4 +1,4 @@
-package com.product.shop.model;
+package com.cart.shoppingcart.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -8,13 +8,10 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-public class ShopCart {
+public class cart {
 
     @Id
     @GeneratedValue
     private Long id;
-    @OneToOne
-    private ShopUser user;
-    @OneToMany
-    private List<ShopProduct> productList;
+    private Long userId;
 }
