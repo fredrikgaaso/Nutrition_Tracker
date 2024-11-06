@@ -3,6 +3,7 @@ import axios from 'axios';
 
 const ShoppingCart = () => {
     const [shoppingCart, setShoppingCart] = useState(null);
+    const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -17,9 +18,19 @@ const ShoppingCart = () => {
                 setLoading(false);
             }
         };
-
+        const fetchUser = async ()=>{
+            try {
+                const response = await axios.get('http://localhost:8081/shop/user/1')
+                setUser(response.data)
+                setLoading(false)
+            }catch (err) {
+                setError("Failed to fetch user");
+                setLoading(false)
+            }
+        }
         fetchShoppingCart();
     }, []);
+
 
     if (loading) return <p>Loading...</p>;
 

@@ -39660,6 +39660,7 @@ var _s = $RefreshSig$();
 const ShoppingCart = ()=>{
     _s();
     const [shoppingCart, setShoppingCart] = (0, _react.useState)(null);
+    const [user, setUser] = (0, _react.useState)(null);
     const [loading, setLoading] = (0, _react.useState)(true);
     const [error, setError] = (0, _react.useState)(null);
     (0, _react.useEffect)(()=>{
@@ -39673,27 +39674,37 @@ const ShoppingCart = ()=>{
                 setLoading(false);
             }
         };
+        const fetchUser = async ()=>{
+            try {
+                const response = await (0, _axiosDefault.default).get("http://localhost:8081/shop/user/1");
+                setUser(response.data);
+                setLoading(false);
+            } catch (err) {
+                setError("Failed to fetch user");
+                setLoading(false);
+            }
+        };
         fetchShoppingCart();
     }, []);
     if (loading) return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
         children: "Loading..."
     }, void 0, false, {
         fileName: "view/shoppingCart.jsx",
-        lineNumber: 24,
+        lineNumber: 35,
         columnNumber: 25
     }, undefined);
     if (error) return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
         children: error
     }, void 0, false, {
         fileName: "view/shoppingCart.jsx",
-        lineNumber: 26,
+        lineNumber: 37,
         columnNumber: 23
     }, undefined);
     if (!shoppingCart) return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
         children: "No shopping cart found"
     }, void 0, false, {
         fileName: "view/shoppingCart.jsx",
-        lineNumber: 28,
+        lineNumber: 39,
         columnNumber: 31
     }, undefined);
     return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -39705,7 +39716,7 @@ const ShoppingCart = ()=>{
                 ]
             }, void 0, true, {
                 fileName: "view/shoppingCart.jsx",
-                lineNumber: 32,
+                lineNumber: 43,
                 columnNumber: 13
             }, undefined),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h3", {
@@ -39715,14 +39726,14 @@ const ShoppingCart = ()=>{
                 ]
             }, void 0, true, {
                 fileName: "view/shoppingCart.jsx",
-                lineNumber: 33,
+                lineNumber: 44,
                 columnNumber: 13
             }, undefined),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h4", {
                 children: "Product List:"
             }, void 0, false, {
                 fileName: "view/shoppingCart.jsx",
-                lineNumber: 35,
+                lineNumber: 46,
                 columnNumber: 13
             }, undefined),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("table", {
@@ -39734,32 +39745,32 @@ const ShoppingCart = ()=>{
                                     children: "Product Name"
                                 }, void 0, false, {
                                     fileName: "view/shoppingCart.jsx",
-                                    lineNumber: 39,
+                                    lineNumber: 50,
                                     columnNumber: 21
                                 }, undefined),
                                 /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("th", {
                                     children: "Calories"
                                 }, void 0, false, {
                                     fileName: "view/shoppingCart.jsx",
-                                    lineNumber: 40,
+                                    lineNumber: 51,
                                     columnNumber: 21
                                 }, undefined),
                                 /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("th", {
                                     children: "Nutritional Info"
                                 }, void 0, false, {
                                     fileName: "view/shoppingCart.jsx",
-                                    lineNumber: 41,
+                                    lineNumber: 52,
                                     columnNumber: 21
                                 }, undefined)
                             ]
                         }, void 0, true, {
                             fileName: "view/shoppingCart.jsx",
-                            lineNumber: 38,
+                            lineNumber: 49,
                             columnNumber: 17
                         }, undefined)
                     }, void 0, false, {
                         fileName: "view/shoppingCart.jsx",
-                        lineNumber: 37,
+                        lineNumber: 48,
                         columnNumber: 17
                     }, undefined),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("tbody", {
@@ -39769,14 +39780,14 @@ const ShoppingCart = ()=>{
                                         children: product.productName
                                     }, void 0, false, {
                                         fileName: "view/shoppingCart.jsx",
-                                        lineNumber: 47,
+                                        lineNumber: 58,
                                         columnNumber: 25
                                     }, undefined),
                                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("td", {
                                         children: product.calories
                                     }, void 0, false, {
                                         fileName: "view/shoppingCart.jsx",
-                                        lineNumber: 48,
+                                        lineNumber: 59,
                                         columnNumber: 25
                                     }, undefined),
                                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("td", {
@@ -39789,44 +39800,44 @@ const ShoppingCart = ()=>{
                                                     ]
                                                 }, nutrient.nutrientName, true, {
                                                     fileName: "view/shoppingCart.jsx",
-                                                    lineNumber: 52,
+                                                    lineNumber: 63,
                                                     columnNumber: 37
                                                 }, undefined))
                                         }, void 0, false, {
                                             fileName: "view/shoppingCart.jsx",
-                                            lineNumber: 50,
+                                            lineNumber: 61,
                                             columnNumber: 29
                                         }, undefined)
                                     }, void 0, false, {
                                         fileName: "view/shoppingCart.jsx",
-                                        lineNumber: 49,
+                                        lineNumber: 60,
                                         columnNumber: 25
                                     }, undefined)
                                 ]
                             }, product.id, true, {
                                 fileName: "view/shoppingCart.jsx",
-                                lineNumber: 46,
+                                lineNumber: 57,
                                 columnNumber: 21
                             }, undefined))
                     }, void 0, false, {
                         fileName: "view/shoppingCart.jsx",
-                        lineNumber: 44,
+                        lineNumber: 55,
                         columnNumber: 17
                     }, undefined)
                 ]
             }, void 0, true, {
                 fileName: "view/shoppingCart.jsx",
-                lineNumber: 36,
+                lineNumber: 47,
                 columnNumber: 13
             }, undefined)
         ]
     }, void 0, true, {
         fileName: "view/shoppingCart.jsx",
-        lineNumber: 31,
+        lineNumber: 42,
         columnNumber: 9
     }, undefined);
 };
-_s(ShoppingCart, "9ESYG6yEnh20x4FbNFRhWqoVFjQ=");
+_s(ShoppingCart, "VL/nYIFtTw5l0Y0cwGhAlwj47r4=");
 _c = ShoppingCart;
 exports.default = ShoppingCart;
 var _c;

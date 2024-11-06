@@ -8,7 +8,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-public class ShopCart {
+public class ShopCart{
 
     @Id
     @GeneratedValue
