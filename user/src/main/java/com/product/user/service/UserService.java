@@ -4,9 +4,7 @@ import com.product.user.model.Users;
 import com.product.user.repos.UserRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -17,10 +15,10 @@ public class UserService  {
 
     private final UserRepo userRepo;
 
-    public Users getUserById(Long id){
+
+    public Users getOneUserById(Long id){
        return userRepo.getUserById(id);
     }
-
     public Users addNewUser(Users user){
         log.info("dette er brukeren som blir lagt til: " + user.getName() + user.getId());
         userRepo.save(user);
@@ -38,6 +36,5 @@ public class UserService  {
     public List<Users> getAllUsers(){
         return userRepo.findAll();
     }
-
 
 }

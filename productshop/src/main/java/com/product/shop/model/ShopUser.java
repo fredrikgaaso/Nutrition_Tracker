@@ -13,5 +13,4 @@ public class ShopUser {
     private String name;
     private int wallet;
     private String password;
-    private Long cartId;
 }

@@ -1,10 +1,8 @@
 package com.product.shop.service;
 
-import com.product.shop.clients.ShopCartClient;
 import com.product.shop.clients.ShopProductClient;
 import com.product.shop.clients.ShopUserClient;
 import com.product.shop.dtos.ProductDTO;
-import com.product.shop.dtos.cartDTO;
 import com.product.shop.dtos.userDTO;
 import com.product.shop.model.ShopCart;
 import com.product.shop.model.ShopProduct;
@@ -22,15 +20,13 @@ import org.springframework.stereotype.Service;
 public class ProductShopService {
     private final ShopProductClient productClient;
     private final ShopUserClient userClient;
-    private final ShopCartClient cartClient;
     private final ShopUserRepo userRepo;
     private final ShopProductRepo productRepo;
     private final ShopCartRepo shopCartRepo;
 
-    public ShopProduct getOneProduct(Long shopId){
-        log.info("Input product: {}", shopId);
+    public ShopProduct getOneProduct(Long productId){
 
-        ProductDTO productDTO = productClient.remoteGetOneProduct(shopId);
+        ProductDTO productDTO = productClient.remoteGetOneProduct(productId);
 
         log.info("shopDTO received from ShopClient: {}", productDTO);
 
@@ -41,16 +37,6 @@ public class ProductShopService {
 
         productRepo.save(response);
 
-        return response;
-    }
-
-    public ShopCart getOneCart(Long cartId){
-        cartDTO cartDTO = cartClient.remoteGetOneCart(cartId);
-
-        ShopCart response = cartDTO.getShopCart();
-
-        shopCartRepo.save(response);
-        log.info("cartDTO received from ShopCartClient: {}", response);
         return response;
     }
 
@@ -69,28 +55,31 @@ public class ProductShopService {
         return response;
     }
 
-
-   /* public ShopCart createNewCart(Long userId) {
-        ShopUser user = userClient.remoteGetOneUser(userId).getUser();
+    public ShopCart createNewCart(Long userId) {
+        if (shopCartRepo.findUserCartByUserId(userId) == null) {
+            userDTO user = userClient.remoteGetOneUser(userId);
             ShopCart cart = new ShopCart();
-            user.setCartId(cart.getId());
             cart.setUserId(user.getId());
-            log.info("Cart id: {}", cart.getId());                  //trying to have cart in own service
+            log.info("Cart id: {}", cart.getId());
             log.info("user id: {}", user.getId());
-            userRepo.save(user);
+            userRepo.save(user.getUser());
             return shopCartRepo.save(cart);
-    }*/
+        }
+        log.info("This user already has a cart");
+        return null;
+
+    }
     public void addProductToCart(Long cartId, Long productId) {
         ShopCart cart = shopCartRepo.findOneCartById(cartId);
         ProductDTO product = productClient.remoteGetOneProduct(productId);
         log.info("Input product: {}", product.getProductName());
         log.info("Input cart: {}", cart.getId());
-        cart.getProductList().add(product.getProduct());
-        log.info("cart list: {}", cart.getProductList());
+        cart.getProductsList().add(product.getProduct());
+        log.info("cart list: {}", cart.getProductsList());
         shopCartRepo.save(cart);
     }
-  /*  public ShopCart getOneShopCart(Long id) {
-        return shopCartRepo.findOneCartById(id);            //trying to have cart in own service
-    }*/
+   public ShopCart getOneShopCart(Long id) {
+        return shopCartRepo.findOneCartById(id);
+    }
 
 }

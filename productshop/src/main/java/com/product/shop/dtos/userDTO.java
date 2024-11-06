@@ -11,7 +11,6 @@ public class userDTO {
     private String name;
     private int wallet;
     private String password;
-    private Long cartId;
 
     public ShopUser getUser(){
         ShopUser shopUser = new ShopUser();
@@ -19,7 +18,6 @@ public class userDTO {
         shopUser.setName(this.name);
         shopUser.setPassword(this.password);
         shopUser.setWallet(this.wallet);
-        shopUser.setCartId(this.cartId);
         return shopUser;
     }
 

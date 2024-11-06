@@ -11,9 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@RequiredArgsConstructor
 public class Users {
-
     @Id
     @GeneratedValue
     private Long id;

@@ -3,15 +3,14 @@ package com.product.user.controller;
 import com.product.user.model.Users;
 import com.product.user.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
-import org.springframework.http.ResponseEntity;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.Authenticator;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 @RequestMapping("/user")
 @CrossOrigin(origins = "http://localhost:1234")
 public class UserController {
@@ -19,7 +18,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     public Users findOneUserById(@PathVariable Long id) {
-        return userService.getUserById(id);
+        return userService.getOneUserById(id);
     }
 
     @PostMapping("/add")
@@ -38,4 +37,5 @@ public class UserController {
     public List<Users> usersList() {
         return userService.getAllUsers();
     }
+
 }
