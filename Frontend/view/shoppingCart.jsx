@@ -1,48 +1,35 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 
-const ShoppingCart = () => {
+const ShoppingCart = ({ userId }) => {
     const [shoppingCart, setShoppingCart] = useState(null);
-    const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchShoppingCart = async () => {
             try {
-                const response = await axios.get('http://localhost:8081/shop/cart/1');
-                setShoppingCart(response.data);
+                const response = await fetch(`http://localhost:8000/cart/${userId}`);
+                const data = await response.json();
+                console.log(data);  // Log the response to check its structure
+                setShoppingCart(data);
                 setLoading(false);
             } catch (err) {
                 setError("Failed to fetch data from the microservice.");
                 setLoading(false);
             }
         };
-        const fetchUser = async ()=>{
-            try {
-                const response = await axios.get('http://localhost:8081/shop/user/1')
-                setUser(response.data)
-                setLoading(false)
-            }catch (err) {
-                setError("Failed to fetch user");
-                setLoading(false)
-            }
-        }
-        fetchShoppingCart();
-    }, []);
 
+        if (userId) {
+            fetchShoppingCart();
+        }
+    }, [userId]);  // Re-run the effect when userId changes
 
     if (loading) return <p>Loading...</p>;
-
     if (error) return <p>{error}</p>;
-
-    if (!shoppingCart) return <p>No shopping cart found</p>;
+    if (!shoppingCart || !shoppingCart.productsList) return <p>No shopping cart found</p>;
 
     return (
         <div>
-            <h2>User: {shoppingCart.user.name}</h2>
-            <h3>Wallet: {shoppingCart.user.wallet}</h3>
-
             <h4>Product List:</h4>
             <table>
                 <thead>
@@ -53,17 +40,21 @@ const ShoppingCart = () => {
                 </tr>
                 </thead>
                 <tbody>
-                {shoppingCart.productList.map((product) => (
-                    <tr key={product.id}>
+                {shoppingCart.productsList.map((product, index) => (
+                    <tr key={index}>
                         <td>{product.productName}</td>
                         <td>{product.calories}</td>
                         <td>
                             <ul>
-                                {product.nutritionalInfo.map((nutrient) => (
-                                    <li key={nutrient.nutrientName}>
-                                        {nutrient.nutrientName}: {nutrient.nutrientValue}
-                                    </li>
-                                ))}
+                                {product.nutritionalInfo && Array.isArray(product.nutritionalInfo) ? (
+                                    product.nutritionalInfo.map((nutrient, nutrientIndex) => (
+                                        <li key={nutrientIndex}>
+                                            {nutrient.nutrientName}: {nutrient.nutrientValue}
+                                        </li>
+                                    ))
+                                ) : (
+                                    <li>No nutritional info available</li>
+                                )}
                             </ul>
                         </td>
                     </tr>

@@ -14,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -69,6 +71,7 @@ public class ProductShopService {
         return null;
 
     }
+
     public void addProductToCart(Long cartId, Long productId) {
         ShopCart cart = shopCartRepo.findOneCartById(cartId);
         ProductDTO product = productClient.remoteGetOneProduct(productId);
@@ -76,10 +79,20 @@ public class ProductShopService {
         log.info("Input cart: {}", cart.getId());
         cart.getProductsList().add(product.getProduct());
         log.info("cart list: {}", cart.getProductsList());
-        shopCartRepo.save(cart);
+        shopCartRepo.saveAndFlush(cart);
     }
-   public ShopCart getOneShopCart(Long id) {
+
+    public ShopCart getOneShopCart(Long id) {
         return shopCartRepo.findOneCartById(id);
     }
 
+    public List<ShopProduct> getAllProducts(){
+       List<ShopProduct> shopProducts = productRepo.findAll();
+       for (int i =0; i<shopProducts.size(); i++) {
+           return shopProducts;
+       }
+       log.info("No product found");
+       return null;
+
+    }
 }

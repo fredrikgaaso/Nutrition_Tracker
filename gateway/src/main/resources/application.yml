@@ -4,31 +4,21 @@ server:
 spring:
   application:
     name: gateway
+
   config:
     import: "optional:consul:"
+
   cloud:
-    loadbalancer:
-      ribbon:
-        enabled: false
-    consul:
-      enabled: true
-      discovery:
-        query-passing: true
-      config:
-        data-key: application.yml
-        prefix: config
-        format: yaml
-        default-context: defaults
     gateway:
       routes:
         - id: product
-          uri: lb://products
+          uri: lb://product
           predicates:
-            - Path=/products,/products/**
-        - id: product-shop
-          uri: lb://shop
+            - Path=/product, /product/**, /product/all
+        - id: shopCart
+          uri: lb://shopCart
           predicates:
-            - Path=/shop,/shop/**
+            - Path=/cart, /cart/**, /cart/**
         - id: user
           uri: lb://user
           predicates:
@@ -50,3 +40,7 @@ spring:
           args:
             retries: 3
             methods: GET, POST
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG

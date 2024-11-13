@@ -1,15 +1,12 @@
-package com.product.shop.clients;
+package com.cart.shopcart.clients;
 
-import com.product.shop.dtos.ProductDTO;
+import com.cart.shopcart.dto.ProductDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @Slf4j

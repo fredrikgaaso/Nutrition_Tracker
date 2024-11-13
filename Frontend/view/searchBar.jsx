@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import axios, {get} from 'axios';
 
 const SearchBar = () => {
     const [searchInput, setSearchInput] = useState("");
@@ -10,8 +10,9 @@ const SearchBar = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/products/all');
-                setProducts(response.data);
+                const response = await fetch('http://localhost:8000/product/all');
+                const data = await response.json();
+                setProducts(data);
                 setLoading(false);
             } catch (err) {
                 setError("Failed to fetch data from the microservice.");
@@ -27,8 +28,9 @@ const SearchBar = () => {
     };
 
     const filteredProducts = products.filter((product) =>
-        product.productName.toLowerCase().includes(searchInput.toLowerCase())
+        product.productName && product.productName.toLowerCase().includes(searchInput.toLowerCase())
     );
+
 
     if (loading) return <p>loading...</p>;
 

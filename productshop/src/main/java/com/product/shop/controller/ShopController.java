@@ -1,5 +1,6 @@
 package com.product.shop.controller;
 
+import com.product.shop.dtos.ProductDTO;
 import com.product.shop.model.ShopCart;
 import com.product.shop.model.ShopProduct;
 import com.product.shop.model.ShopUser;
@@ -8,11 +9,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/shop")
-@CrossOrigin(origins = "http://localhost:1234")
 public class ShopController {
 
     private final ProductShopService shopService;
@@ -41,7 +43,6 @@ public class ShopController {
             throw new IllegalStateException("The returned user is null");
         }
         log.info("Received response: id={}, name={}, wallet={}", shopUser.getId(), shopUser.getName(), shopUser.getWallet());
-       // shopService.createNewCart(userId);
         return shopUser;
     }
 
@@ -58,5 +59,10 @@ public class ShopController {
     @PostMapping("/cart/add/{cartId}/{productId}")
     public void addProductToCart(@PathVariable Long cartId,@PathVariable Long productId) {
         shopService.addProductToCart(cartId, productId);
+    }
+
+    @GetMapping("/all")
+    public List<ShopProduct> findAll() {
+    return shopService.getAllProducts();
     }
 }

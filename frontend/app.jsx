@@ -1,7 +1,7 @@
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import SearchBar from './view/searchBar'
 import ShoppingCart from "./view/shoppingCart";
-import Login from "./view/login";
+import FrontPage from "./view/frontPage"
 
 function App() {
     return(
@@ -9,7 +9,7 @@ function App() {
            <Routes>
                <Route path={"searchbar"} element={<SearchBar/>}/>
                <Route path={"ShoppingCart"} element={<ShoppingCart/>}/>
-               <Route path={"login"} element={<Login/>}/>
+               <Route path={"frontpage"} element={<FrontPage/>}/>
            </Routes>
        </BrowserRouter>
     )

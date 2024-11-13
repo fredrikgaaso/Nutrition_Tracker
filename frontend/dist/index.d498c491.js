@@ -27226,8 +27226,8 @@ var _searchBar = require("./view/searchBar");
 var _searchBarDefault = parcelHelpers.interopDefault(_searchBar);
 var _shoppingCart = require("./view/shoppingCart");
 var _shoppingCartDefault = parcelHelpers.interopDefault(_shoppingCart);
-var _login = require("./view/login");
-var _loginDefault = parcelHelpers.interopDefault(_login);
+var _frontPage = require("./view/frontPage");
+var _frontPageDefault = parcelHelpers.interopDefault(_frontPage);
 function App() {
     return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.BrowserRouter), {
         children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Routes), {
@@ -27257,11 +27257,11 @@ function App() {
                     columnNumber: 16
                 }, this),
                 /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactRouterDom.Route), {
-                    path: "login",
-                    element: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _loginDefault.default), {}, void 0, false, {
+                    path: "frontpage",
+                    element: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _frontPageDefault.default), {}, void 0, false, {
                         fileName: "app.jsx",
                         lineNumber: 12,
-                        columnNumber: 47
+                        columnNumber: 51
                     }, void 0)
                 }, void 0, false, {
                     fileName: "app.jsx",
@@ -27290,7 +27290,7 @@ $RefreshReg$(_c, "App");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-dev-runtime":"iTorj","react-router-dom":"9xmpe","./view/searchBar":"2AqNb","./view/shoppingCart":"4JGXG","./view/login":"2bGjb","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"km3Ru"}],"9xmpe":[function(require,module,exports) {
+},{"react/jsx-dev-runtime":"iTorj","react-router-dom":"9xmpe","./view/searchBar":"2AqNb","./view/shoppingCart":"4JGXG","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"km3Ru","./view/frontPage":"9B0GC"}],"9xmpe":[function(require,module,exports) {
 /**
  * React Router DOM v6.26.2
  *
@@ -34524,8 +34524,9 @@ const SearchBar = ()=>{
     (0, _react.useEffect)(()=>{
         const fetchProducts = async ()=>{
             try {
-                const response = await (0, _axiosDefault.default).get("http://localhost:8080/products/all");
-                setProducts(response.data);
+                const response = await fetch("http://localhost:8000/product/all");
+                const data = await response.json();
+                setProducts(data);
                 setLoading(false);
             } catch (err) {
                 setError("Failed to fetch data from the microservice.");
@@ -34537,19 +34538,19 @@ const SearchBar = ()=>{
     const handleChange = (e)=>{
         setSearchInput(e.target.value);
     };
-    const filteredProducts = products.filter((product)=>product.productName.toLowerCase().includes(searchInput.toLowerCase()));
+    const filteredProducts = products.filter((product)=>product.productName && product.productName.toLowerCase().includes(searchInput.toLowerCase()));
     if (loading) return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
         children: "loading..."
     }, void 0, false, {
         fileName: "view/searchBar.jsx",
-        lineNumber: 33,
+        lineNumber: 35,
         columnNumber: 25
     }, undefined);
     if (error) return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
         children: error
     }, void 0, false, {
         fileName: "view/searchBar.jsx",
-        lineNumber: 35,
+        lineNumber: 37,
         columnNumber: 23
     }, undefined);
     if (searchInput.length === 0) return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -34561,7 +34562,7 @@ const SearchBar = ()=>{
                 placeholder: "Search..."
             }, void 0, false, {
                 fileName: "view/searchBar.jsx",
-                lineNumber: 38,
+                lineNumber: 40,
                 columnNumber: 9
             }, undefined),
             " ",
@@ -34569,13 +34570,13 @@ const SearchBar = ()=>{
                 children: "no products found"
             }, void 0, false, {
                 fileName: "view/searchBar.jsx",
-                lineNumber: 43,
+                lineNumber: 45,
                 columnNumber: 12
             }, undefined)
         ]
     }, void 0, true, {
         fileName: "view/searchBar.jsx",
-        lineNumber: 37,
+        lineNumber: 39,
         columnNumber: 42
     }, undefined);
     if (!loading && !error && searchInput.length > 0) return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
@@ -34587,7 +34588,7 @@ const SearchBar = ()=>{
                 placeholder: "Search..."
             }, void 0, false, {
                 fileName: "view/searchBar.jsx",
-                lineNumber: 48,
+                lineNumber: 50,
                 columnNumber: 13
             }, undefined),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("table", {
@@ -34599,32 +34600,32 @@ const SearchBar = ()=>{
                                     children: "Food name"
                                 }, void 0, false, {
                                     fileName: "view/searchBar.jsx",
-                                    lineNumber: 57,
+                                    lineNumber: 59,
                                     columnNumber: 25
                                 }, undefined),
                                 /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("th", {
                                     children: "Nutritional Info"
                                 }, void 0, false, {
                                     fileName: "view/searchBar.jsx",
-                                    lineNumber: 58,
+                                    lineNumber: 60,
                                     columnNumber: 25
                                 }, undefined),
                                 /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("th", {
                                     children: "Calories"
                                 }, void 0, false, {
                                     fileName: "view/searchBar.jsx",
-                                    lineNumber: 59,
+                                    lineNumber: 61,
                                     columnNumber: 25
                                 }, undefined)
                             ]
                         }, void 0, true, {
                             fileName: "view/searchBar.jsx",
-                            lineNumber: 56,
+                            lineNumber: 58,
                             columnNumber: 21
                         }, undefined)
                     }, void 0, false, {
                         fileName: "view/searchBar.jsx",
-                        lineNumber: 55,
+                        lineNumber: 57,
                         columnNumber: 21
                     }, undefined),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("tbody", {
@@ -34634,14 +34635,14 @@ const SearchBar = ()=>{
                                         children: product.productName
                                     }, void 0, false, {
                                         fileName: "view/searchBar.jsx",
-                                        lineNumber: 65,
+                                        lineNumber: 67,
                                         columnNumber: 29
                                     }, undefined),
                                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("td", {
                                         children: product.calories
                                     }, void 0, false, {
                                         fileName: "view/searchBar.jsx",
-                                        lineNumber: 66,
+                                        lineNumber: 68,
                                         columnNumber: 29
                                     }, undefined),
                                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("td", {
@@ -34654,40 +34655,40 @@ const SearchBar = ()=>{
                                                     ]
                                                 }, nutrientIndex, true, {
                                                     fileName: "view/searchBar.jsx",
-                                                    lineNumber: 70,
+                                                    lineNumber: 72,
                                                     columnNumber: 41
                                                 }, undefined))
                                         }, void 0, false, {
                                             fileName: "view/searchBar.jsx",
-                                            lineNumber: 68,
+                                            lineNumber: 70,
                                             columnNumber: 33
                                         }, undefined)
                                     }, void 0, false, {
                                         fileName: "view/searchBar.jsx",
-                                        lineNumber: 67,
+                                        lineNumber: 69,
                                         columnNumber: 29
                                     }, undefined)
                                 ]
                             }, index, true, {
                                 fileName: "view/searchBar.jsx",
-                                lineNumber: 64,
+                                lineNumber: 66,
                                 columnNumber: 25
                             }, undefined))
                     }, void 0, false, {
                         fileName: "view/searchBar.jsx",
-                        lineNumber: 62,
+                        lineNumber: 64,
                         columnNumber: 21
                     }, undefined)
                 ]
             }, void 0, true, {
                 fileName: "view/searchBar.jsx",
-                lineNumber: 54,
+                lineNumber: 56,
                 columnNumber: 17
             }, undefined)
         ]
     }, void 0, true, {
         fileName: "view/searchBar.jsx",
-        lineNumber: 47,
+        lineNumber: 49,
         columnNumber: 9
     }, undefined);
 };
@@ -39654,86 +39655,57 @@ parcelHelpers.defineInteropFlag(exports);
 var _jsxDevRuntime = require("react/jsx-dev-runtime");
 var _react = require("react");
 var _reactDefault = parcelHelpers.interopDefault(_react);
-var _axios = require("axios");
-var _axiosDefault = parcelHelpers.interopDefault(_axios);
 var _s = $RefreshSig$();
-const ShoppingCart = ()=>{
+const ShoppingCart = ({ userId })=>{
     _s();
     const [shoppingCart, setShoppingCart] = (0, _react.useState)(null);
-    const [user, setUser] = (0, _react.useState)(null);
     const [loading, setLoading] = (0, _react.useState)(true);
     const [error, setError] = (0, _react.useState)(null);
     (0, _react.useEffect)(()=>{
         const fetchShoppingCart = async ()=>{
             try {
-                const response = await (0, _axiosDefault.default).get("http://localhost:8081/shop/cart/1");
-                setShoppingCart(response.data);
+                const response = await fetch(`http://localhost:8000/cart/${userId}`);
+                const data = await response.json();
+                console.log(data); // Log the response to check its structure
+                setShoppingCart(data);
                 setLoading(false);
             } catch (err) {
                 setError("Failed to fetch data from the microservice.");
                 setLoading(false);
             }
         };
-        const fetchUser = async ()=>{
-            try {
-                const response = await (0, _axiosDefault.default).get("http://localhost:8081/shop/user/1");
-                setUser(response.data);
-                setLoading(false);
-            } catch (err) {
-                setError("Failed to fetch user");
-                setLoading(false);
-            }
-        };
-        fetchShoppingCart();
-    }, []);
+        if (userId) fetchShoppingCart();
+    }, [
+        userId
+    ]); // Re-run the effect when userId changes
     if (loading) return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
         children: "Loading..."
     }, void 0, false, {
         fileName: "view/shoppingCart.jsx",
-        lineNumber: 35,
+        lineNumber: 27,
         columnNumber: 25
     }, undefined);
     if (error) return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
         children: error
     }, void 0, false, {
         fileName: "view/shoppingCart.jsx",
-        lineNumber: 37,
+        lineNumber: 28,
         columnNumber: 23
     }, undefined);
-    if (!shoppingCart) return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
+    if (!shoppingCart || !shoppingCart.productsList) return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
         children: "No shopping cart found"
     }, void 0, false, {
         fileName: "view/shoppingCart.jsx",
-        lineNumber: 39,
-        columnNumber: 31
+        lineNumber: 29,
+        columnNumber: 61
     }, undefined);
     return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
         children: [
-            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h2", {
-                children: [
-                    "User: ",
-                    shoppingCart.user.name
-                ]
-            }, void 0, true, {
-                fileName: "view/shoppingCart.jsx",
-                lineNumber: 43,
-                columnNumber: 13
-            }, undefined),
-            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h3", {
-                children: [
-                    "Wallet: ",
-                    shoppingCart.user.wallet
-                ]
-            }, void 0, true, {
-                fileName: "view/shoppingCart.jsx",
-                lineNumber: 44,
-                columnNumber: 13
-            }, undefined),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h4", {
                 children: "Product List:"
             }, void 0, false, {
                 fileName: "view/shoppingCart.jsx",
-                lineNumber: 46,
+                lineNumber: 33,
                 columnNumber: 13
             }, undefined),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("table", {
@@ -39745,99 +39717,105 @@ const ShoppingCart = ()=>{
                                     children: "Product Name"
                                 }, void 0, false, {
                                     fileName: "view/shoppingCart.jsx",
-                                    lineNumber: 50,
+                                    lineNumber: 37,
                                     columnNumber: 21
                                 }, undefined),
                                 /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("th", {
                                     children: "Calories"
                                 }, void 0, false, {
                                     fileName: "view/shoppingCart.jsx",
-                                    lineNumber: 51,
+                                    lineNumber: 38,
                                     columnNumber: 21
                                 }, undefined),
                                 /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("th", {
                                     children: "Nutritional Info"
                                 }, void 0, false, {
                                     fileName: "view/shoppingCart.jsx",
-                                    lineNumber: 52,
+                                    lineNumber: 39,
                                     columnNumber: 21
                                 }, undefined)
                             ]
                         }, void 0, true, {
                             fileName: "view/shoppingCart.jsx",
-                            lineNumber: 49,
+                            lineNumber: 36,
                             columnNumber: 17
                         }, undefined)
                     }, void 0, false, {
                         fileName: "view/shoppingCart.jsx",
-                        lineNumber: 48,
+                        lineNumber: 35,
                         columnNumber: 17
                     }, undefined),
                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("tbody", {
-                        children: shoppingCart.productList.map((product)=>/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("tr", {
+                        children: shoppingCart.productsList.map((product, index)=>/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("tr", {
                                 children: [
                                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("td", {
                                         children: product.productName
                                     }, void 0, false, {
                                         fileName: "view/shoppingCart.jsx",
-                                        lineNumber: 58,
+                                        lineNumber: 45,
                                         columnNumber: 25
                                     }, undefined),
                                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("td", {
                                         children: product.calories
                                     }, void 0, false, {
                                         fileName: "view/shoppingCart.jsx",
-                                        lineNumber: 59,
+                                        lineNumber: 46,
                                         columnNumber: 25
                                     }, undefined),
                                     /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("td", {
                                         children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("ul", {
-                                            children: product.nutritionalInfo.map((nutrient)=>/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("li", {
+                                            children: product.nutritionalInfo && Array.isArray(product.nutritionalInfo) ? product.nutritionalInfo.map((nutrient, nutrientIndex)=>/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("li", {
                                                     children: [
                                                         nutrient.nutrientName,
                                                         ": ",
                                                         nutrient.nutrientValue
                                                     ]
-                                                }, nutrient.nutrientName, true, {
+                                                }, nutrientIndex, true, {
                                                     fileName: "view/shoppingCart.jsx",
-                                                    lineNumber: 63,
-                                                    columnNumber: 37
-                                                }, undefined))
+                                                    lineNumber: 51,
+                                                    columnNumber: 41
+                                                }, undefined)) : /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("li", {
+                                                children: "No nutritional info available"
+                                            }, void 0, false, {
+                                                fileName: "view/shoppingCart.jsx",
+                                                lineNumber: 56,
+                                                columnNumber: 37
+                                            }, undefined)
                                         }, void 0, false, {
                                             fileName: "view/shoppingCart.jsx",
-                                            lineNumber: 61,
+                                            lineNumber: 48,
                                             columnNumber: 29
                                         }, undefined)
                                     }, void 0, false, {
                                         fileName: "view/shoppingCart.jsx",
-                                        lineNumber: 60,
+                                        lineNumber: 47,
                                         columnNumber: 25
                                     }, undefined)
                                 ]
-                            }, product.id, true, {
+                            }, index, true, {
                                 fileName: "view/shoppingCart.jsx",
-                                lineNumber: 57,
+                                lineNumber: 44,
                                 columnNumber: 21
                             }, undefined))
                     }, void 0, false, {
                         fileName: "view/shoppingCart.jsx",
-                        lineNumber: 55,
+                        lineNumber: 42,
                         columnNumber: 17
                     }, undefined)
                 ]
             }, void 0, true, {
                 fileName: "view/shoppingCart.jsx",
-                lineNumber: 47,
+                lineNumber: 34,
                 columnNumber: 13
             }, undefined)
         ]
     }, void 0, true, {
         fileName: "view/shoppingCart.jsx",
-        lineNumber: 42,
+        lineNumber: 32,
         columnNumber: 9
     }, undefined);
 };
-_s(ShoppingCart, "VL/nYIFtTw5l0Y0cwGhAlwj47r4=");
+_s(ShoppingCart, "9ESYG6yEnh20x4FbNFRhWqoVFjQ=");
 _c = ShoppingCart;
 exports.default = ShoppingCart;
 var _c;
@@ -39848,148 +39826,64 @@ $RefreshReg$(_c, "ShoppingCart");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-dev-runtime":"iTorj","react":"21dqq","axios":"jo6P5","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"km3Ru"}],"2bGjb":[function(require,module,exports) {
-var $parcel$ReactRefreshHelpers$555b = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+},{"react/jsx-dev-runtime":"iTorj","react":"21dqq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"km3Ru"}],"9B0GC":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$c964 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
-$parcel$ReactRefreshHelpers$555b.prelude(module);
+$parcel$ReactRefreshHelpers$c964.prelude(module);
 
 try {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _jsxDevRuntime = require("react/jsx-dev-runtime");
-var _react = require("react");
-var _reactDefault = parcelHelpers.interopDefault(_react);
-var _axios = require("axios");
-var _axiosDefault = parcelHelpers.interopDefault(_axios);
-var _reactRouterDom = require("react-router-dom");
-var _s = $RefreshSig$();
-const SimpleLogin = ()=>{
-    _s();
-    const [user, setUser] = (0, _react.useState)([]);
-    const [username, setUsername] = (0, _react.useState)("");
-    const [password, setPassword] = (0, _react.useState)("");
-    const [message, setMessage] = (0, _react.useState)("");
-    const [error, setError] = (0, _react.useState)(null);
-    (0, _react.useEffect)(()=>{
-        const fetchUsers = async ()=>{
-            try {
-                const response = await (0, _axiosDefault.default).get("http://localhost:8086/user/all");
-                setUser(response.data);
-            } catch (err) {
-                setError("Failed to fetch data from the microservice.");
-            }
-        };
-        fetchUsers();
-    }, []);
-    const handleLogin = (e)=>{
-        e.preventDefault();
-        for(let i = 0; i < user.length; i++)if (username === user[i].name && password === user[i].password) {
-            window.location.href = "/searchBar";
-            setMessage("Login successful");
-        } else setMessage("Login not successful");
-    };
+var _shoppingCart = require("./shoppingCart");
+var _shoppingCartDefault = parcelHelpers.interopDefault(_shoppingCart);
+const FrontPage = ()=>{
     return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
         children: [
-            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("h2", {
-                children: "Login"
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
+                children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _shoppingCartDefault.default), {
+                    userId: 1
+                }, void 0, false, {
+                    fileName: "view/frontPage.jsx",
+                    lineNumber: 6,
+                    columnNumber: 21
+                }, undefined)
             }, void 0, false, {
-                fileName: "view/login.jsx",
-                lineNumber: 41,
+                fileName: "view/frontPage.jsx",
+                lineNumber: 6,
                 columnNumber: 13
             }, undefined),
-            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("form", {
-                onSubmit: handleLogin,
-                children: [
-                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                        children: [
-                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("label", {
-                                children: "Username:"
-                            }, void 0, false, {
-                                fileName: "view/login.jsx",
-                                lineNumber: 44,
-                                columnNumber: 21
-                            }, undefined),
-                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("input", {
-                                type: "text",
-                                value: username,
-                                onChange: (e)=>setUsername(e.target.value),
-                                required: true
-                            }, void 0, false, {
-                                fileName: "view/login.jsx",
-                                lineNumber: 45,
-                                columnNumber: 21
-                            }, undefined)
-                        ]
-                    }, void 0, true, {
-                        fileName: "view/login.jsx",
-                        lineNumber: 43,
-                        columnNumber: 17
-                    }, undefined),
-                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
-                        children: [
-                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("label", {
-                                children: "Password:"
-                            }, void 0, false, {
-                                fileName: "view/login.jsx",
-                                lineNumber: 53,
-                                columnNumber: 21
-                            }, undefined),
-                            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("input", {
-                                type: "password",
-                                value: password,
-                                onChange: (e)=>setPassword(e.target.value),
-                                required: true
-                            }, void 0, false, {
-                                fileName: "view/login.jsx",
-                                lineNumber: 54,
-                                columnNumber: 21
-                            }, undefined)
-                        ]
-                    }, void 0, true, {
-                        fileName: "view/login.jsx",
-                        lineNumber: 52,
-                        columnNumber: 17
-                    }, undefined),
-                    /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
-                        type: "submit",
-                        children: "Login"
-                    }, void 0, false, {
-                        fileName: "view/login.jsx",
-                        lineNumber: 61,
-                        columnNumber: 17
-                    }, undefined)
-                ]
-            }, void 0, true, {
-                fileName: "view/login.jsx",
-                lineNumber: 42,
-                columnNumber: 13
-            }, undefined),
-            message && /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("p", {
-                children: message
+            /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
+                children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _shoppingCartDefault.default), {
+                    userId: 2
+                }, void 0, false, {
+                    fileName: "view/frontPage.jsx",
+                    lineNumber: 7,
+                    columnNumber: 21
+                }, undefined)
             }, void 0, false, {
-                fileName: "view/login.jsx",
-                lineNumber: 63,
-                columnNumber: 25
+                fileName: "view/frontPage.jsx",
+                lineNumber: 7,
+                columnNumber: 13
             }, undefined)
         ]
     }, void 0, true, {
-        fileName: "view/login.jsx",
-        lineNumber: 40,
+        fileName: "view/frontPage.jsx",
+        lineNumber: 5,
         columnNumber: 9
     }, undefined);
 };
-_s(SimpleLogin, "dhBAcwpB3ENj2j+Z/wuzRiSpr1g=");
-_c = SimpleLogin;
-exports.default = SimpleLogin;
+_c = FrontPage;
+exports.default = FrontPage;
 var _c;
-$RefreshReg$(_c, "SimpleLogin");
+$RefreshReg$(_c, "FrontPage");
 
-  $parcel$ReactRefreshHelpers$555b.postlude(module);
+  $parcel$ReactRefreshHelpers$c964.postlude(module);
 } finally {
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-dev-runtime":"iTorj","react":"21dqq","axios":"jo6P5","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"km3Ru","react-router-dom":"9xmpe"}]},["dlFZn","1xC6H","g9R30"], "g9R30", "parcelRequiredc7f")
+},{"react/jsx-dev-runtime":"iTorj","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"km3Ru","./shoppingCart":"4JGXG","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["dlFZn","1xC6H","g9R30"], "g9R30", "parcelRequiredc7f")
 
 //# sourceMappingURL=index.d498c491.js.map

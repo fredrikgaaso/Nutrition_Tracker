@@ -13,8 +13,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/products")
-@CrossOrigin(origins = "http://localhost:1234")
+@RequestMapping("/product")
 public class ProductController {
 
     private final ProductService productService;

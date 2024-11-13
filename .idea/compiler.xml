@@ -10,6 +10,7 @@
         <module name="productshop" />
         <module name="Product" />
         <module name="user" />
+        <module name="shopCart" />
         <module name="gateway" />
       </profile>
     </annotationProcessing>
@@ -22,6 +23,7 @@
       <module name="Product" options="-parameters" />
       <module name="gateway" options="-parameters" />
       <module name="productshop" options="-parameters" />
+      <module name="shopCart" options="-parameters" />
       <module name="shoppingCart" options="-parameters" />
       <module name="user" options="-parameters" />
     </option>
