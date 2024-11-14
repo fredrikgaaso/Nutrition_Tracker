@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -53,5 +55,9 @@ public class CartService {
         cart.getProductsList().add(product.getProduct());
         log.info("cart list: {}", cart.getProductsList());
         shopCartRepo.saveAndFlush(cart);
+    }
+
+    public List<ShopCart> getAllCarts() {
+        return shopCartRepo.findAll();
     }
 }

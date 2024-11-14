@@ -7,9 +7,9 @@ function App() {
     return(
        <BrowserRouter>
            <Routes>
-               <Route path={"searchbar"} element={<SearchBar/>}/>
-               <Route path={"ShoppingCart"} element={<ShoppingCart/>}/>
-               <Route path={"frontpage"} element={<FrontPage/>}/>
+               <Route path="/searchbar/:cartId" element={<SearchBar/>}/>
+               <Route path={"/shoppingCart/:cartId"} element={<ShoppingCart/>}/>
+               <Route path="/frontpage" element={<FrontPage/>}/>
            </Routes>
        </BrowserRouter>
     )

@@ -24,7 +24,7 @@ public class ShopProductClient {
     }
 
     public ProductDTO remoteGetOneProduct(Long productId){
-        String callUrl = restServiceUrl + "/products/" + productId;
+        String callUrl = restServiceUrl + "/product/" + productId;
 
         ResponseEntity<ProductDTO> response;
 

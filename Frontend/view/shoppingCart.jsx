@@ -1,45 +1,48 @@
 import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 
-const ShoppingCart = ({ userId }) => {
+const ShoppingCart = () => {
+    const { cartId } = useParams();
+    const navigate = useNavigate();
     const [shoppingCart, setShoppingCart] = useState(null);
-    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchShoppingCart = async () => {
             try {
-                const response = await fetch(`http://localhost:8000/cart/${userId}`);
+                const response = await fetch(`http://localhost:8000/cart/${cartId}`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch data from the microservice.');
+                }
                 const data = await response.json();
-                console.log(data);  // Log the response to check its structure
                 setShoppingCart(data);
-                setLoading(false);
             } catch (err) {
                 setError("Failed to fetch data from the microservice.");
-                setLoading(false);
             }
         };
 
-        if (userId) {
+        if (cartId) {
             fetchShoppingCart();
         }
-    }, [userId]);  // Re-run the effect when userId changes
+    }, [cartId]);
 
-    if (loading) return <p>Loading...</p>;
+    const handleNavigateToSearch = () => {
+        navigate(`/searchbar/${cartId}`);
+    };
+
     if (error) return <p>{error}</p>;
     if (!shoppingCart || !shoppingCart.productsList) return <p>No shopping cart found</p>;
 
     return (
         <div>
             <h4>Product List:</h4>
+            <button onClick={handleNavigateToSearch}>Go to SearchBar for Cart {cartId}</button>
             <table>
-                <thead>
                 <tr>
                     <th>Product Name</th>
                     <th>Calories</th>
                     <th>Nutritional Info</th>
                 </tr>
-                </thead>
-                <tbody>
                 {shoppingCart.productsList.map((product, index) => (
                     <tr key={index}>
                         <td>{product.productName}</td>
@@ -59,8 +62,8 @@ const ShoppingCart = ({ userId }) => {
                         </td>
                     </tr>
                 ))}
-                </tbody>
             </table>
+
         </div>
     );
 };
