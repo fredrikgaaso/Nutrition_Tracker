@@ -7,16 +7,11 @@ import lombok.Setter;
 
 import java.util.List;
 
-@Entity
 @Getter
 @Setter
 @RequiredArgsConstructor
 public class FoodResponse {
-    @Id
-    private long id;
     private String foodName;
-    @ManyToOne
     private NutrientResponse calories;
-    @OneToMany
     private List<ConstituentResponse> constituents;
 }

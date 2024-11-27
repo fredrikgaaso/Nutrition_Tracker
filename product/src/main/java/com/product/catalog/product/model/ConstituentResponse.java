@@ -10,13 +10,11 @@ import lombok.Setter;
 
 import java.util.List;
 
-@Entity
+
 @Getter
 @Setter
 @RequiredArgsConstructor
 public class ConstituentResponse {
-    @Id
-    private long id;
     private String nutrientId;
     private Double quantity;
     private String unit;
