@@ -26,6 +26,11 @@ spring:
           predicates:
             - Path=/user/**
 
+        - id: recommendation
+          uri: lb://recommendation
+          predicates:
+            - Path=/recommendation/**
+
       globalcors:
         cors-configurations:
           '[/**]':

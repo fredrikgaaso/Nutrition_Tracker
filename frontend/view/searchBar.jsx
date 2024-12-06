@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 const SearchBar = () => {
     const { cartId } = useParams();
+    const navigate = useNavigate();
     const [searchInput, setSearchInput] = useState("");
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -58,6 +59,10 @@ const SearchBar = () => {
         }
     };
 
+    const handleNavigateToCart = () => {
+        navigate(`/shoppingCart/${cartId}`);
+    };
+
     const handleQuantityChange = (productId, value) => {
         setQuantity((prev) => ({ ...prev, [productId]: value }));
     };
@@ -67,6 +72,7 @@ const SearchBar = () => {
 
     return (
         <div>
+            <button onClick={handleNavigateToCart}>Back to cart</button>
             <input
                 type="text"
                 value={searchInput}

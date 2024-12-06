@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequestMapping("/recommendation")
@@ -28,7 +30,7 @@ public class RecommendationController {
     }
 
     @GetMapping("/recommend/{cartId}")
-    public String recommendProducts(@PathVariable Long cartId) {
+    public List<String> recommendProducts(@PathVariable Long cartId) {
         ShopCart shopCart = recommendationService.getOneCart(cartId);
         if (shopCart == null) {
             log.error("shopCart returned null");

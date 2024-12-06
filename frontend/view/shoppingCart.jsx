@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import Recommendation from "./recommendation";
 
 const ShoppingCart = () => {
     const { cartId } = useParams();
     const navigate = useNavigate();
     const [shoppingCart, setShoppingCart] = useState(null);
     const [error, setError] = useState(null);
+    const [showRecommendation, setShowRecommendation] = useState(false);
 
     useEffect(() => {
         const fetchShoppingCart = async () => {
@@ -29,8 +31,11 @@ const ShoppingCart = () => {
     const handleNavigateToSearch = () => {
         navigate(`/searchbar/${cartId}`);
     };
-    const handleNavigateToRecommendations = () => {
-        navigate(`/recommendations/${cartId}`);
+    const handleNavigateToFrontPage = () => {
+        navigate(`/`);
+    }
+    const handleToggleRecommendation = () => {
+        setShowRecommendation(Recommendation => !Recommendation);
     }
 
     if (error) return <p>{error}</p>;
@@ -38,16 +43,22 @@ const ShoppingCart = () => {
 
     return (
         <div>
-            <h4>Product List:</h4>
+            <button onClick={handleNavigateToFrontPage}>Go back to front page</button>
             <button onClick={handleNavigateToSearch}>Go to SearchBar for Cart {cartId}</button>
-            <button onClick={handleNavigateToRecommendations}>Get recommendations</button>
+            <button
+                onClick={handleToggleRecommendation}>{showRecommendation ? 'Hide Recommendations' : 'Get Recommendations'}</button>
+            {showRecommendation && <Recommendation cartId={cartId}/>}
+            <h4>Product List:</h4>
             <table>
+                <thead>
                 <tr>
                     <th>Product Name</th>
                     <th>Calories pr 100g</th>
                     <th>Nutritional Info pr 100g</th>
                     <th>Quantity</th>
                 </tr>
+                </thead>
+                <tbody>
                 {shoppingCart.productsList.map((product, index) => (
                     <tr key={index}>
                         <td>{product.productName}</td>
@@ -68,6 +79,7 @@ const ShoppingCart = () => {
                         <td>{product.quantity}</td>
                     </tr>
                 ))}
+                </tbody>
             </table>
 
         </div>
