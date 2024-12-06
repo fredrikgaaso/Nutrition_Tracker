@@ -1,6 +1,5 @@
-package com.product.catalog.product.model;
+package com.product.catalog.product.response;
 
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -14,4 +13,5 @@ public class FoodResponse {
     private String foodName;
     private NutrientResponse calories;
     private List<ConstituentResponse> constituents;
+    private String foodGroupId;
 }

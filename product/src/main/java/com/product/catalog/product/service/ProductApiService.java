@@ -2,6 +2,10 @@ package com.product.catalog.product.service;
 
 import com.product.catalog.product.model.*;
 import com.product.catalog.product.repos.ProductRepo;
+import com.product.catalog.product.response.FoodGroupResponse;
+import com.product.catalog.product.response.FoodGroupWrapper;
+import com.product.catalog.product.response.FoodResponse;
+import com.product.catalog.product.response.FoodResponseWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.ParameterizedTypeReference;
@@ -28,38 +32,59 @@ public class ProductApiService {
 
 
     public void fetchAndSaveProducts() {
-        String apiUrl = "https://www.matvaretabellen.no/api/nb/foods.json";
+        String foodApi = "https://www.matvaretabellen.no/api/nb/foods.json";
+        String foodGroupApi = "https://www.matvaretabellen.no/api/nb/food-groups.json";
 
         try {
-            // Use RestTemplate to fetch the API response
-            ResponseEntity<FoodResponseWrapper> response = restTemplate.exchange(
-                    apiUrl, HttpMethod.GET, null,
-                    new ParameterizedTypeReference<FoodResponseWrapper>() {}
+            ResponseEntity<FoodGroupWrapper> foodGroupResponse = restTemplate.exchange(
+                    foodGroupApi, HttpMethod.GET, null,
+                    new ParameterizedTypeReference<>() {}
             );
 
-            // Extract the list of foods
-            List<FoodResponse> foodResponses = Objects.requireNonNull(response.getBody()).getFoods();
+            List<FoodGroupResponse> foodGroups = Objects.requireNonNull(foodGroupResponse.getBody()).getFoodGroups();
 
-            // Process and save each food
+            ResponseEntity<FoodResponseWrapper> foodResponse = restTemplate.exchange(
+                    foodApi, HttpMethod.GET, null,
+                    new ParameterizedTypeReference<>() {}
+            );
+
+            List<FoodResponse> foodResponses = Objects.requireNonNull(foodResponse.getBody()).getFoods();
+
             if (foodResponses != null) {
-                for (FoodResponse food : foodResponses) {
-                    Product product = new Product();
-                    product.setProductName(food.getFoodName());
-                    product.setCalories(food.getCalories().getQuantity() != null ? food.getCalories().getQuantity() : 0.0);
+                List<Product> products = foodResponses.parallelStream()
+                        .map(food -> {
+                            Product product = new Product();
+                            product.setProductName(food.getFoodName());
+                            product.setCalories(food.getCalories().getQuantity() != null ? food.getCalories().getQuantity() : 0.0);
 
-                    if (food.getConstituents() != null) {
-                        List<Nutrient> nutrients = food.getConstituents().stream()
-                                .map(constituent -> {
-                                    Nutrient nutrient = new Nutrient();
-                                    nutrient.setNutrientName(constituent.getNutrientId());
-                                    nutrient.setNutrientValue(constituent.getQuantity() != null ? constituent.getQuantity() : 0.0);
-                                    return nutrient;
-                                })
-                                .collect(Collectors.toList());
-                        product.setNutritionalInfo(nutrients);
-                    }
+                            if (food.getFoodGroupId() != null && !food.getFoodGroupId().isEmpty()) {
+                                foodGroups.stream()
+                                        .filter(group -> group.getFoodGroupId() != null && group.getFoodGroupId().equals(food.getFoodGroupId()))
+                                        .findFirst()
+                                        .ifPresent(group -> product.setFoodGroup(group.getName()));
+                            }
 
-                    productRepo.save(product);
+                            if (food.getConstituents() != null) {
+                                List<Nutrient> nutrients = food.getConstituents().parallelStream()
+                                        .filter(constituent -> constituent.getNutrientId().matches("Energi|Protein|Karbo|Sukker|Fett|Mettet|Salt"))
+                                        .map(constituent -> {
+                                            Nutrient nutrient = new Nutrient();
+                                            nutrient.setNutrientName(constituent.getNutrientId());
+                                            nutrient.setNutrientValue(constituent.getQuantity() != null ? constituent.getQuantity() : 0.0);
+                                            return nutrient;
+                                        })
+                                        .collect(Collectors.toList());
+                                product.setNutritionalInfo(nutrients);
+                            }
+                            return product;
+                        })
+                        .collect(Collectors.toList());
+
+                // Save products in batches
+                int batchSize = 100;
+                for (int i = 0; i < products.size(); i += batchSize) {
+                    int end = Math.min(i + batchSize, products.size());
+                    productRepo.saveAll(products.subList(i, end));
                 }
             } else {
                 log.warn("No foods found in API response");

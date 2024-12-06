@@ -40,9 +40,9 @@ public class ShopCartController {
     public ShopCart createNewCart() {
         return cartService.createNewCart();
     }
-    @PostMapping("/add/{cartId}/{productId}")
-    public void addProductToCart(@PathVariable Long cartId,@PathVariable Long productId) {
-        cartService.addProductToCart(cartId, productId);
+    @PostMapping("/add/{cartId}/product/{productId}/{quantity}")
+    public void addProductToCart(@PathVariable Long cartId,@PathVariable Long productId, @PathVariable int quantity) {
+        cartService.addProductToCart(cartId, productId, quantity);
     }
 
     @GetMapping("/all")

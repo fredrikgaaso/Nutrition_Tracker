@@ -14,15 +14,18 @@ spring:
         - id: product
           uri: lb://product
           predicates:
-            - Path=/product, /product/**, /product/all
+            - Path=/product/**
+
         - id: shopCart
           uri: lb://shopCart
           predicates:
-            - Path=/cart, /cart/*, /cart/all, /cart/{cartId}
+            - Path=/cart/**
+
         - id: user
           uri: lb://user
           predicates:
-            - Path=/user,/user/**
+            - Path=/user/**
+
       globalcors:
         cors-configurations:
           '[/**]':
@@ -35,6 +38,7 @@ spring:
               - "POST"
               - "OPTIONS"
             allow-credentials: true
+
       default-filters:
         - name: Retry
           args:

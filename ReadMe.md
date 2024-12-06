@@ -13,6 +13,9 @@ http://localhost:8080
 <strong>User<strong><br>
 http://localhost:8086
 
+Cart
+
+
 <strong>Start new instance with new port:</strong><br>
 mvn spring-boot:run -Dspring-boot.run.arguments="--server.port=NEW_PORT_NUMBER"
 

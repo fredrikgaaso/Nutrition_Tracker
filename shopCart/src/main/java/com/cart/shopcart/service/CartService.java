@@ -21,18 +21,14 @@ public class CartService {
     private final ShopCartRepo shopCartRepo;
 
 
-    public ShopProduct getOneProduct(Long productId){
-
+    public ShopProduct getOneProduct(Long productId) {
         ProductDTO productDTO = productClient.remoteGetOneProduct(productId);
 
         log.info("shopDTO received from ShopClient: {}", productDTO);
 
-
         ShopProduct response = productDTO.getProduct();
 
         log.info("Returning product: {}", response);
-
-        productRepo.save(response);
 
         return response;
     }
@@ -47,13 +43,26 @@ public class CartService {
     }
 
 
-    public void addProductToCart(Long cartId, Long productId) {
+    public void addProductToCart(Long cartId, Long productId, int quantity) {
         ShopCart cart = shopCartRepo.findOneCartById(cartId);
-        ProductDTO product = productClient.remoteGetOneProduct(productId);
+        ShopProduct product = productRepo.findById(productId).orElseGet(() -> {
+            ProductDTO productDTO = productClient.remoteGetOneProduct(productId);
+            ShopProduct newProduct = productDTO.getProduct();
+            newProduct.setQuantity(quantity);
+            return productRepo.save(newProduct);
+        });
+
         log.info("Input product: {}", product.getProductName());
         log.info("Input cart: {}", cart.getId());
-        cart.getProductsList().add(product.getProduct());
         log.info("cart list: {}", cart.getProductsList());
+
+        if (cart.getProductsList().contains(product)) {
+            product.setQuantity(product.getQuantity() + quantity);
+            productRepo.save(product);
+        }
+        else {
+            cart.getProductsList().add(product);
+        }
         shopCartRepo.saveAndFlush(cart);
     }
 

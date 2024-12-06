@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="productshop" />
         <module name="Product" />
+        <module name="recommendation" />
         <module name="user" />
         <module name="shopCart" />
         <module name="gateway" />
@@ -23,6 +24,7 @@
       <module name="Product" options="-parameters" />
       <module name="gateway" options="-parameters" />
       <module name="productshop" options="-parameters" />
+      <module name="recommendation" options="-parameters" />
       <module name="shopCart" options="-parameters" />
       <module name="shoppingCart" options="-parameters" />
       <module name="user" options="-parameters" />

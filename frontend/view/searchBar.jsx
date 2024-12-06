@@ -7,6 +7,8 @@ const SearchBar = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [addedProducts, setAddedProducts] = useState(new Set());
+    const [quantity, setQuantity] = useState({});
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -37,18 +39,27 @@ const SearchBar = () => {
         product.productName && product.productName.toLowerCase().includes(searchInput.toLowerCase())
     );
 
-    const handleAddProductToCart = async (productId) => {
+    const handleAddProductToCart = async (e, productId) => {
+        e.preventDefault();
         try {
-            await fetch(`http://localhost:8000/cart/add/${cartId}/${productId}`, {
+            const response = await fetch(`http://localhost:8000/cart/add/${cartId}/product/${productId}/${quantity[productId] || 1}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
             });
-            alert('Product added to cart successfully');
+            if (response.ok) {
+                setAddedProducts((prev) => new Set(prev).add(productId));
+            } else {
+                throw new Error(`Failed to add product to cart: ${errorData.message}`);
+            }
         } catch (err) {
-            alert('Failed to add product to cart');
+            console.error('Error adding product to cart:', err);
         }
+    };
+
+    const handleQuantityChange = (productId, value) => {
+        setQuantity((prev) => ({ ...prev, [productId]: value }));
     };
 
     if (error) return <p>{error}</p>;
@@ -93,9 +104,23 @@ const SearchBar = () => {
                                 </ul>
                             </td>
                             <td>
-                                <button onClick={() => handleAddProductToCart(product.id)}>
-                                    Add to Cart
-                                </button>
+                                {addedProducts.has(product.id) ? (
+                                    <form onSubmit={(e) => handleAddProductToCart(e, product.id)}>
+                                        <input
+                                            type="number"
+                                            value={quantity[product.id] || 1}
+                                            onChange={(e) => handleQuantityChange(product.id, e.target.value)}
+                                            min="1"
+                                        />
+                                        <button type="submit">
+                                            Confirm
+                                        </button>
+                                    </form>
+                                ) : (
+                                    <button onClick={() => setAddedProducts((prev) => new Set(prev).add(product.id))}>
+                                        Add to Cart
+                                    </button>
+                                )}
                             </td>
                         </tr>
                     ))}

@@ -22,7 +22,9 @@ public class Product {
     private String productName;
     @ElementCollection
     private List<Nutrient> nutritionalInfo;
+    private String foodGroup;
     private double calories;
+    private int quantity;
 
 }
 

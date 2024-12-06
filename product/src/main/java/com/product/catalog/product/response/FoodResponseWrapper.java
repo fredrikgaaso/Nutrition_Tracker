@@ -1,4 +1,4 @@
-package com.product.catalog.product.model;
+package com.product.catalog.product.response;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -11,4 +11,4 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FoodResponseWrapper {
     private List<FoodResponse> foods;
- }
+}

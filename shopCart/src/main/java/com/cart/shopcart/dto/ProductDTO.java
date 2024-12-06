@@ -14,6 +14,8 @@ public class ProductDTO {
     private String productName;
     private List<Nutrient> nutritionalInfo;
     private double calories;
+    private int quantity;
+    private String foodGroup;
 
     public ShopProduct getProduct() {
         ShopProduct shopProduct = new ShopProduct();
@@ -21,6 +23,8 @@ public class ProductDTO {
         shopProduct.setProductName(this.productName);
         shopProduct.setCalories(this.calories);
         shopProduct.setNutritionalInfo(this.nutritionalInfo);
+        shopProduct.setQuantity(this.quantity);
+        shopProduct.setFoodGroup(this.foodGroup);
 
         return shopProduct;
     }

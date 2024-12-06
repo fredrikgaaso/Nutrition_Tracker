@@ -30,7 +30,7 @@ public class ProductController {
         return productService.addOneProduct(product);
     }
 
-    @GetMapping("/list")
+    @GetMapping("/fetch")
     public ResponseEntity<List<Product>> fetchAllProducts() {
         productApiService.fetchAndSaveProducts(); //change to not save everytime
         List<Product> products = productService.findAllProducts();
@@ -40,4 +40,5 @@ public class ProductController {
     public List<Product> getAllProductsAll() {
         return productService.findAllProducts();
     }
+
 }

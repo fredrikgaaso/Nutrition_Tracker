@@ -29,6 +29,9 @@ const ShoppingCart = () => {
     const handleNavigateToSearch = () => {
         navigate(`/searchbar/${cartId}`);
     };
+    const handleNavigateToRecommendations = () => {
+        navigate(`/recommendations/${cartId}`);
+    }
 
     if (error) return <p>{error}</p>;
     if (!shoppingCart || !shoppingCart.productsList) return <p>No shopping cart found</p>;
@@ -37,11 +40,13 @@ const ShoppingCart = () => {
         <div>
             <h4>Product List:</h4>
             <button onClick={handleNavigateToSearch}>Go to SearchBar for Cart {cartId}</button>
+            <button onClick={handleNavigateToRecommendations}>Get recommendations</button>
             <table>
                 <tr>
                     <th>Product Name</th>
-                    <th>Calories</th>
-                    <th>Nutritional Info</th>
+                    <th>Calories pr 100g</th>
+                    <th>Nutritional Info pr 100g</th>
+                    <th>Quantity</th>
                 </tr>
                 {shoppingCart.productsList.map((product, index) => (
                     <tr key={index}>
@@ -60,6 +65,7 @@ const ShoppingCart = () => {
                                 )}
                             </ul>
                         </td>
+                        <td>{product.quantity}</td>
                     </tr>
                 ))}
             </table>
