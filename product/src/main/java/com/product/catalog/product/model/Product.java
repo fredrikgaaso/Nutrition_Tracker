@@ -24,7 +24,6 @@ public class Product {
     private List<Nutrient> nutritionalInfo;
     private String foodGroup;
     private double calories;
-    private int quantity;
 
 }
 

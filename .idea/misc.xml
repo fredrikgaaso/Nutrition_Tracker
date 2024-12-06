@@ -15,7 +15,9 @@
     </option>
     <option name="ignoredFiles">
       <set>
+        <option value="$PROJECT_DIR$/productshop/pom.xml" />
         <option value="$PROJECT_DIR$/shoppingCart/pom.xml" />
+        <option value="$PROJECT_DIR$/user/pom.xml" />
       </set>
     </option>
   </component>

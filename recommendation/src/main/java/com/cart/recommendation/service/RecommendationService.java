@@ -38,8 +38,9 @@ public class RecommendationService {
         List<String> recommendations = new ArrayList<>();
 
         boolean hasFruitsOrVegetables = products.stream().anyMatch(product ->
-                product.getFoodGroup().equalsIgnoreCase("Frukt og Bær") ||
-                        product.getFoodGroup().equalsIgnoreCase("Grønnsaker")
+                product.getFoodGroup().startsWith("Frukt") ||
+                        product.getFoodGroup().startsWith("Bær") ||
+                        product.getFoodGroup().startsWith("Grønnsaker")
         );
         if (!hasFruitsOrVegetables) {
             recommendations.add("Include fruits, berries, or vegetables in all meals. ");
@@ -53,23 +54,20 @@ public class RecommendationService {
         }
 
         boolean hasFish = products.stream().anyMatch(product ->
-                product.getFoodGroup().equalsIgnoreCase("Fisk og skalldyr") ||
-                        product.getFoodGroup().equalsIgnoreCase("Fisk") ||
-                        product.getFoodGroup().equalsIgnoreCase("Skalldyr") ||
-                        product.getFoodGroup().equalsIgnoreCase("Fiskeprodukter")
+                product.getFoodGroup().startsWith("Fisk") ||
+                        product.getFoodGroup().startsWith("Skalldyr")
         );
         boolean hasRedMeat = products.stream().anyMatch(product ->
-                product.getFoodGroup().equalsIgnoreCase("Kjøtt og fjørfre") ||
-                        product.getFoodGroup().equalsIgnoreCase("Kjøttprodukter")
+                product.getFoodGroup().startsWith("Kjøtt")
         );
         if (!hasFish) {
-            recommendations.add("Choose fish and seafood more often than red meat. Eat as little processed meat as possible. ");
+            recommendations.add("Choose fish and seafood more often than red meat. Eat as little processed meat as possible.");
         } else if (hasRedMeat) {
             recommendations.add("Reduce the intake of red meat and processed meat. ");
         }
 
         boolean hasDairy = products.stream().anyMatch(product ->
-                product.getFoodGroup().equalsIgnoreCase("dairy")
+                product.getFoodGroup().equalsIgnoreCase("Meieriprodukter")
         );
         if (!hasDairy) {
             recommendations.add("Have a daily intake of milk and dairy products. Choose products with less fat. ");
@@ -80,30 +78,11 @@ public class RecommendationService {
                         product.getFoodGroup().equalsIgnoreCase("Sjokolade og godteri") ||
                         product.getFoodGroup().equalsIgnoreCase("Sukker og honning") ||
                         product.getFoodGroup().equalsIgnoreCase("Dessert og iskrem")
-
         );
         if (hasSweets) {
             recommendations.add("Limit candy, snacks, and sweet baked goods. ");
         }
-
-        boolean hasWater = products.stream().anyMatch(product ->
-                product.getFoodGroup().equalsIgnoreCase("water")
-        );
-        if (!hasWater) {
-            recommendations.add("Drink water!");
-        }
-
-        if (recommendations.isEmpty()) {
-            recommendations.add("Your cart looks great! Keep up the good work.");
-        }
-
         return recommendations;
-    }
-
-    private List<ShopProduct> fetchProductsFromFoodGroup(String foodGroup) {
-        // Implement logic to fetch products from the given food group
-        // This is a placeholder implementation
-        return List.of();
     }
 
 }

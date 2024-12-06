@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/NutritionTracker.iml" filepath="$PROJECT_DIR$/.idea/NutritionTracker.iml" />
-      <module fileurl="file://$PROJECT_DIR$/productshop/productshop.iml" filepath="$PROJECT_DIR$/productshop/productshop.iml" />
     </modules>
   </component>
 </project>
