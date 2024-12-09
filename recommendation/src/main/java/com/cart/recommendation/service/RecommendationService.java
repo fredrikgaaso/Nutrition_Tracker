@@ -8,8 +8,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 
 @Service
 @RequiredArgsConstructor
@@ -17,6 +19,22 @@ import java.util.List;
 public class RecommendationService {
 
     private final ShopCartClient shopCartClient;
+
+    private static final Map<String, String> ALLERGEN_TO_FOODGROUP = new HashMap<>();
+
+    static {
+        ALLERGEN_TO_FOODGROUP.put("gluten", "Korn- og bakevarer");
+        ALLERGEN_TO_FOODGROUP.put("lactose", "Meieriprodukter");
+        ALLERGEN_TO_FOODGROUP.put("nuts", "Nøtter og frø");
+        ALLERGEN_TO_FOODGROUP.put("soy", "Sojaprodukter");
+        ALLERGEN_TO_FOODGROUP.put("egg", "Egg og eggeprodukter");
+        ALLERGEN_TO_FOODGROUP.put("fish", "Fisk");
+        ALLERGEN_TO_FOODGROUP.put("shellfish", "Skalldyr");
+        ALLERGEN_TO_FOODGROUP.put("milk", "Meieriprodukter");
+        ALLERGEN_TO_FOODGROUP.put("wheat", "Korn- og bakevarer");
+        ALLERGEN_TO_FOODGROUP.put("sesame", "Sesamfrø");
+        ALLERGEN_TO_FOODGROUP.put("celery", "Grønnsaker");
+    }
 
 
     public ShopCart getOneCart(Long cartId) {
@@ -29,11 +47,46 @@ public class RecommendationService {
 
     }
 
+    public void updateRecommendation(ShopCart shopCart) {
+        log.info("Updating recommendation for cart: {}", shopCart);
+        makeRecommendation(shopCart);
+    }
+
     public List<String> makeRecommendation(ShopCart shopCart) {
         List<ShopProduct> products = shopCart.getProductsList();
         if (products.isEmpty()) {
             return List.of("No products in the cart. Please add some products to get recommendations.");
         }
+
+        log.info("Allergens in shopcart: {}", shopCart.getAllergens().toString());
+
+        Set<String> restrictedFoodGroups = shopCart.getAllergens().stream()
+                .map(allergen -> {
+                    String foodGroup = ALLERGEN_TO_FOODGROUP.get(allergen);
+                    log.info("Mapping allergen '{}' to food group '{}'", allergen, foodGroup);
+                    return foodGroup;
+                })
+                .collect(Collectors.toSet());
+
+        log.info("Restricted food groups: {}", restrictedFoodGroups);
+
+        List<String> presentAllergens = products.stream()
+                .flatMap(product -> {
+                    log.info("Product food group: {}", product.getFoodGroup());
+                    log.info("Product parent group: {}", product.getParentGroup());
+                    return Stream.of(product.getFoodGroup(), product.getParentGroup());
+                })
+                .filter(restrictedFoodGroups::contains)
+                .distinct()
+                .toList();
+
+        log.info("Allergens present in the cart: {}", presentAllergens);
+
+        if (!presentAllergens.isEmpty()) {
+            return List.of("The cart contains allergens: " + presentAllergens + ". Please remove these products to get recommendations.");
+        }
+
+
 
         List<String> recommendations = new ArrayList<>();
 

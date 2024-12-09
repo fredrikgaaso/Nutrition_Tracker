@@ -2,6 +2,8 @@ package com.cart.shopcart.service;
 
 import com.cart.shopcart.clients.ShopProductClient;
 import com.cart.shopcart.dto.ProductDTO;
+import com.cart.shopcart.eventdriven.ProductEvent;
+import com.cart.shopcart.eventdriven.ProductEventPublisher;
 import com.cart.shopcart.model.ShopCart;
 import com.cart.shopcart.model.ShopProduct;
 import com.cart.shopcart.repos.ShopCartRepo;
@@ -11,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @Slf4j
@@ -19,6 +22,7 @@ public class CartService {
     private final ShopProductClient productClient;
     private final ShopProductRepo productRepo;
     private final ShopCartRepo shopCartRepo;
+    private final ProductEventPublisher productEventPublisher;
 
 
     public ShopProduct getOneProduct(Long productId) {
@@ -42,13 +46,27 @@ public class CartService {
             return shopCartRepo.save(cart);
     }
 
-
-    public void addProductToCart(Long cartId, Long productId, int quantity) {
+    public void removeProduct(ProductEvent productEvent) {
+        ShopCart cart = shopCartRepo.findOneCartById(productEvent.getCartId());
+        ShopProduct product = productRepo.findById(productEvent.getProductId()).orElseThrow();
+        log.info(product.getProductName() + " removed from cart");
+        cart.getProductsList().remove(product);
+        productEventPublisher.publishProductEvent(productEvent);
+        shopCartRepo.save(cart);
+    }
+    public void setAllergens(Long cartId, Set<String> allergens) {
         ShopCart cart = shopCartRepo.findOneCartById(cartId);
-        ShopProduct product = productRepo.findById(productId).orElseGet(() -> {
-            ProductDTO productDTO = productClient.remoteGetOneProduct(productId);
+        cart.setAllergens(allergens);
+        shopCartRepo.save(cart);
+    }
+
+
+    public void addProductToCart(ProductEvent productEvent) {
+        ShopCart cart = shopCartRepo.findOneCartById(productEvent.getCartId());
+        ShopProduct product = productRepo.findById(productEvent.getProductId()).orElseGet(() -> {
+            ProductDTO productDTO = productClient.remoteGetOneProduct(productEvent.getProductId());
             ShopProduct newProduct = productDTO.getProduct();
-            newProduct.setQuantity(quantity);
+            newProduct.setQuantity(productEvent.getQuantity());
             return productRepo.save(newProduct);
         });
 
@@ -57,12 +75,14 @@ public class CartService {
         log.info("cart list: {}", cart.getProductsList());
 
         if (cart.getProductsList().contains(product)) {
-            product.setQuantity(product.getQuantity() + quantity);
+            product.setQuantity(product.getQuantity() + productEvent.getQuantity());
             productRepo.save(product);
         }
         else {
             cart.getProductsList().add(product);
         }
+        productEventPublisher.publishProductEvent(productEvent);
+
         shopCartRepo.saveAndFlush(cart);
     }
 

@@ -23,6 +23,7 @@ public class Product {
     @ElementCollection
     private List<Nutrient> nutritionalInfo;
     private String foodGroup;
+    private String parentGroup;
     private double calories;
 
 }

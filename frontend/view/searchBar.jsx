@@ -43,11 +43,16 @@ const SearchBar = () => {
     const handleAddProductToCart = async (e, productId) => {
         e.preventDefault();
         try {
-            const response = await fetch(`http://localhost:8000/cart/add/${cartId}/product/${productId}/${quantity[productId] || 1}`, {
+            const response = await fetch(`http://localhost:8000/cart/add`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
+                body: JSON.stringify({
+                    cartId,
+                    productId,
+                    quantity: quantity[productId] || 1
+                })
             });
             if (response.ok) {
                 setAddedProducts((prev) => new Set(prev).add(productId));

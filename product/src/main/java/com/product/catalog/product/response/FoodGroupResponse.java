@@ -11,5 +11,4 @@ public class FoodGroupResponse {
     private String foodGroupId;
     private String name;
     private String parentId;
-
 }

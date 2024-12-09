@@ -30,9 +30,12 @@ const recommendation = () => {
     if (!recommendation) return <p>No recommendation found</p>;
     return (
         <div>
-            <h4>Recommendation</h4>
-            <p>Recommendation for cart {cartId}</p>
-            <p>{recommendation}</p>
+            <h4>Recommendation for cart {cartId}</h4>
+            <ul>
+                {recommendation.map((recommendation, index) => (
+                    <li key={index}>{recommendation}</li>
+                ))}
+            </ul>
 
         </div>
     )

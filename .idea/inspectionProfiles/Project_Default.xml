@@ -8,6 +8,7 @@
           <option value="gateway" />
           <option value="gateway" />
           <option value="gateway" />
+          <option value="shopCart" />
         </list>
       </option>
       <option name="ignoredPackages">
@@ -15,10 +16,12 @@
           <option value="org.xmlunit:xmlunit-core:2.9.1" />
           <option value="org.springframework:spring-context:6.1.12" />
           <option value="org.springframework:spring-webflux:6.1.12" />
+          <option value="org.apache.tomcat.embed:tomcat-embed-core:10.1.28" />
         </list>
       </option>
       <option name="ignoredReasons">
         <list>
+          <option value="Not exploitable" />
           <option value="Not exploitable" />
           <option value="Not exploitable" />
           <option value="Not exploitable" />

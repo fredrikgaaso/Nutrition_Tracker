@@ -3,6 +3,7 @@ import SearchBar from './view/searchBar'
 import ShoppingCart from "./view/shoppingCart";
 import FrontPage from "./view/frontPage";
 import Recommendation from "./view/recommendation";
+import Allergen from "./view/allergen";
 
 function App() {
     return(
@@ -12,6 +13,7 @@ function App() {
                <Route path={"/shoppingCart/:cartId"} element={<ShoppingCart/>}/>
                <Route path="/" element={<FrontPage/>}/>
                <Route path="/recommend/:cartId" element={<Recommendation/>}/>
+               <Route path={"/allergens/:cartId"} element={<Allergen/>}/>
            </Routes>
        </BrowserRouter>
     )

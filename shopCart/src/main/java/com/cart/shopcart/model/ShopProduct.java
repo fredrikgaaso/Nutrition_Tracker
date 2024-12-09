@@ -20,4 +20,6 @@ public class ShopProduct {
     private double calories;
     private int quantity;
     private String foodGroup;
+    private String parentGroup;
+
 }

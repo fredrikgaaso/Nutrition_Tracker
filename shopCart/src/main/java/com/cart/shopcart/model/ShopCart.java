@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -16,4 +17,6 @@ public class ShopCart{
     private Long id;
     @ManyToMany
     private List<ShopProduct> productsList;
+    @ElementCollection
+    private Set<String> Allergens;
 }

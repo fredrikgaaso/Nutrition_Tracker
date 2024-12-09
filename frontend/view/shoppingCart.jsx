@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Recommendation from "./recommendation";
+import Allergen from "./allergen";
 
 const ShoppingCart = () => {
     const { cartId } = useParams();
@@ -8,6 +9,7 @@ const ShoppingCart = () => {
     const [shoppingCart, setShoppingCart] = useState(null);
     const [error, setError] = useState(null);
     const [showRecommendation, setShowRecommendation] = useState(false);
+    const [showAllergens, setShowAllergens] = useState(false);
 
     useEffect(() => {
         const fetchShoppingCart = async () => {
@@ -28,6 +30,39 @@ const ShoppingCart = () => {
         }
     }, [cartId]);
 
+    const handleDeleteProduct = async (productId) => {
+        try {
+            const response = await fetch(`http://localhost:8000/cart/remove`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    cartId,
+                    productId,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to delete product');
+            }
+            const text = await response.text();
+            const updatedCart = text ? JSON.parse(text) : null;
+
+            if (updatedCart) {
+                setShoppingCart(updatedCart);
+            } else {
+                setShoppingCart(prevCart => ({
+                    ...prevCart,
+                    productsList: prevCart.productsList.filter(product => product.id !== productId)
+                }));
+            }
+        } catch (err) {
+            console.error('Failed to delete product:', err);
+            setError('Failed to delete product');
+        }
+    }
+
     const handleNavigateToSearch = () => {
         navigate(`/searchbar/${cartId}`);
     };
@@ -37,6 +72,9 @@ const ShoppingCart = () => {
     const handleToggleRecommendation = () => {
         setShowRecommendation(Recommendation => !Recommendation);
     }
+    const handleToggleAllergens = () => {
+        setShowAllergens(showAllergens => !showAllergens);
+    }
 
     if (error) return <p>{error}</p>;
     if (!shoppingCart || !shoppingCart.productsList) return <p>No shopping cart found</p>;
@@ -45,9 +83,12 @@ const ShoppingCart = () => {
         <div>
             <button onClick={handleNavigateToFrontPage}>Go back to front page</button>
             <button onClick={handleNavigateToSearch}>Go to SearchBar for Cart {cartId}</button>
+            <button onClick={handleToggleAllergens}>{showAllergens ? 'Hide Allergens' : 'Add Allergens'}</button>
             <button
                 onClick={handleToggleRecommendation}>{showRecommendation ? 'Hide Recommendations' : 'Get Recommendations'}</button>
             {showRecommendation && <Recommendation cartId={cartId}/>}
+            {showAllergens && <Allergen cartId={cartId}/>}
+
             <h4>Product List:</h4>
             <table>
                 <thead>
@@ -77,6 +118,7 @@ const ShoppingCart = () => {
                             </ul>
                         </td>
                         <td>{product.quantity}</td>
+                        <td><button onClick={() => handleDeleteProduct(product.id)}>Remove Product</button></td>
                     </tr>
                 ))}
                 </tbody>
