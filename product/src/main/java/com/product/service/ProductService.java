@@ -1,17 +1,22 @@
-package com.product.catalog.product.service;
+package com.product.service;
 
-import com.product.catalog.product.model.Product;
-import com.product.catalog.product.repos.ProductRepo;
+import com.product.model.Product;
+import com.product.repos.ProductRepo;
 import lombok.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class ProductService {
 
     private final ProductRepo productRepo;
+
+    @Autowired
+    public ProductService(ProductRepo productRepo) {
+        this.productRepo = productRepo;
+    }
 
     public Product addOneProduct(Product product) {
         productRepo.save(product);

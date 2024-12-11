@@ -23,6 +23,8 @@ public class Event {
         CartDTO cartDTO = shopCartClient.remoteGetOneCart(message.getCartId());
         ShopCart response = cartDTO.getShopCart();
         log.info(message.toString());
-        recommendationService.updateRecommendation(response);
+        recommendationService.makeRecommendation(response);
+        recommendationService.checkNutritionalValue(response);
+        recommendationService.checkAllergen(response);
     }
 }

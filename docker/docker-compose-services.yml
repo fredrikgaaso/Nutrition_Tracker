@@ -1,0 +1,88 @@
+version: "3.8"
+
+services:
+
+  frontend:
+    image: frontend
+    ports:
+      - '1234:80'
+
+  gateway:
+    image: gateway
+    ports:
+      - '8000:8000'
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_CLOUD_CONSUL_HOST=consul
+    depends_on:
+      - rabbitmq-dev
+      - consul-importer
+    networks:
+      - micro_product
+
+  product:
+    image: product
+    ports:
+      - '8082:8082'
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_CLOUD_CONSUL_HOST=consul
+    depends_on:
+      - consul-importer
+    networks:
+      - micro_product
+
+  shopcart:
+    image: shopcart
+    ports:
+      - '8081:8081'
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_CLOUD_CONSUL_HOST=consul
+    depends_on:
+      - rabbitmq-dev
+      - consul-importer
+    networks:
+      - micro_product
+
+  recommendation:
+    image: recommendation
+    ports:
+      - '8083:8083'
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_CLOUD_CONSUL_HOST=consul
+    depends_on:
+      - consul-importer
+      - rabbitmq-dev
+    networks:
+      - micro_product
+
+  rabbitmq-dev:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    networks:
+      - micro_product
+
+  consul-dev:
+    image: hashicorp/consul:1.19.2
+    container_name: consul
+    ports:
+      - '8500:8500'
+    command: 'agent -dev -node=NutritionTracker -client=0.0.0.0 -log-level=INFO'
+    networks:
+      - micro_product
+
+  consul-importer:
+    image: consul-importer:1.19.2
+    depends_on:
+      - consul-dev
+    networks:
+      - micro_product
+
+networks:
+  micro_product:
+    driver: bridge

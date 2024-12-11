@@ -2,12 +2,14 @@ package com.cart.recommendation.service;
 
 import com.cart.recommendation.client.ShopCartClient;
 import com.cart.recommendation.dtos.CartDTO;
+import com.cart.recommendation.model.Nutrient;
 import com.cart.recommendation.model.ShopCart;
 import com.cart.recommendation.model.ShopProduct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -19,6 +21,8 @@ import java.util.stream.Stream;
 public class RecommendationService {
 
     private final ShopCartClient shopCartClient;
+
+    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.##");
 
     private static final Map<String, String> ALLERGEN_TO_FOODGROUP = new HashMap<>();
 
@@ -33,7 +37,6 @@ public class RecommendationService {
         ALLERGEN_TO_FOODGROUP.put("milk", "Meieriprodukter");
         ALLERGEN_TO_FOODGROUP.put("wheat", "Korn- og bakevarer");
         ALLERGEN_TO_FOODGROUP.put("sesame", "Sesamfrø");
-        ALLERGEN_TO_FOODGROUP.put("celery", "Grønnsaker");
     }
 
 
@@ -47,17 +50,8 @@ public class RecommendationService {
 
     }
 
-    public void updateRecommendation(ShopCart shopCart) {
-        log.info("Updating recommendation for cart: {}", shopCart);
-        makeRecommendation(shopCart);
-    }
-
-    public List<String> makeRecommendation(ShopCart shopCart) {
+    public List<String> checkAllergen(ShopCart shopCart) {
         List<ShopProduct> products = shopCart.getProductsList();
-        if (products.isEmpty()) {
-            return List.of("No products in the cart. Please add some products to get recommendations.");
-        }
-
         log.info("Allergens in shopcart: {}", shopCart.getAllergens().toString());
 
         Set<String> restrictedFoodGroups = shopCart.getAllergens().stream()
@@ -81,37 +75,81 @@ public class RecommendationService {
                 .toList();
 
         log.info("Allergens present in the cart: {}", presentAllergens);
+        return presentAllergens;
+    }
 
-        if (!presentAllergens.isEmpty()) {
-            return List.of("The cart contains allergens: " + presentAllergens + ". Please remove these products to get recommendations.");
+    private double getNutrientValue(List<Nutrient> nutritionalInfo, String nutrientName) {
+        return nutritionalInfo.stream()
+                .filter(nutrient -> nutrient.getNutrientName().equalsIgnoreCase(nutrientName))
+                .mapToDouble(Nutrient::getNutrientValue)
+                .sum();
+    }
+
+    public List<String> checkNutritionalValue(ShopCart shopCart) {
+        List<ShopProduct> products = shopCart.getProductsList();
+        double totalProtein = products.stream()
+                .mapToDouble(product -> getNutrientValue(product.getNutritionalInfo(), "protein"))
+                .sum();
+        double totalCarbs = products.stream()
+                .mapToDouble(product -> getNutrientValue(product.getNutritionalInfo(), "Karbo"))
+                .sum();
+        double totalFat = products.stream()
+                .mapToDouble(product -> getNutrientValue(product.getNutritionalInfo(), "fett"))
+                .sum();
+
+        int desiredProtein = shopCart.getDesiredProtein();
+        int desiredCarbs = shopCart.getDesiredCarbs();
+        int desiredFat = shopCart.getDesiredFat();
+
+        List<String> recommendations = new ArrayList<>();
+        if (totalProtein < desiredProtein) {
+            recommendations.add("You are missing " + (desiredProtein - totalProtein) + "g of protein in your diet.");
+        } else if (totalProtein > desiredProtein) {
+            recommendations.add("You have exceeded the recommended protein intake by " + DECIMAL_FORMAT.format(totalProtein - desiredProtein) + "g.");
         }
+        if (totalCarbs < desiredCarbs) {
+            recommendations.add("You are missing " + DECIMAL_FORMAT.format(desiredCarbs - totalCarbs) + "g of carbs in your diet.");
+        } else if (totalCarbs > desiredCarbs) {
+            recommendations.add("You have exceeded the recommended carb intake by " + DECIMAL_FORMAT.format(totalCarbs - desiredCarbs) + "g.");
+        }
+        if (totalFat < desiredFat) {
+            recommendations.add("You are missing " + (desiredFat - totalFat) + "g of fat in your diet.");
+        } else if (totalFat > desiredFat) {
+            recommendations.add("You have exceeded the recommended fat intake by " + (totalFat - desiredFat) + "g.");
+        }
+        return recommendations;
+    }
 
-
+    public List<String> makeRecommendation(ShopCart shopCart) {
+        List<ShopProduct> products = shopCart.getProductsList();
+        if (products.size()<3) {
+            return List.of("Add at least 3 products to get recommendations.");
+        }
 
         List<String> recommendations = new ArrayList<>();
 
         boolean hasFruitsOrVegetables = products.stream().anyMatch(product ->
-                product.getFoodGroup().startsWith("Frukt") ||
-                        product.getFoodGroup().startsWith("Bær") ||
-                        product.getFoodGroup().startsWith("Grønnsaker")
+                product.getFoodGroup().toLowerCase().contains("frukt") ||
+                        product.getFoodGroup().toLowerCase().contains("bær") ||
+                        product.getFoodGroup().toLowerCase().contains("grønnsaker")
         );
         if (!hasFruitsOrVegetables) {
             recommendations.add("Include fruits, berries, or vegetables in all meals. ");
         }
 
         boolean hasWholeGrains = products.stream().anyMatch(product ->
-                product.getFoodGroup().equalsIgnoreCase("Korn- og bakevarer")
+                product.getFoodGroup().toLowerCase().contains("korn- og bakevarer")
         );
         if (!hasWholeGrains) {
             recommendations.add("Include whole grain bread or other whole grain products in several meals each day. ");
         }
 
         boolean hasFish = products.stream().anyMatch(product ->
-                product.getFoodGroup().startsWith("Fisk") ||
-                        product.getFoodGroup().startsWith("Skalldyr")
+                product.getFoodGroup().toLowerCase().contains("fisk") ||
+                        product.getFoodGroup().toLowerCase().contains("skalldyr")
         );
         boolean hasRedMeat = products.stream().anyMatch(product ->
-                product.getFoodGroup().startsWith("Kjøtt")
+                product.getFoodGroup().toLowerCase().contains("kjøtt")
         );
         if (!hasFish) {
             recommendations.add("Choose fish and seafood more often than red meat. Eat as little processed meat as possible.");
@@ -120,17 +158,17 @@ public class RecommendationService {
         }
 
         boolean hasDairy = products.stream().anyMatch(product ->
-                product.getFoodGroup().equalsIgnoreCase("Meieriprodukter")
+                product.getFoodGroup().toLowerCase().contains("meieriprodukter")
         );
         if (!hasDairy) {
             recommendations.add("Have a daily intake of milk and dairy products. Choose products with less fat. ");
         }
 
         boolean hasSweets = products.stream().anyMatch(product ->
-                product.getFoodGroup().equalsIgnoreCase("Kjeks og småkaker") ||
-                        product.getFoodGroup().equalsIgnoreCase("Sjokolade og godteri") ||
-                        product.getFoodGroup().equalsIgnoreCase("Sukker og honning") ||
-                        product.getFoodGroup().equalsIgnoreCase("Dessert og iskrem")
+                product.getFoodGroup().toLowerCase().contains("kjeks og småkaker") ||
+                        product.getFoodGroup().toLowerCase().contains("sjokolode og godteri") ||
+                        product.getFoodGroup().toLowerCase().contains("sukker og honning") ||
+                        product.getFoodGroup().toLowerCase().contains("dessert og iskrem")
         );
         if (hasSweets) {
             recommendations.add("Limit candy, snacks, and sweet baked goods. ");

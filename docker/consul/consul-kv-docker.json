@@ -1,0 +1,67 @@
+[
+  {
+    "key": "config/",
+    "flags": 0,
+    "value": ""
+  },
+  {
+    "key": "config/product,dev/",
+    "flags": 0,
+    "value": ""
+  },
+  {
+    "key": "config/product,dev/application.yml",
+    "flags": 0,
+    "value": ""
+  },
+  {
+    "key": "config/shopCart,dev/",
+    "flags": 0,
+    "value": ""
+  },
+  {
+    "key": "config/shopCart,dev/application.yml",
+    "flags": 0,
+    "value": ""
+  },
+  {
+    "key": "config/recommendation,dev/",
+    "flags": 0,
+    "value": ""
+  },
+  {
+    "key": "config/recommendation,dev/application.yml",
+    "flags": 0,
+    "value": ""
+  },
+  {
+    "key": "config/product,docker/",
+    "flags": 0,
+    "value": ""
+  },
+  {
+    "key": "config/product,docker/application.yml",
+    "flags": 0,
+    "value": ""
+  },
+  {
+    "key": "config/shopcart,docker/",
+    "flags": 0,
+    "value": ""
+  },
+  {
+    "key": "config/shopCart,docker/application.yml",
+    "flags": 0,
+    "value": "c3ByaW5nOgogIGFwcGxpY2F0aW9uOgogICAgbmFtZTogc2hvcENhcnQKICBjb25maWc6CiAgICBpbXBvcnQ6IG9wdGlvbmFsOmNvbnN1bAogIHJhYmJpdG1xOgogICAgaG9zdDogcmFiYml0bXEKICAgIHVzZXJuYW1lOiBndWVzdAogICAgcGFzc3dvcmQ6IGd1ZXN0CiAgICBwb3J0OiA1NjcyCgpzZXJ2ZXI6CiAgcG9ydDogODA4MQoKcHJvZHVjdDoKICBzZXJ2aWNlOgogICAgdXJsOiBodHRwOi8vcHJvZHVjdDo4MDgyCgphbXFwOgogIGV4Y2hhbmdlOgogICAgbmFtZTogcHJvZHVjdEV4Y2hhbmdlCiAgcm91dGluZzoKICAgIGtleTogcHJvZHVjdC5hZGRlZAoKbWFuYWdlbWVudDoKICBlbmRwb2ludHM6CiAgICB3ZWI6CiAgICAgIGV4cG9zdXJlOgogICAgICAgIGluY2x1ZGU6IGhlYWx0aCxpbmZv"
+  },
+  {
+    "key": "config/recommendation,docker/",
+    "flags": 0,
+    "value": ""
+  },
+  {
+    "key": "config/recommendation,docker/application.yml",
+    "flags": 0,
+    "value": "c3ByaW5nOgogIGFwcGxpY2F0aW9uOgogICAgbmFtZTogcmVjb21tZW5kYXRpb24KICBjb25maWc6CiAgICBpbXBvcnQ6IG9wdGlvbmFsOmNvbnN1bAogIHJhYmJpdG1xOgogICAgaG9zdDogbG9jYWxob3N0CiAgICB1c2VybmFtZTogZ3Vlc3QKICAgIHBhc3N3b3JkOiBndWVzdAogICAgcG9ydDogNTY3MgoKc2VydmVyOgogIHBvcnQ6IDgwODMKCnNob3BjYXJ0OgogIHNlcnZpY2U6CiAgICB1cmw6IGh0dHA6Ly9zaG9wY2FydDo4MDgxCgphbXFwOgogIGV4Y2hhbmdlOgogICAgbmFtZTogcHJvZHVjdEV4Y2hhbmdlCiAgcm91dGluZzoKICAgIGtleTogcHJvZHVjdC5hZGRlZAogIHF1ZXVlOgogICAgbmFtZTogcHJvZHVjdFF1ZXVlCgptYW5hZ2VtZW50OgogIGVuZHBvaW50czoKICAgIHdlYjoKICAgICAgZXhwb3N1cmU6CiAgICAgICAgaW5jbHVkZTogaGVhbHRoLGluZm8="
+  }
+]

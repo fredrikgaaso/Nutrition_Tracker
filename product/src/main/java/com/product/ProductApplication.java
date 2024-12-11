@@ -1,9 +1,7 @@
-package com.product.catalog.product;
+package com.product;
 
-import com.product.catalog.product.service.ProductApiService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 
 @SpringBootApplication
 public class ProductApplication {

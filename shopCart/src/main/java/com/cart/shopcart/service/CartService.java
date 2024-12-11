@@ -60,30 +60,42 @@ public class CartService {
         shopCartRepo.save(cart);
     }
 
+    public void setDesiredNutrients(Long cartId, int desiredProtein, int desiredCarbs, int desiredFat) {
+        ShopCart cart = shopCartRepo.findOneCartById(cartId);
+        cart.setDesiredProtein(desiredProtein);
+        cart.setDesiredCarbs(desiredCarbs);
+        cart.setDesiredFat(desiredFat);
+        shopCartRepo.save(cart);
+    }
+
 
     public void addProductToCart(ProductEvent productEvent) {
-        ShopCart cart = shopCartRepo.findOneCartById(productEvent.getCartId());
-        ShopProduct product = productRepo.findById(productEvent.getProductId()).orElseGet(() -> {
-            ProductDTO productDTO = productClient.remoteGetOneProduct(productEvent.getProductId());
-            ShopProduct newProduct = productDTO.getProduct();
-            newProduct.setQuantity(productEvent.getQuantity());
-            return productRepo.save(newProduct);
-        });
+        try {
+            ShopCart cart = shopCartRepo.findOneCartById(productEvent.getCartId());
+            ShopProduct product = productRepo.findById(productEvent.getProductId()).orElseGet(() -> {
+                ProductDTO productDTO = productClient.remoteGetOneProduct(productEvent.getProductId());
+                ShopProduct newProduct = productDTO.getProduct();
+                newProduct.setQuantity(productEvent.getQuantity());
+                return productRepo.save(newProduct);
+            });
 
-        log.info("Input product: {}", product.getProductName());
-        log.info("Input cart: {}", cart.getId());
-        log.info("cart list: {}", cart.getProductsList());
+            log.info("Input product: {}", product.getProductName());
+            log.info("Input cart: {}", cart.getId());
+            log.info("cart list: {}", cart.getProductsList());
 
-        if (cart.getProductsList().contains(product)) {
-            product.setQuantity(product.getQuantity() + productEvent.getQuantity());
-            productRepo.save(product);
+            if (cart.getProductsList().contains(product)) {
+                product.setQuantity(product.getQuantity() + productEvent.getQuantity());
+                productRepo.save(product);
+            } else {
+                cart.getProductsList().add(product);
+            }
+            productEventPublisher.publishProductEvent(productEvent);
+
+            shopCartRepo.saveAndFlush(cart);
+        } catch (Exception e) {
+            log.error("Error adding product to cart", e);
+            throw new RuntimeException("Failed to add product to cart", e);
         }
-        else {
-            cart.getProductsList().add(product);
-        }
-        productEventPublisher.publishProductEvent(productEvent);
-
-        shopCartRepo.saveAndFlush(cart);
     }
 
     public List<ShopCart> getAllCarts() {

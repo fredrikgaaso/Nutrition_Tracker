@@ -57,6 +57,8 @@ const SearchBar = () => {
             if (response.ok) {
                 setAddedProducts((prev) => new Set(prev).add(productId));
             } else {
+                const errorData = await response.json();
+                console.error('Error data:', errorData);
                 throw new Error(`Failed to add product to cart: ${errorData.message}`);
             }
         } catch (err) {
@@ -64,6 +66,19 @@ const SearchBar = () => {
         }
     };
 
+    const handleGetProductList = async () => {
+        try {
+            const response = await fetch(`http://localhost:8000/product/fetch`);
+            if (response.ok) {
+                const data = await response.json();
+                setProducts(data);
+            } else {
+                throw new Error('Failed to fetch products.');
+            }
+        } catch (err) {
+            console.error('Error fetching products:', err);
+    }
+    };
     const handleNavigateToCart = () => {
         navigate(`/shoppingCart/${cartId}`);
     };
@@ -78,6 +93,7 @@ const SearchBar = () => {
     return (
         <div>
             <button onClick={handleNavigateToCart}>Back to cart</button>
+            <button onClick={handleGetProductList}>Get product list</button>
             <input
                 type="text"
                 value={searchInput}

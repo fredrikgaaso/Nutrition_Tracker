@@ -12,4 +12,7 @@ public class ShopCart {
     private Long id;
     private List<ShopProduct> productsList;
     private Set<String> allergens;
+    private int desiredProtein;
+    private int desiredCarbs;
+    private int desiredFat;
 }

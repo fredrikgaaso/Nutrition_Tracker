@@ -1,19 +1,18 @@
-package com.product.catalog.product.model;
+package com.product.model;
 
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import lombok.Generated;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
 
-@Entity
 @Getter
 @Setter
+@Entity
 @RequiredArgsConstructor
 public class Product {
     @Id
@@ -25,6 +24,7 @@ public class Product {
     private String foodGroup;
     private String parentGroup;
     private double calories;
+
 
 }
 

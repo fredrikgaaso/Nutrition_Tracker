@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Recommendation from "./recommendation";
 import Allergen from "./allergen";
+import desiredNutrition from "./desiredNutrition";
+import DesiredNutrition from "./desiredNutrition";
 
 const ShoppingCart = () => {
     const { cartId } = useParams();
@@ -10,7 +12,7 @@ const ShoppingCart = () => {
     const [error, setError] = useState(null);
     const [showRecommendation, setShowRecommendation] = useState(false);
     const [showAllergens, setShowAllergens] = useState(false);
-
+    const [showNutritionalValue, setShowNutritionalValue] = useState(false);
     useEffect(() => {
         const fetchShoppingCart = async () => {
             try {
@@ -75,6 +77,9 @@ const ShoppingCart = () => {
     const handleToggleAllergens = () => {
         setShowAllergens(showAllergens => !showAllergens);
     }
+    const handleToggleNutritionalValue = () => {
+        setShowNutritionalValue(showNutritionalValue => !showNutritionalValue);
+    }
 
     if (error) return <p>{error}</p>;
     if (!shoppingCart || !shoppingCart.productsList) return <p>No shopping cart found</p>;
@@ -84,10 +89,11 @@ const ShoppingCart = () => {
             <button onClick={handleNavigateToFrontPage}>Go back to front page</button>
             <button onClick={handleNavigateToSearch}>Go to SearchBar for Cart {cartId}</button>
             <button onClick={handleToggleAllergens}>{showAllergens ? 'Hide Allergens' : 'Add Allergens'}</button>
-            <button
-                onClick={handleToggleRecommendation}>{showRecommendation ? 'Hide Recommendations' : 'Get Recommendations'}</button>
+            <button onClick={handleToggleRecommendation}>{showRecommendation ? 'Hide Recommendations' : 'Get Recommendations'}</button>
+            <button onClick={handleToggleNutritionalValue}>{showNutritionalValue ? 'Hide Nutritional Value' : 'Add nutritional value'}</button>
             {showRecommendation && <Recommendation cartId={cartId}/>}
             {showAllergens && <Allergen cartId={cartId}/>}
+            {showNutritionalValue && <DesiredNutrition cartId={cartId}/>}
 
             <h4>Product List:</h4>
             <table>

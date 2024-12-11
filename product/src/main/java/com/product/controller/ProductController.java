@@ -1,23 +1,32 @@
-package com.product.catalog.product.controller;
+package com.product.controller;
 
-import com.product.catalog.product.model.Product;
-import com.product.catalog.product.service.ProductApiService;
-import com.product.catalog.product.service.ProductService;
+import com.product.model.Product;
+import com.product.service.ProductApiService;
+import com.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
+
 
 import java.util.List;
 
 @Slf4j
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/product")
 public class ProductController {
 
     private final ProductService productService;
     private final ProductApiService productApiService;
+    private boolean productsFetched = false;
+
+    @Autowired
+    public ProductController(ProductService productService, ProductApiService productApiService) {
+        this.productService = productService;
+        this.productApiService = productApiService;
+    }
 
 
     @GetMapping("/{id}")
@@ -32,7 +41,10 @@ public class ProductController {
 
     @GetMapping("/fetch")
     public ResponseEntity<List<Product>> fetchAllProducts() {
-        productApiService.fetchAndSaveProducts(); //change to not save everytime
+      if (!productsFetched) {
+          productApiService.fetchAndSaveProducts();
+          productsFetched = true;
+      }
         List<Product> products = productService.findAllProducts();
         return ResponseEntity.ok(products);
     }

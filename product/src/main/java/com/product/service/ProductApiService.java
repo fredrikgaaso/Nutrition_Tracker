@@ -1,11 +1,12 @@
-package com.product.catalog.product.service;
+package com.product.service;
 
-import com.product.catalog.product.model.*;
-import com.product.catalog.product.repos.ProductRepo;
-import com.product.catalog.product.response.FoodGroupResponse;
-import com.product.catalog.product.response.FoodGroupWrapper;
-import com.product.catalog.product.response.FoodResponse;
-import com.product.catalog.product.response.FoodResponseWrapper;
+import com.product.model.Nutrient;
+import com.product.model.Product;
+import com.product.repos.ProductRepo;
+import com.product.response.FoodGroupResponse;
+import com.product.response.FoodGroupWrapper;
+import com.product.response.FoodResponse;
+import com.product.response.FoodResponseWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.ParameterizedTypeReference;
@@ -13,6 +14,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
 
 import java.util.List;
 import java.util.Objects;
@@ -24,6 +26,8 @@ public class ProductApiService {
 
     private final RestTemplate restTemplate;
     private final ProductRepo productRepo;
+
+
 
     private final String filterConstituents = "Energi|Protein|Karbo|Sukker|Fett|Mettet|Salt";
 
@@ -45,12 +49,12 @@ public class ProductApiService {
                         .map(food -> mapToProduct(food, foodGroups))
                         .collect(Collectors.toList());
 
-                saveProductsInBatches(products, 100);
+                saveProductsInBatches(products);
             } else {
-                log.warn("No foods found in API response");
+                log.info("No foods found in API response");
             }
         } catch (Exception e) {
-            log.error("Error fetching and saving products: {}", e.getMessage(), e);
+            log.info("Error fetching and saving products: {}", e.getMessage(), e);
         }
     }
 
@@ -101,9 +105,9 @@ public class ProductApiService {
         return product;
     }
 
-    private void saveProductsInBatches(List<Product> products, int batchSize) {
-        for (int i = 0; i < products.size(); i += batchSize) {
-            int end = Math.min(i + batchSize, products.size());
+    private void saveProductsInBatches(List<Product> products) {
+        for (int i = 0; i < products.size(); i += 100) {
+            int end = Math.min(i + 100, products.size());
             productRepo.saveAll(products.subList(i, end));
         }
     }

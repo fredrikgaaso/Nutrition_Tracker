@@ -11,7 +11,6 @@ import java.util.Set;
 @Getter
 @Setter
 public class ShopCart{
-
     @Id
     @GeneratedValue
     private Long id;
@@ -19,4 +18,7 @@ public class ShopCart{
     private List<ShopProduct> productsList;
     @ElementCollection
     private Set<String> Allergens;
+    private int desiredProtein;
+    private int desiredCarbs;
+    private int desiredFat;
 }

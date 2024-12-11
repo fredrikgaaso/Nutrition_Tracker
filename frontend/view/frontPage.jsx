@@ -50,7 +50,7 @@ const FrontPage = () => {
     };
 
     return (
-        <div>
+        <div className="container">
             <h3>Existing Shopping Carts</h3>
             {error && <p>{error}</p>}
             <div>

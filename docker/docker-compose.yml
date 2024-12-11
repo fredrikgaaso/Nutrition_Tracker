@@ -1,0 +1,29 @@
+services:
+  rabbitmq-dev:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    networks:
+      - micro_product
+
+  consul-dev:
+    image: hashicorp/consul:1.19.2
+    container_name: consul
+    ports:
+      - '8500:8500'
+    command: 'agent -dev -node=NutritionTracker -client=0.0.0.0 -log-level=INFO'
+    networks:
+      - micro_product
+
+  consul-importer:
+    image: consul-importer:1.19.2
+    depends_on:
+      - consul-dev
+    networks:
+      - micro_product
+
+networks:
+  micro_product:
+    driver: bridge

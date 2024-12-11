@@ -1,5 +1,6 @@
 package com.cart.shopcart.controller;
 
+import com.cart.shopcart.dto.DesiredNutritionDTO;
 import com.cart.shopcart.eventdriven.ProductEvent;
 import com.cart.shopcart.model.ShopCart;
 import com.cart.shopcart.model.ShopProduct;
@@ -55,6 +56,15 @@ public class ShopCartController {
         cartService.setAllergens(cartId, allergens);
     }
 
+    @PostMapping("/desiredNutrients/{cartId}")
+    public void setDesiredNutrients(@PathVariable Long cartId, @RequestBody DesiredNutritionDTO desiredNutritionDTO) {
+        int protein = desiredNutritionDTO.getDesiredProtein();
+        int fat = desiredNutritionDTO.getDesiredFat();
+        int carbs = desiredNutritionDTO.getDesiredCarbs();
+
+        cartService.setDesiredNutrients(cartId, protein, fat, carbs);
+    }
+
     @GetMapping("/{cartId}")
     public ShopCart findOneCartById(@PathVariable Long cartId) {
         return cartService.getOneShopCart(cartId);
@@ -64,10 +74,7 @@ public class ShopCartController {
     public ShopCart createNewCart() {
         return cartService.createNewCart();
     }
-   /* @PostMapping("/add/{cartId}/product/{productId}/{quantity}")
-    public void addProductToCart(@PathVariable Long cartId,@PathVariable Long productId, @PathVariable int quantity) {
-        cartService.addProductToCart(cartId, productId, quantity);
-    }*/
+
 
     @GetMapping("/all")
     public List<ShopCart> getAllCarts() {

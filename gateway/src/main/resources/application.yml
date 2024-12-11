@@ -9,6 +9,15 @@ spring:
     import: "optional:consul:"
 
   cloud:
+    consul:
+      enabled: true
+      discovery:
+        query-passing: true
+      config:
+        data-key: application.yml
+        prefix: config
+        format: yaml
+        default-context: defaults
     gateway:
       routes:
         - id: product

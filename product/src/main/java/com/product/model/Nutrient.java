@@ -1,4 +1,4 @@
-package com.product.catalog.product.model;
+package com.product.model;
 
 import jakarta.persistence.Embeddable;
 import lombok.Getter;
@@ -11,4 +11,5 @@ import lombok.Setter;
 public class Nutrient {
     private String nutrientName;
     private Double nutrientValue;
+
 }
