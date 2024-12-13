@@ -56,7 +56,7 @@ How to use the project:<br>
 ```http://localhost:1234```<br>
 2. Here you can create a new cart, which takes you to the cart page, from here you can go to the searchbar and add products to the shopping cart, or you could set allergies and desired nutritional values, and get recommendations.
 3. When you first start the project the product list will be empty, therefore you have to press the "Get products" button to get fetch the products from matvaretabellen.no, and add them to the product list.
-4. When you add or remove a product from the cart, a message is sent to rabbitmq, and the recommendation service will get the message and update the recommendations.
+4. When you add or remove a product from the cart, a message is sent to rabbitmq, and the recommendation service will get the message and update the recommendations, you do have to press the "Get/hide recommendations" button to get the updated recommendations.
 5. You can create as many shopping carts as you like, and each shopping cart will have their own allergens and nutritional values.
 
 Overview:<br>
