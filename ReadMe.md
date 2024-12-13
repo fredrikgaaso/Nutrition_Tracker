@@ -29,7 +29,7 @@ How to build and run the project with docker:<br>
 1. Open the zip file and extract the project.
 2. Run the following command to build the project, after cding into each service:<br>
 ```mvn clean package```<br>
-3. Run the following command to build the docker image:<br>
+3. Run the following command to build the docker image: (I recommend using these names for the services, as they are coded into the docker-compose files: "shopcart", "product", "gateway", "recommendation", "frontend" and "consul-importer")<br>
 ```docker build -t <image-name> .```<br>
 4. Run the following command to start the docker container:<br>
 ```docker run -p <port>:<port> <image-name>```<br>
@@ -40,11 +40,15 @@ How to build and run the project with docker:<br>
 
 When running the project with docker, you need to change the following:<br>
 1. In application.properties file in shopCart, change the following:<br>
+```spring.cloud.consul.host=localhost``` -> ```spring.cloud.consul.host=consul```<br>
 ```spring.rabbitmq.host=localhost``` -> ```spring.rabbitmq.host=rabbitmq```<br>
 ```product.service.url=http://localhost:8082``` ->```product.service.url=http://product:8082```<br>
 2. In application.properties file in recommendation, change the following:<br>
+```spring.cloud.consul.host=localhost``` -> ```spring.cloud.consul.host=consul```<br>
 ```spring.rabbitmq.host=localhost``` -> ```spring.rabbitmq.host=rabbitmq```<br>
 ```shopcart.service.url=http://localhost:8081``` ->```shopcart.service.url=http://shopcart:8082```<br>
+3. In application.properties file in product, change the following:<br>
+```spring.cloud.consul.host=localhost``` -> ```spring.cloud.consul.host=consul```<br>
 3. For some reason i couldn't get consul-kv-docker.json to actually so i have to manually change the application.properties files in the services to point to the correct rabbitmq host, and shopCart and product url.
 
 How to use the project:<br>
@@ -71,7 +75,7 @@ Diagram:<br>
 ![Diagram](images/diagram.png)
 
 Problems:<br>
-1. I had some problems with the consul-kv-docker.json file, and couldn't get it to work, so i had to manually change the application.properties files in the services to point to the correct rabbitmq host, and shopCart and product url.
+1. I had some problems with the consul-kv-docker.json file, and couldn't get it to work, so i had to manually change the application.properties files in the services to point to the correct rabbitmq host, and shopCart and product url when dockerising the services.
 2. I had some problems with correct java version on my system, and had to manually change the java version on my system to 21.0.1. with this command: <br>
 ```export JAVA_HOME=$(/usr/libexec/java_home -v 21)``` <br> 
 ```export PATH=$JAVA_HOME/bin:$PATH```
