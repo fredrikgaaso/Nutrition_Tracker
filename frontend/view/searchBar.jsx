@@ -68,6 +68,7 @@ const SearchBar = () => {
 
     const handleGetProductList = async () => {
         try {
+            setLoading(true)
             const response = await fetch(`http://localhost:8000/product/fetch`);
             if (response.ok) {
                 const data = await response.json();
@@ -78,6 +79,9 @@ const SearchBar = () => {
         } catch (err) {
             console.error('Error fetching products:', err);
     }
+    finally {
+            setLoading(false)
+        }
     };
     const handleNavigateToCart = () => {
         navigate(`/shoppingCart/${cartId}`);

@@ -12,14 +12,18 @@ const Recommendation = () => {
         const fetchRecommendation = async () => {
             console.log(cartId);
             try {
-                const response = await fetch(`http://localhost:8000/recommendation/recommend/${cartId}`);
+                const response = await fetch(`http://localhost:8000/recommendation/update/${cartId}`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch recommendation.');
                 }
                 const data = await response.json();
-                console.log(data);
-                console.log(data.recommendation);
-                setRecommendation(data);
+                console.log(data.allergens);
+                console.log(data.nutritionalValues);
+                console.log(data.recommendedProducts);
+
+                setRecommendation(data.recommendedProducts);
+                setAllergens(data.allergens);
+                setDesiredNutrition(data.nutritionalValues);
             } catch (err) {
                 console.log(err);
                 setError("Failed to fetch recommendation.");
@@ -30,41 +34,6 @@ const Recommendation = () => {
         }
     }, [cartId]);
 
-    useEffect(() => {
-        const fetchAllergens = async () => {
-            try {
-                const response = await fetch(`http://localhost:8000/recommendation/allergen/${cartId}`);
-                if (!response.ok) {
-                    throw new Error('Failed to fetch allergens.');
-                }
-                const data = await response.json();
-                setAllergens(data);
-            } catch (err) {
-                setError("Failed to fetch allergens.");
-            }
-        };
-        if (cartId) {
-            fetchAllergens();
-        }
-    }, [cartId]);
-
-    useEffect(() => {
-        const fetchDesiredNutrition = async () => {
-            try {
-                const response = await fetch(`http://localhost:8000/recommendation/nutrition/${cartId}`);
-                if (!response.ok) {
-                    throw new Error('Failed to fetch desired nutrition.');
-                }
-                const data = await response.json();
-                setDesiredNutrition(data);
-            } catch (err) {
-                setError("Failed to fetch desired nutrition.");
-            }
-        };
-        if (cartId) {
-            fetchDesiredNutrition();
-        }
-    }, [cartId]);
 
     if (error) return <p>{error}</p>;
     if (!recommendation) return <p>No recommendation found</p>;

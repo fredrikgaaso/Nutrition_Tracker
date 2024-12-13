@@ -3,8 +3,10 @@ package com.cart.recommendation.service;
 import com.cart.recommendation.client.ShopCartClient;
 import com.cart.recommendation.dtos.CartDTO;
 import com.cart.recommendation.model.Nutrient;
+import com.cart.recommendation.model.RecommendationData;
 import com.cart.recommendation.model.ShopCart;
 import com.cart.recommendation.model.ShopProduct;
+import com.cart.recommendation.repos.RecommendationRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,8 @@ public class RecommendationService {
 
     private final ShopCartClient shopCartClient;
 
+    private final RecommendationRepo recommendationRepo;
+
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.##");
 
     private static final Map<String, String> ALLERGEN_TO_FOODGROUP = new HashMap<>();
@@ -37,6 +41,28 @@ public class RecommendationService {
         ALLERGEN_TO_FOODGROUP.put("milk", "Meieriprodukter");
         ALLERGEN_TO_FOODGROUP.put("wheat", "Korn- og bakevarer");
         ALLERGEN_TO_FOODGROUP.put("sesame", "Sesamfrø");
+    }
+
+    public RecommendationData getRecommendations(Long cartId) {
+        log.info("Recommendation updated");
+        return recommendationRepo.findByShopCartId(cartId);
+    }
+
+    public RecommendationData setRecommendations(ShopCart shopCart) {
+        log.info("Recommendation created");
+        List<String> allergens = checkAllergen(shopCart);
+        List<String> nutritionalValues = checkNutritionalValue(shopCart);
+        List<String> recommendedProducts = makeRecommendation(shopCart);
+
+        RecommendationData recommendationData = new RecommendationData();
+        recommendationData.setShopCartId(shopCart.getId());
+        recommendationData.setAllergens(allergens);
+        recommendationData.setNutritionalValues(nutritionalValues);
+        recommendationData.setRecommendedProducts(recommendedProducts);
+
+        recommendationRepo.save(recommendationData);
+
+        return recommendationData;
     }
 
 
@@ -103,7 +129,7 @@ public class RecommendationService {
 
         List<String> recommendations = new ArrayList<>();
         if (totalProtein < desiredProtein) {
-            recommendations.add("You are missing " + (desiredProtein - totalProtein) + "g of protein in your diet.");
+            recommendations.add("You are missing " + DECIMAL_FORMAT.format(desiredProtein - totalProtein) + "g of protein in your diet.");
         } else if (totalProtein > desiredProtein) {
             recommendations.add("You have exceeded the recommended protein intake by " + DECIMAL_FORMAT.format(totalProtein - desiredProtein) + "g.");
         }
@@ -113,9 +139,9 @@ public class RecommendationService {
             recommendations.add("You have exceeded the recommended carb intake by " + DECIMAL_FORMAT.format(totalCarbs - desiredCarbs) + "g.");
         }
         if (totalFat < desiredFat) {
-            recommendations.add("You are missing " + (desiredFat - totalFat) + "g of fat in your diet.");
+            recommendations.add("You are missing " + DECIMAL_FORMAT.format(desiredFat - totalFat) + "g of fat in your diet.");
         } else if (totalFat > desiredFat) {
-            recommendations.add("You have exceeded the recommended fat intake by " + (totalFat - desiredFat) + "g.");
+            recommendations.add("You have exceeded the recommended fat intake by " + DECIMAL_FORMAT.format(totalFat - desiredFat) + "g.");
         }
         return recommendations;
     }
