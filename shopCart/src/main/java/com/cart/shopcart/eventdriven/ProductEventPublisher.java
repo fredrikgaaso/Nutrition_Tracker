@@ -18,9 +18,8 @@ public class ProductEventPublisher {
         this.exchangeName = exchangeName;
     }
 
-    public void publishProductEvent(ProductEvent message) {
+    public void publishProductEvent(Object message) {
         String routingKey = "product.added";
         amqpTemplate.convertAndSend(exchangeName, routingKey, message);
     }
-
 }

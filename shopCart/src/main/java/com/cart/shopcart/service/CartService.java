@@ -2,6 +2,7 @@ package com.cart.shopcart.service;
 
 import com.cart.shopcart.clients.ShopProductClient;
 import com.cart.shopcart.dto.ProductDTO;
+import com.cart.shopcart.eventdriven.AllergenEvent;
 import com.cart.shopcart.eventdriven.ProductEvent;
 import com.cart.shopcart.eventdriven.ProductEventPublisher;
 import com.cart.shopcart.model.ShopCart;
@@ -56,7 +57,9 @@ public class CartService {
     }
     public void setAllergens(Long cartId, Set<String> allergens) {
         ShopCart cart = shopCartRepo.findOneCartById(cartId);
+        AllergenEvent allergenEvent = new AllergenEvent(cartId, allergens);
         cart.setAllergens(allergens);
+        productEventPublisher.publishProductEvent(allergenEvent);
         shopCartRepo.save(cart);
     }
 

@@ -28,19 +28,18 @@ public class RecommendationService {
 
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.##");
 
-    private static final Map<String, String> ALLERGEN_TO_FOODGROUP = new HashMap<>();
+    private static final Map<String, List<String>> ALLERGEN_TO_FOODGROUP = new HashMap<>();
 
     static {
-        ALLERGEN_TO_FOODGROUP.put("gluten", "Korn- og bakevarer");
-        ALLERGEN_TO_FOODGROUP.put("lactose", "Meieriprodukter");
-        ALLERGEN_TO_FOODGROUP.put("nuts", "Nøtter og frø");
-        ALLERGEN_TO_FOODGROUP.put("soy", "Sojaprodukter");
-        ALLERGEN_TO_FOODGROUP.put("egg", "Egg og eggeprodukter");
-        ALLERGEN_TO_FOODGROUP.put("fish", "Fisk");
-        ALLERGEN_TO_FOODGROUP.put("shellfish", "Skalldyr");
-        ALLERGEN_TO_FOODGROUP.put("milk", "Meieriprodukter");
-        ALLERGEN_TO_FOODGROUP.put("wheat", "Korn- og bakevarer");
-        ALLERGEN_TO_FOODGROUP.put("sesame", "Sesamfrø");
+        ALLERGEN_TO_FOODGROUP.put("gluten", List.of("Korn", "Brød"));
+        ALLERGEN_TO_FOODGROUP.put("lactose", List.of("Meieriprodukter", "Melk", "Ost"));
+        ALLERGEN_TO_FOODGROUP.put("nuts", List.of("Nøtter", "Frø"));
+        ALLERGEN_TO_FOODGROUP.put("soy", List.of("Soja"));
+        ALLERGEN_TO_FOODGROUP.put("egg", List.of("Egg"));
+        ALLERGEN_TO_FOODGROUP.put("fish", List.of("Fisk"));
+        ALLERGEN_TO_FOODGROUP.put("shellfish", List.of("Skalldyr"));
+        ALLERGEN_TO_FOODGROUP.put("sesame", List.of("sesam"));
+        ALLERGEN_TO_FOODGROUP.put("Vegan", List.of("kjøtt", "fisk", "melk", "meieriprodukter", "egg"));
     }
 
     public RecommendationData getRecommendations(Long cartId) {
@@ -81,10 +80,14 @@ public class RecommendationService {
         log.info("Allergens in shopcart: {}", shopCart.getAllergens().toString());
 
         Set<String> restrictedFoodGroups = shopCart.getAllergens().stream()
-                .map(allergen -> {
-                    String foodGroup = ALLERGEN_TO_FOODGROUP.get(allergen);
-                    log.info("Mapping allergen '{}' to food group '{}'", allergen, foodGroup);
-                    return foodGroup;
+                .flatMap(allergen -> {
+                    List<String> foodGroups = ALLERGEN_TO_FOODGROUP.get(allergen);
+                    if (foodGroups == null) {
+                        log.warn("No food groups found for allergen '{}'", allergen);
+                        return Stream.empty();
+                    }
+                    log.info("Mapping allergen '{}' to food groups '{}'", allergen, foodGroups);
+                    return foodGroups.stream();
                 })
                 .collect(Collectors.toSet());
 
@@ -96,7 +99,8 @@ public class RecommendationService {
                     log.info("Product parent group: {}", product.getParentGroup());
                     return Stream.of(product.getFoodGroup(), product.getParentGroup());
                 })
-                .filter(restrictedFoodGroups::contains)
+                .filter(foodGroup -> foodGroup != null && restrictedFoodGroups.stream()
+                        .anyMatch(restrictedFoodGroup -> foodGroup.toLowerCase().contains(restrictedFoodGroup.toLowerCase())))
                 .distinct()
                 .toList();
 

@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 
 const Allergen = () => {
     const [selectedAllergen, setSelectedAllergen] = useState([]);
-    const allergens = ['gluten', 'lactose', 'nuts', 'soy', 'egg', 'fish', 'shellfish', 'milk', 'wheat', 'sesame', 'celery'];
+    const allergens = ['gluten', 'lactose', 'nuts', 'soy', 'egg', 'fish', 'shellfish', 'vegan', 'sesame'];
     const [output, setOutput] = useState("");
     const { cartId } = useParams();
 
@@ -15,7 +15,7 @@ const Allergen = () => {
         );
     };
 
-    const fetchAllergens = async () => {
+    const setAllergens = async () => {
         const response = await fetch(`http://localhost:8000/cart/setAllergens/${cartId}`, {
             method: 'POST',
             headers: {
@@ -33,6 +33,7 @@ const Allergen = () => {
         setOutput(data.message);
     };
 
+
     return (
         <div>
             <h4>Allergens</h4>
@@ -47,7 +48,7 @@ const Allergen = () => {
                     {allergen}
                 </label>
             ))}
-            <button onClick={fetchAllergens}>Set Allergens</button>
+            <button onClick={setAllergens}>Set Allergens</button>
             <p>{output}</p>
         </div>
     );
