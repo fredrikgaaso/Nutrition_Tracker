@@ -33,15 +33,15 @@
   },
   {
     "key": "config/product,docker/application.yml",
-    "value": ""
+    "value": "c3ByaW5nOgogIGNsb3VkOgogICAgY29uc3VsOgogICAgICBob3N0OiBjb25zdWw="
   },
   {
     "key": "config/shopcart,docker/",
     "value": ""
   },
   {
-    "key": "config/shopCart,docker/application.yml",
-    "value": "CnNwcmluZzoKICBhcHBsaWNhdGlvbjoKICAgIG5hbWU6IHNob3BDYXJ0CiAgY29uZmlnOgogICAgaW1wb3J0OiBvcHRpb25hbDpjb25zdWwKICByYWJiaXRtcToKICAgIGhvc3Q6IHJhYmJpdG1xCiAgICB1c2VybmFtZTogZ3Vlc3QKICAgIHBhc3N3b3JkOiBndWVzdAogICAgcG9ydDogNTY3MgoKc2VydmVyOgogIHBvcnQ6IDgwODEKCnByb2R1Y3Q6CiAgc2VydmljZToKICAgIHVybDogaHR0cDovL3Byb2R1Y3Q6ODA4MgoKYW1xcDoKICBleGNoYW5nZToKICAgIG5hbWU6IHByb2R1Y3RFeGNoYW5nZQogIHJvdXRpbmc6CiAgICBrZXk6IHByb2R1Y3QuYWRkZWQKCm1hbmFnZW1lbnQ6CiAgZW5kcG9pbnRzOgogICAgd2ViOgogICAgICBleHBvc3VyZToKICAgICAgICBpbmNsdWRlOiBoZWFsdGgsaW5mbwo"
+    "key": "config/shopcart,docker/application.yml",
+    "value": "cHJvZHVjdDoKIHNlcnZpY2U6CiAgdXJsOiBodHRwOi8vcHJvZHVjdDo4MDgyCgpzcHJpbmc6CiByYWJiaXRtcToKICBob3N0OiByYWJiaXRtcQogIA=="
   },
   {
     "key": "config/recommendation,docker/",
@@ -49,6 +49,6 @@
   },
   {
     "key": "config/recommendation,docker/application.yml",
-    "value": "CnNwcmluZzoKICBhcHBsaWNhdGlvbjoKICAgIG5hbWU6IHJlY29tbWVuZGF0aW9uCiAgY29uZmlnOgogICAgaW1wb3J0OiBvcHRpb25hbDpjb25zdWwKICByYWJiaXRtcToKICAgIGhvc3Q6IGxvY2FsaG9zdAogICAgdXNlcm5hbWU6IGd1ZXN0CiAgICBwYXNzd29yZDogZ3Vlc3QKICAgIHBvcnQ6IDU2NzIKCnNlcnZlcjoKICBwb3J0OiA4MDgzCgpzaG9wY2FydDoKICBzZXJ2aWNlOgogICAgdXJsOiBodHRwOi8vc2hvcGNhcnQ6ODA4MQoKYW1xcDoKICBleGNoYW5nZToKICAgIG5hbWU6IHByb2R1Y3RFeGNoYW5nZQogIHJvdXRpbmc6CiAgICBrZXk6IHByb2R1Y3QuYWRkZWQKICBxdWV1ZToKICAgIG5hbWU6IHByb2R1Y3RRdWV1ZQoKbWFuYWdlbWVudDoKICBlbmRwb2ludHM6CiAgICB3ZWI6CiAgICAgIGV4cG9zdXJlOgogICAgICAgIGluY2x1ZGU6IGhlYWx0aCxpbmZvCg="
+    "value": "c2hvcGNhcnQ6CiAgc2VydmljZToKICAgIHVybDogaHR0cDovL3Nob3BjYXJ0OjgwODEKICAgIApzcHJpbmc6CiAgcmFiYml0bXE6CiAgICBob3N0OiByYWJiaXRtcQogIGNsb3VkOgogICAgY29uc3VsOgogICAgICBob3N0OiBjb25zdWw="
   }
 ]

@@ -3,7 +3,10 @@ How to build and run the project:<br>
 2. When running locally you need to have RabbitMQ installed and running on default port 5672, and consul running on 8500.
 3. Run the following command to build the project, after cding into each service:<br>
 ```mvn clean package```<br>
-4. Run the following command to start the project:<br>
+4. Start rabbitmq and consul on your local machine.
+```rabbitmq-server```<br>
+```consul agent -dev```<br>
+4. Run the following command to start the projects:<br>
 ```mvn spring-boot:run```<br>
 5. If you want to start multiple instances of each service, you can run the following command:<br>
 ```mvn spring-boot:run -Dspring-boot.run.arguments="--server.port=NEW_PORT_NUMBER"```<br>
@@ -12,18 +15,18 @@ How to build and run the project:<br>
 ```npm run dev```<br>
 7. The project will be running on port 1234, 8081, 8082, 8083, 8500, 15672
 8. You can access the project using the following URL:<br>
-        Frontend:<br>
-```http://localhost:1234```<br>
-        Shopcart:<br>
-```http://localhost:8081```<br>
-        Product:<br>
-```http://localhost:8082```<br>
-        Recommendation:<br>
-```http://localhost:8083```<br>
-        Consul:<br>
-```http://localhost:8500```<br>
-        RabbitMQ:<br>
-```http://localhost:15672```<br>
+   Frontend:<br>
+   ```http://localhost:1234```<br>
+   Shopcart:<br>
+   ```http://localhost:8081```<br>
+   Product:<br>
+   ```http://localhost:8082```<br>
+   Recommendation:<br>
+   ```http://localhost:8083```<br>
+   Consul:<br>
+   ```http://localhost:8500```<br>
+   RabbitMQ:<br>
+   ```http://localhost:15672```<br>
 
 How to build and run the project with docker:<br>
 1. Open the zip file and extract the project.
@@ -37,19 +40,19 @@ How to build and run the project with docker:<br>
 ```docker-compose up``` to start rabbitmq, and consul<br>
 ```docker-compose -f docker-compose-services.yml up``` to start rabbitmq, consul and all the services<br>
 6. The project will be running on port 1234, 8081, 8082, 8083, 8500, 15672
-
-When running the project with docker, you need to change the following:<br>
-1. In application.properties file in shopCart, change the following:<br>
-```spring.cloud.consul.host=localhost``` -> ```spring.cloud.consul.host=consul```<br>
-```spring.rabbitmq.host=localhost``` -> ```spring.rabbitmq.host=rabbitmq```<br>
-```product.service.url=http://localhost:8082``` ->```product.service.url=http://product:8082```<br>
-2. In application.properties file in recommendation, change the following:<br>
-```spring.cloud.consul.host=localhost``` -> ```spring.cloud.consul.host=consul```<br>
-```spring.rabbitmq.host=localhost``` -> ```spring.rabbitmq.host=rabbitmq```<br>
-```shopcart.service.url=http://localhost:8081``` ->```shopcart.service.url=http://shopcart:8082```<br>
-3. In application.properties file in product, change the following:<br>
-```spring.cloud.consul.host=localhost``` -> ```spring.cloud.consul.host=consul```<br>
-3. For some reason i couldn't get consul-kv-docker.json to actually so i have to manually change the application.properties files in the services to point to the correct rabbitmq host, and shopCart and product url.
+7. You can access the project using the following URL:<br>
+      Frontend:<br>
+      ```http://localhost:1234```<br>
+      Shopcart:<br>
+      ```http://localhost:8081```<br>
+      Product:<br>
+      ```http://localhost:8082```<br>
+      Recommendation:<br>
+      ```http://localhost:8083```<br>
+      Consul:<br>
+      ```http://localhost:8500```<br>
+      RabbitMQ:<br>
+      ```http://localhost:15672```<br>
 
 How to use the project:<br>
 1. After all services are up and running, you can access the frontend using the following URL:<br>
@@ -75,7 +78,7 @@ Diagram:<br>
 ![Diagram](images/diagram.png)
 
 Problems:<br>
-1. I had some problems with the consul-kv-docker.json file, and couldn't get it to work, so i had to manually change the application.properties files in the services to point to the correct rabbitmq host, and shopCart and product url when dockerising the services.
-2. I had some problems with correct java version on my system, and had to manually change the java version on my system to 21.0.1. with this command: <br>
+1. I had some problems with correct java version on my system, and had to manually change the java version on my system to 21.0.1. with this command: <br>
 ```export JAVA_HOME=$(/usr/libexec/java_home -v 21)``` <br> 
-```export PATH=$JAVA_HOME/bin:$PATH```
+```export PATH=$JAVA_HOME/bin:$PATH``` <br>
+If the problem arises just run this, but the project should be running on java 21.0.1.

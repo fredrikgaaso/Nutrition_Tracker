@@ -40,8 +40,8 @@ services:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_CLOUD_CONSUL_HOST=consul-dev
     depends_on:
-      - rabbitmq-dev
       - consul-importer
+      - rabbitmq-dev
     networks:
       - micro_product
 
@@ -77,7 +77,7 @@ services:
       - micro_product
 
   consul-importer:
-    image: consul-importer:1.19.2
+    image: consul-importer
     depends_on:
       - consul-dev
     networks:
