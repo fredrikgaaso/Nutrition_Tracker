@@ -81,4 +81,4 @@ Problems:<br>
 1. I had some problems with correct java version on my system, and had to manually change the java version on my system to 21.0.1. with this command: <br>
 ```export JAVA_HOME=$(/usr/libexec/java_home -v 21)``` <br> 
 ```export PATH=$JAVA_HOME/bin:$PATH``` <br>
-If the problem arises just run this, but the project should be running on java 21.0.1.
+If the problem arises just run this, and it should work.
