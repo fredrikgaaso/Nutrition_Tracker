@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNutritionData } from "../hooks/useNutritionData";
+import { TextField, Button, Typography } from '@mui/material';
 
 const DesiredNutrition = () => {
     const {
@@ -15,37 +16,49 @@ const DesiredNutrition = () => {
 
     return (
         <div>
-            <h4>Desired Nutrition</h4>
-            <p>Set your desired nutritional values:</p>
-            <label>
-                Protein (g):
-                <input
-                    type="number"
-                    value={desiredProtein}
-                    onChange={handleDesiredProteinChange}
-                />
-            </label>
-            <br />
-            <label>
-                Carbs (g):
-                <input
-                    type="number"
-                    value={desiredCarbs}
-                    onChange={handleDesiredCarbsChange}
-                />
-            </label>
-            <br />
-            <label>
-                Fat (g):
-                <input
-                    type="number"
-                    value={desiredFat}
-                    onChange={handleDesiredFatChange}
-                />
-            </label>
-            <br />
-            <button onClick={fetchNutritionalValueCall}>Set Desired Nutrition</button>
-            <p>{output}</p>
+            <Typography variant="h4" gutterBottom>
+                Desired Nutrition
+            </Typography>
+            <Typography variant="body1" gutterBottom>
+                Set your desired nutritional values:
+            </Typography>
+            <TextField
+                label="Protein (g)"
+                type="number"
+                value={desiredProtein}
+                onChange={handleDesiredProteinChange}
+                fullWidth
+                margin="normal"
+            />
+            <TextField
+                label="Carbs (g)"
+                type="number"
+                value={desiredCarbs}
+                onChange={handleDesiredCarbsChange}
+                fullWidth
+                margin="normal"
+            />
+            <TextField
+                label="Fat (g)"
+                type="number"
+                value={desiredFat}
+                onChange={handleDesiredFatChange}
+                fullWidth
+                margin="normal"
+            />
+            <Button
+                variant="contained"
+                color="primary"
+                onClick={fetchNutritionalValueCall}
+                style={{ marginTop: '16px' }}
+            >
+                Set Desired Nutrition
+            </Button>
+            {output && (
+                <Typography variant="body2" color="textSecondary" style={{ marginTop: '16px' }}>
+                    {output}
+                </Typography>
+            )}
         </div>
     );
 };

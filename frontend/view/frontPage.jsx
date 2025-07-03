@@ -1,26 +1,44 @@
-import React, from 'react';
+import React from 'react';
 import { useFontPageData } from "../hooks/usefontPageData";
+import { Button, Typography, Container, Card, CardContent } from '@mui/material';
 
 const FrontPage = () => {
     const { carts, error, handleRedirect, handleCreateNewCart } = useFontPageData();
 
     return (
-        <div className="container">
-            <h3>Existing Shopping Carts</h3>
-            {error && <p>{error}</p>}
+        <Container>
+            <Typography variant="h4" gutterBottom>
+                Existing Shopping Carts
+            </Typography>
+            {error && (
+                <Typography variant="body1" color="error">
+                    {error}
+                </Typography>
+            )}
             <div>
                 {carts.map(cart => (
-                    <div key={cart.id} className="cart-item">
-                        <button onClick={() => handleRedirect(cart.id)}>
-                            Go to Shopping Cart {cart.id}
-                        </button>
-                    </div>
+                    <Card key={cart.id} style={{ marginBottom: '16px' }}>
+                        <CardContent>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={() => handleRedirect(cart.id)}
+                            >
+                                Go to Shopping Cart {cart.id}
+                            </Button>
+                        </CardContent>
+                    </Card>
                 ))}
             </div>
-            <button onClick={handleCreateNewCart}>
+            <Button
+                variant="contained"
+                color="secondary"
+                onClick={handleCreateNewCart}
+                style={{ marginTop: '16px' }}
+            >
                 Create new cart
-            </button>
-        </div>
+            </Button>
+        </Container>
     );
 };
 

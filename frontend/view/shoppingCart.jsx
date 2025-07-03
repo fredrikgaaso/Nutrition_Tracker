@@ -1,136 +1,97 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React from 'react';
+import { useShoppingCartData } from "../hooks/useShoppingCartData";
 import Recommendation from "./recommendation";
 import Allergen from "./allergen";
-import desiredNutrition from "./desiredNutrition";
 import DesiredNutrition from "./desiredNutrition";
+import { Button, Typography, Table, TableHead, TableRow, TableCell, TableBody, List, ListItem, Container } from '@mui/material';
 
 const ShoppingCart = () => {
-    const { cartId } = useParams();
-    const navigate = useNavigate();
-    const [shoppingCart, setShoppingCart] = useState(null);
-    const [error, setError] = useState(null);
-    const [showRecommendation, setShowRecommendation] = useState(false);
-    const [showAllergens, setShowAllergens] = useState(false);
-    const [showNutritionalValue, setShowNutritionalValue] = useState(false);
-    useEffect(() => {
-        const fetchShoppingCart = async () => {
-            try {
-                const response = await fetch(`http://localhost:8000/cart/${cartId}`);
-                if (!response.ok) {
-                    throw new Error('Failed to fetch data from the microservice.');
-                }
-                const data = await response.json();
-                setShoppingCart(data);
-            } catch (err) {
-                setError("Failed to fetch data from the microservice.");
-            }
-        };
+    const {
+        shoppingCart,
+        cartId,
+        error,
+        showRecommendation,
+        showAllergens,
+        showNutritionalValue,
+        handleNavigateToProduct,
+        handleNavigateToFrontpage,
+        handleToggleRecommendation,
+        handleToggleAllergens,
+        handleToggleNutritionalValue,
+        handleDeleteProductFromCart
+    } = useShoppingCartData();
 
-        if (cartId) {
-            fetchShoppingCart();
-        }
-    }, [cartId]);
-
-    const handleDeleteProduct = async (productId) => {
-        try {
-            const response = await fetch(`http://localhost:8000/cart/remove`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    cartId,
-                    productId,
-                }),
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to delete product');
-            }
-            const text = await response.text();
-            const updatedCart = text ? JSON.parse(text) : null;
-
-            if (updatedCart) {
-                setShoppingCart(updatedCart);
-            } else {
-                setShoppingCart(prevCart => ({
-                    ...prevCart,
-                    productsList: prevCart.productsList.filter(product => product.id !== productId)
-                }));
-            }
-        } catch (err) {
-            console.error('Failed to delete product:', err);
-            setError('Failed to delete product');
-        }
-    }
-
-    const handleNavigateToSearch = () => {
-        navigate(`/searchbar/${cartId}`);
-    };
-    const handleNavigateToFrontPage = () => {
-        navigate(`/`);
-    }
-    const handleToggleRecommendation = () => {
-        setShowRecommendation(Recommendation => !Recommendation);
-    }
-    const handleToggleAllergens = () => {
-        setShowAllergens(showAllergens => !showAllergens);
-    }
-    const handleToggleNutritionalValue = () => {
-        setShowNutritionalValue(showNutritionalValue => !showNutritionalValue);
-    }
-
-    if (error) return <p>{error}</p>;
-    if (!shoppingCart || !shoppingCart.productsList) return <p>No shopping cart found</p>;
+    if (error) return <Typography color="error">{error}</Typography>;
+    if (!shoppingCart || !shoppingCart.productsList) return <Typography>No shopping cart found</Typography>;
 
     return (
-        <div>
-            <button onClick={handleNavigateToFrontPage}>Go back to front page</button>
-            <button onClick={handleNavigateToSearch}>Go to SearchBar for Cart {cartId}</button>
-            <button onClick={handleToggleAllergens}>{showAllergens ? 'Hide Allergens' : 'Add Allergens'}</button>
-            <button onClick={handleToggleRecommendation}>{showRecommendation ? 'Hide Recommendations' : 'Get Recommendations'}</button>
-            <button onClick={handleToggleNutritionalValue}>{showNutritionalValue ? 'Hide Nutritional Value' : 'Add nutritional value'}</button>
-            {showRecommendation && <Recommendation cartId={cartId}/>}
-            {showAllergens && <Allergen cartId={cartId}/>}
-            {showNutritionalValue && <DesiredNutrition cartId={cartId}/>}
+        <Container>
+            <Button variant="contained" color="primary" onClick={handleNavigateToFrontpage} style={{ marginBottom: '16px' }}>
+                Go back to front page
+            </Button>
+            <Button variant="contained" color="primary" onClick={handleNavigateToProduct} style={{ marginBottom: '16px' }}>
+                Go to SearchBar for Cart {cartId}
+            </Button>
+            <Button variant="contained" color="secondary" onClick={handleToggleAllergens} style={{ marginBottom: '16px' }}>
+                {showAllergens ? 'Hide Allergens' : 'Add Allergens'}
+            </Button>
+            <Button variant="contained" color="secondary" onClick={handleToggleRecommendation} style={{ marginBottom: '16px' }}>
+                {showRecommendation ? 'Hide Recommendations' : 'Get Recommendations'}
+            </Button>
+            <Button variant="contained" color="secondary" onClick={handleToggleNutritionalValue} style={{ marginBottom: '16px' }}>
+                {showNutritionalValue ? 'Hide Nutritional Value' : 'Add nutritional value'}
+            </Button>
 
-            <h4>Product List:</h4>
-            <table>
-                <thead>
-                <tr>
-                    <th>Product Name</th>
-                    <th>Calories pr 100g</th>
-                    <th>Nutritional Info pr 100g</th>
-                    <th>Quantity</th>
-                </tr>
-                </thead>
-                <tbody>
-                {shoppingCart.productsList.map((product, index) => (
-                    <tr key={index}>
-                        <td>{product.productName}</td>
-                        <td>{product.calories}</td>
-                        <td>
-                            <ul>
-                                {product.nutritionalInfo && Array.isArray(product.nutritionalInfo) ? (
-                                    product.nutritionalInfo.map((nutrient, nutrientIndex) => (
-                                        <li key={nutrientIndex}>
-                                            {nutrient.nutrientName}: {nutrient.nutrientValue}
-                                        </li>
-                                    ))
-                                ) : (
-                                    <li>No nutritional info available</li>
-                                )}
-                            </ul>
-                        </td>
-                        <td>{product.quantity}</td>
-                        <td><button onClick={() => handleDeleteProduct(product.id)}>Remove Product</button></td>
-                    </tr>
-                ))}
-                </tbody>
-            </table>
+            {showRecommendation && <Recommendation cartId={cartId} />}
+            {showAllergens && <Allergen cartId={cartId} />}
+            {showNutritionalValue && <DesiredNutrition cartId={cartId} />}
 
-        </div>
+            <Typography variant="h4" gutterBottom>
+                Product List:
+            </Typography>
+            <Table>
+                <TableHead>
+                    <TableRow>
+                        <TableCell>Product Name</TableCell>
+                        <TableCell>Calories pr 100g</TableCell>
+                        <TableCell>Nutritional Info pr 100g</TableCell>
+                        <TableCell>Quantity</TableCell>
+                        <TableCell>Actions</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {shoppingCart.productsList.map((product, index) => (
+                        <TableRow key={index}>
+                            <TableCell>{product.productName}</TableCell>
+                            <TableCell>{product.calories}</TableCell>
+                            <TableCell>
+                                <List>
+                                    {product.nutritionalInfo && Array.isArray(product.nutritionalInfo) ? (
+                                        product.nutritionalInfo.map((nutrient, nutrientIndex) => (
+                                            <ListItem key={nutrientIndex}>
+                                                {nutrient.nutrientName}: {nutrient.nutrientValue}
+                                            </ListItem>
+                                        ))
+                                    ) : (
+                                        <ListItem>No nutritional info available</ListItem>
+                                    )}
+                                </List>
+                            </TableCell>
+                            <TableCell>{product.quantity}</TableCell>
+                            <TableCell>
+                                <Button
+                                    variant="contained"
+                                    color="error"
+                                    onClick={() => handleDeleteProductFromCart(product.id)}
+                                >
+                                    Remove Product
+                                </Button>
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
+        </Container>
     );
 };
 

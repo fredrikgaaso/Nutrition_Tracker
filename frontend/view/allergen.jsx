@@ -1,28 +1,49 @@
-import {useAllergenData } from "../hooks/useAllergenData";
+import React from 'react';
+import { useAllergenData } from "../hooks/useAllergenData";
+import { Checkbox, FormControlLabel, Button, Typography } from '@mui/material';
 
-const Allergen = ( ) => {
- const { selectedAllergens,
-     allergens,
-     handleAllergenChange,
-     setAllergensCall,
-     output } = useAllergenData();
+const Allergen = () => {
+    const {
+        selectedAllergens,
+        allergens,
+        handleAllergenChange,
+        setAllergensCall,
+        output
+    } = useAllergenData();
 
     return (
         <div>
-            <h4>Allergens</h4>
-            <p>Select your allergens:</p>
+            <Typography variant="h4" gutterBottom>
+                Allergens
+            </Typography>
+            <Typography variant="body1" gutterBottom>
+                Select your allergens:
+            </Typography>
             {allergens.map((allergen) => (
-                <label key={allergen}>
-                    <input
-                        type="checkbox"
-                        checked={selectedAllergens.includes(allergen)}
-                        onChange={() => handleAllergenChange(allergen)}
-                    />
-                    {allergen}
-                </label>
+                <FormControlLabel
+                    key={allergen}
+                    control={
+                        <Checkbox
+                            checked={selectedAllergens.includes(allergen)}
+                            onChange={() => handleAllergenChange(allergen)}
+                        />
+                    }
+                    label={allergen}
+                />
             ))}
-            <button onClick={setAllergensCall}>Set Allergens</button>
-            <p>{output}</p>
+            <Button
+                variant="contained"
+                color="primary"
+                onClick={setAllergensCall}
+                style={{ marginTop: '16px' }}
+            >
+                Set Allergens
+            </Button>
+            {output && (
+                <Typography variant="body2" color="textSecondary" style={{ marginTop: '16px' }}>
+                    {output}
+                </Typography>
+            )}
         </div>
     );
 };

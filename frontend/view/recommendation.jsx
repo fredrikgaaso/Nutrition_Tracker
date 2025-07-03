@@ -1,37 +1,43 @@
-import {useRecommendationData} from "../hooks/useRecommendationData";
+import React from 'react';
+import { useRecommendationData } from "../hooks/useRecommendationData";
+import { Typography, List, ListItem, Container } from '@mui/material';
 
 const Recommendation = () => {
-    const {  recommendations,
-        error,
-        cartId,
-        allergens,
-        desiredNutritions,} = useRecommendationData();
+    const { recommendations, error, cartId, allergens, desiredNutritions } = useRecommendationData();
 
-    if (error) return <p>{error}</p>;
-    if (!recommendations) return <p>No recommendation found</p>;
+    if (error) return <Typography color="error">{error}</Typography>;
+    if (!recommendations) return <Typography>No recommendation found</Typography>;
 
     return (
-        <div>
-            <h4>Recommendation for cart {cartId}</h4>
-            <h5>Recommendation</h5>
-            <ul>
-                {recommendations && recommendations.map((recommendation, index) => (
-                    <li key={index}>{recommendation}</li>
+        <Container>
+            <Typography variant="h4" gutterBottom>
+                Recommendation for cart {cartId}
+            </Typography>
+            <Typography variant="h5" gutterBottom>
+                Recommendation
+            </Typography>
+            <List>
+                {recommendations.map((recommendation, index) => (
+                    <ListItem key={index}>{recommendation}</ListItem>
                 ))}
-            </ul>
-            <h5>Allergens</h5>
-            <ul>
-                {allergens && allergens.map((allergen, index) => (
-                    <li key={index}>{allergen}</li>
+            </List>
+            <Typography variant="h5" gutterBottom>
+                Allergens
+            </Typography>
+            <List>
+                {allergens.map((allergen, index) => (
+                    <ListItem key={index}>{allergen}</ListItem>
                 ))}
-            </ul>
-            <h5>Desired Nutrition</h5>
-            <ul>
-                {desiredNutritions && desiredNutritions.map((nutrition, index) => (
-                    <li key={index}>{nutrition}</li>
+            </List>
+            <Typography variant="h5" gutterBottom>
+                Desired Nutrition
+            </Typography>
+            <List>
+                {desiredNutritions.map((nutrition, index) => (
+                    <ListItem key={index}>{nutrition}</ListItem>
                 ))}
-            </ul>
-        </div>
+            </List>
+        </Container>
     );
 };
 
