@@ -65,6 +65,8 @@ public class CartService {
     }
 
     public void setDesiredNutrients(Long cartId, int desiredProtein, int desiredCarbs, int desiredFat) {
+        log.info("Setting desired nutrients for cartId: {}, Protein: {}, Carbs: {}, Fat: {}",
+                 cartId, desiredProtein, desiredCarbs, desiredFat);
         ShopCart cart = shopCartRepo.findOneCartById(cartId);
         cart.setDesiredProtein(desiredProtein);
         cart.setDesiredCarbs(desiredCarbs);

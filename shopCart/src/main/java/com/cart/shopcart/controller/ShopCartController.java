@@ -53,6 +53,7 @@ public class ShopCartController {
 
     @PostMapping("/setAllergens/{cartId}")
     public void setAllergens(@PathVariable Long cartId, @RequestBody Set<String> allergens) {
+        log.info("Setting allergens for cartId: {}, allergens: {}", cartId, allergens);
         cartService.setAllergens(cartId, allergens);
     }
 
