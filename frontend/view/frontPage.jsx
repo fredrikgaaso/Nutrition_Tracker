@@ -1,63 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, from 'react';
+import { useFontPageData } from "../hooks/usefontPageData";
 
 const FrontPage = () => {
-    const [carts, setCarts] = useState([]);
-    const [error, setError] = useState(null);
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        const fetchCarts = async () => {
-            setError(null);
-            try {
-                const response = await fetch('http://localhost:8000/cart/all');
-                if (!response.ok) {
-                    throw new Error('Failed to fetch shopping carts');
-                }
-                const data = await response.json();
-                setCarts(data);
-            } catch (err) {
-                setError(err.message);
-            }
-        };
-
-        fetchCarts();
-    }, []);
-
-    const handleRedirect = (cartId) => {
-        navigate(`/shoppingCart/${cartId}`);
-    };
-
-    const handleCreateNewCart = async () => {
-        setError(null);
-        try {
-            const response = await fetch('http://localhost:8000/cart/create', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to create a new cart');
-            }
-
-            const newCart = await response.json();
-            handleRedirect(newCart.id);
-        } catch (err) {
-            setError(err.message);
-        }
-    };
+    const { carts, error, handleRedirect, handleCreateNewCart } = useFontPageData();
 
     return (
         <div className="container">
             <h3>Existing Shopping Carts</h3>
             {error && <p>{error}</p>}
             <div>
-                {carts.map((cart) => (
-                    <button key={cart.id} onClick={() => handleRedirect(cart.id)}>
-                        Go to Shopping Cart {cart.id}
-                    </button>
+                {carts.map(cart => (
+                    <div key={cart.id} className="cart-item">
+                        <button onClick={() => handleRedirect(cart.id)}>
+                            Go to Shopping Cart {cart.id}
+                        </button>
+                    </div>
                 ))}
             </div>
             <button onClick={handleCreateNewCart}>
