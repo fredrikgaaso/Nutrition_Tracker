@@ -2,9 +2,9 @@ import {fetchCarts, createNewCart} from "../service/frontPageService";
 import {useEffect, useState, useCallback} from "react";
 import {useNavigate} from "react-router-dom";
 export const useFontPageData = () => {
-    const [carts, setCarts] = useState([]); // Correct array destructuring
-    const [error, setError] = useState(null); // Correct array destructuring
-    const navigate = useNavigate(); // Correct usage of `useNavigate`
+    const [carts, setCarts] = useState([]);
+    const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
     const fetchCartsCall = useCallback(async () => {
         setError(null);
