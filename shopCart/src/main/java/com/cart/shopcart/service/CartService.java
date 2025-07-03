@@ -56,6 +56,7 @@ public class CartService {
         shopCartRepo.save(cart);
     }
     public void setAllergens(Long cartId, Set<String> allergens) {
+        log.info("allergens from setAllergens:" + allergens);
         ShopCart cart = shopCartRepo.findOneCartById(cartId);
         AllergenEvent allergenEvent = new AllergenEvent(cartId, allergens);
         cart.setAllergens(allergens);

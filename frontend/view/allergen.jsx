@@ -1,38 +1,11 @@
-import React, { useState } from 'react';
-import { useParams } from "react-router-dom";
+import {useAllergenData } from "../hooks/useAllergenData";
 
-const Allergen = () => {
-    const [selectedAllergen, setSelectedAllergen] = useState([]);
-    const allergens = ['gluten', 'lactose', 'nuts', 'soy', 'egg', 'fish', 'shellfish', 'vegan', 'sesame'];
-    const [output, setOutput] = useState("");
-    const { cartId } = useParams();
-
-    const handleAllergenChange = (allergen) => {
-        setSelectedAllergen((prevAllergen) =>
-            prevAllergen.includes(allergen)
-                ? prevAllergen.filter((a) => a !== allergen)
-                : [...prevAllergen, allergen]
-        );
-    };
-
-    const setAllergens = async () => {
-        const response = await fetch(`http://localhost:8000/cart/setAllergens/${cartId}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(selectedAllergen),
-        });
-
-        if (!response.ok) {
-            console.error('Failed to set allergens:', response.statusText);
-            return;
-        }
-
-        const data = await response.text();
-        setOutput(data.message);
-    };
-
+const Allergen = ( ) => {
+ const { selectedAllergens,
+     allergens,
+     handleAllergenChange,
+     setAllergensCall,
+     output } = useAllergenData();
 
     return (
         <div>
@@ -42,13 +15,13 @@ const Allergen = () => {
                 <label key={allergen}>
                     <input
                         type="checkbox"
-                        checked={selectedAllergen.includes(allergen)}
+                        checked={selectedAllergens.includes(allergen)}
                         onChange={() => handleAllergenChange(allergen)}
                     />
                     {allergen}
                 </label>
             ))}
-            <button onClick={setAllergens}>Set Allergens</button>
+            <button onClick={setAllergensCall}>Set Allergens</button>
             <p>{output}</p>
         </div>
     );
