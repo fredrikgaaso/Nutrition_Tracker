@@ -1,6 +1,18 @@
 import React from 'react';
 import { useProductData } from '../hooks/useProductData';
-import { TextField, Button, Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material';
+import {
+    TextField,
+    Button,
+    Table,
+    TableHead,
+    TableRow,
+    TableCell,
+    TableBody,
+    Container,
+    Pagination, IconButton
+} from '@mui/material';
+import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
+import { ButtonGrid } from './layout/buttonGrid';
 
 const ProductPage = () => {
     const {
@@ -16,20 +28,31 @@ const ProductPage = () => {
         handleFetchProductListFromApi,
         handleAddProductToCart,
         handleNavigateToCart,
+        handlePageChange,
+        productsPerPage,
+        currentPage,
+        currentProducts
     } = useProductData();
+
+    const buttons = [
+        {
+            label: 'Back to Cart',
+            onClick: handleNavigateToCart,
+        },
+        {
+            label: 'Get Product List',
+            onClick: handleFetchProductListFromApi,
+
+        }
+    ]
 
     if (error) return <p>{error}</p>;
     if (loading) return <p>Loading...</p>;
 
     return (
-        <div style={{ padding: '20px' }}>
-            <Button variant="contained" color="primary" onClick={handleNavigateToCart} style={{ marginRight: '10px' }}>
-                Back to Cart
-            </Button>
-            <Button variant="contained" color="secondary" onClick={handleFetchProductListFromApi}>
-                Get Product List
-            </Button>
-            <div style={{ margin: '20px 0' }}>
+        <Container sx={{ marginTop: '20px', marginBottom: '20px' }}>
+            <ButtonGrid buttons={buttons} />
+            <Container sx={{ marginTop: '20px', marginBottom: '20px' }}>
                 <TextField
                     label="Search Products"
                     variant="outlined"
@@ -37,70 +60,81 @@ const ProductPage = () => {
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
-            </div>
+            </Container>
             {filteredProducts.length === 0 ? (
                 <p>No products found</p>
             ) : (
-                <Table style={{ width: '650px', height: '400px', tableLayout: 'fixed' }}>                    <TableHead>
-                        <TableRow>
-                            <TableCell>Food Name</TableCell>
-                            <TableCell>Calories</TableCell>
-                            <TableCell>Nutritional Info</TableCell>
-                            <TableCell>Add to Cart</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {filteredProducts.map((product) => (
-                            <TableRow key={product.id}>
-                                <TableCell>{product.productName}</TableCell>
-                                <TableCell>{product.calories}</TableCell>
-                                <TableCell>
-                                    <ul style={{ paddingLeft: '20px' }}>
-                                        {product.nutritionalInfo && Array.isArray(product.nutritionalInfo) ? (
-                                            product.nutritionalInfo.map((nutrient, index) => (
-                                                <li key={index}>
-                                                    {nutrient.nutrientName}: {nutrient.nutrientValue}
-                                                </li>
-                                            ))
+                <>
+                    <Table style={{ width: '650px', height: '400px', tableLayout: 'fixed' }}>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Food Name</TableCell>
+                                <TableCell>Calories</TableCell>
+                                <TableCell>Nutritional Info</TableCell>
+                                <TableCell>Add to Cart</TableCell>
+                                <TableCell></TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {currentProducts.map((product) => (
+                                <TableRow key={product.id}>
+                                    <TableCell>{product.productName}</TableCell>
+                                    <TableCell>{product.calories}</TableCell>
+                                    <TableCell>
+                                        <ul style={{ paddingLeft: '20px' }}>
+                                            {product.nutritionalInfo && Array.isArray(product.nutritionalInfo) ? (
+                                                product.nutritionalInfo.map((nutrient, index) => (
+                                                    <li key={index}>
+                                                        {nutrient.nutrientName}: {nutrient.nutrientValue}
+                                                    </li>
+                                                ))
+                                            ) : (
+                                                <li>No nutritional info available</li>
+                                            )}
+                                        </ul>
+                                    </TableCell>
+                                    <TableCell>
+                                        {addedProducts.has(product.id) ? (
+                                            <div style={{ marginTop: '10px' }}>
+                                                <TextField
+                                                    type="number"
+                                                    value={quantity[product.id] || 1}
+                                                    onChange={(e) => handleQuantityChange(product.id, e.target.value)}
+                                                    inputProps={{ min: 1 }}
+                                                    style={{ width: '80px', marginRight: '10px' }}
+                                                />
+                                                <Button
+                                                    variant="contained"
+                                                    color="secondary"
+                                                    onClick={(e) => handleAddProductToCart(e, product.id)}
+                                                >
+                                                    Confirm
+                                                </Button>
+                                            </div>
                                         ) : (
-                                            <li>No nutritional info available</li>
-                                        )}
-                                    </ul>
-                                </TableCell>
-                                <TableCell>
-                                    {addedProducts.has(product.id) ? (
-                                        <div style={{ marginTop: '10px' }}>
-                                            <TextField
-                                                type="number"
-                                                value={quantity[product.id] || 1}
-                                                onChange={(e) => handleQuantityChange(product.id, e.target.value)}
-                                                inputProps={{ min: 1 }}
-                                                style={{ width: '80px', marginRight: '10px' }}
-                                            />
                                             <Button
                                                 variant="contained"
                                                 color="primary"
-                                                onClick={(e) => handleAddProductToCart(e, product.id)}
+                                                onClick={() => setAddedProducts((prev) => new Set(prev).add(product.id))}
                                             >
-                                                Confirm
+                                                Add to Cart
                                             </Button>
-                                        </div>
-                                    ) : (
-                                        <Button
-                                            variant="contained"
-                                            color="secondary"
-                                            onClick={() => setAddedProducts((prev) => new Set(prev).add(product.id))}
-                                        >
-                                            Add to Cart
-                                        </Button>
-                                    )}
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
+                                        )}
+                                    </TableCell>
+                                    <TableCell><IconButton><StarBorderRoundedIcon/></IconButton></TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                    <Pagination
+                        count={Math.ceil(filteredProducts.length / productsPerPage)}
+                        page={currentPage}
+                        onChange={handlePageChange}
+                        sx={{ marginTop: '20px', display: 'flex', justifyContent: 'center' }}
+                    />
+                </>
             )}
-        </div>
+        </Container>
     );
 };
 

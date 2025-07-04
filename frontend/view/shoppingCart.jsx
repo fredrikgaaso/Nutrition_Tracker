@@ -4,6 +4,7 @@ import Recommendation from "./recommendation";
 import Allergen from "./allergen";
 import DesiredNutrition from "./desiredNutrition";
 import { Button, Typography, Table, TableHead, TableRow, TableCell, TableBody, List, ListItem, Container } from '@mui/material';
+import { ButtonGrid } from "./layout/buttonGrid";
 
 const ShoppingCart = () => {
     const {
@@ -18,33 +19,57 @@ const ShoppingCart = () => {
         handleToggleRecommendation,
         handleToggleAllergens,
         handleToggleNutritionalValue,
-        handleDeleteProductFromCart
+        handleDeleteProductFromCart,
+        calculatedNutritionalValue,
+        calculatedCalories
     } = useShoppingCartData();
+
+    const buttons = [
+        {
+            label: 'Go back to front page',
+            onClick: handleNavigateToFrontpage,
+        },
+        {
+            label: 'Go to Product Page',
+            onClick: handleNavigateToProduct,
+        },
+        {
+            label: showAllergens ? 'Hide Allergens' : 'Add Allergens',
+            onClick: handleToggleAllergens,
+        },
+        {
+            label: showRecommendation ? 'Hide Recommendations' : 'Get Recommendations',
+            onClick: handleToggleRecommendation,
+        },
+        {
+            label: showNutritionalValue ? 'Hide Nutritional Value' : 'Add nutritional value',
+            onClick: handleToggleNutritionalValue,
+        }
+        ];
 
     if (error) return <Typography color="error">{error}</Typography>;
     if (!shoppingCart || !shoppingCart.productsList) return <Typography>No shopping cart found</Typography>;
 
     return (
-        <Container>
-            <Button variant="contained" color="primary" onClick={handleNavigateToFrontpage} style={{ marginBottom: '16px' }}>
-                Go back to front page
-            </Button>
-            <Button variant="contained" color="primary" onClick={handleNavigateToProduct} style={{ marginBottom: '16px' }}>
-                Go to SearchBar for Cart {cartId}
-            </Button>
-            <Button variant="contained" color="secondary" onClick={handleToggleAllergens} style={{ marginBottom: '16px' }}>
-                {showAllergens ? 'Hide Allergens' : 'Add Allergens'}
-            </Button>
-            <Button variant="contained" color="secondary" onClick={handleToggleRecommendation} style={{ marginBottom: '16px' }}>
-                {showRecommendation ? 'Hide Recommendations' : 'Get Recommendations'}
-            </Button>
-            <Button variant="contained" color="secondary" onClick={handleToggleNutritionalValue} style={{ marginBottom: '16px' }}>
-                {showNutritionalValue ? 'Hide Nutritional Value' : 'Add nutritional value'}
-            </Button>
+        <Container sx={{ marginTop: '20px', marginBottom: '20px' }}>
+           <ButtonGrid buttons={buttons}/>
 
             {showRecommendation && <Recommendation cartId={cartId} />}
             {showAllergens && <Allergen cartId={cartId} />}
             {showNutritionalValue && <DesiredNutrition cartId={cartId} />}
+            {shoppingCart.productsList.length > 0 && (
+                <>
+                    <Typography variant="h6">Nutritional value of cart:</Typography>
+                    <Typography>Calories: {calculatedCalories} kcal</Typography>
+                    {Object.entries(calculatedNutritionalValue)
+                        .sort(([a], [b]) => a.localeCompare(b))
+                        .map(([nutrientName, nutrientValue], index) => (
+                            <Typography key={index}>
+                                {nutrientName}: {nutrientValue}g
+                            </Typography>
+                        ))}
+                </>
+            )}
 
             <Typography variant="h4" gutterBottom>
                 Product List:
@@ -91,6 +116,11 @@ const ShoppingCart = () => {
                     ))}
                 </TableBody>
             </Table>
+            {shoppingCart.productsList.length === 0 && (
+                <Typography variant="h6" gutterBottom>
+                    Your shopping cart is empty.
+                </Typography>
+            )}
         </Container>
     );
 };
