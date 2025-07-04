@@ -93,7 +93,6 @@ export const useProductData = () => {
 
     };
     const markFavoriteProduct = async (product) => {
-        // Optimistically update favoriteProducts with product objects
         setFavoriteProducts((prev) => {
             const exists = prev.find((p) => p.id === product.id);
             if (exists) {
@@ -102,10 +101,7 @@ export const useProductData = () => {
                 return [...prev, product];
             }
         });
-        // Update backend, but do not set loading or re-fetch immediately
         await postFavoriteProduct(product.id);
-        // Optionally, re-fetch in the background if you want to sync with backend
-        // handleFetchFavoriteProducts();
     };
 
    useEffect(() => {

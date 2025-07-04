@@ -41,9 +41,11 @@ const ProductPage = () => {
     const [open, setOpen] = React.useState(false);
     const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
 
+    const handleRemoveFavoriteProduct = (product) => {
+        markFavoriteProduct(product);
+    }
 
     const handleOpenAndClose = () => {
-
         setOpen(!open);
         setIsDrawerOpen(!isDrawerOpen);
     };
@@ -157,12 +159,23 @@ const ProductPage = () => {
                         </TableBody>
                     </Table>
                     <Drawer
+                        sx={{
+                            width: 300,
+                            flexShrink: 0,
+                            '& .MuiDrawer-paper': {
+                                width: 300,
+                                boxSizing: 'border-box',
+                            },
+                        }}
                         anchor={'right'}
                         open={isDrawerOpen}
                         onClose={handleClose}>
+
                         <Favorites
                         favoriteProducts={favoriteProducts}
-                    /></Drawer>
+                        onRemoveFavorite={handleRemoveFavoriteProduct}
+                        />
+                    </Drawer>
 
                     <Pagination
                         count={Math.ceil(filteredProducts.length / productsPerPage)}
