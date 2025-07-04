@@ -9,10 +9,12 @@ import {
     TableCell,
     TableBody,
     Container,
-    Pagination, IconButton
+    Pagination, IconButton, Drawer, Box
 } from '@mui/material';
 import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
+import StarRateRoundedIcon from '@mui/icons-material/StarRateRounded';
 import { ButtonGrid } from './layout/buttonGrid';
+import Favorites from "./dialogs/favorites";
 
 const ProductPage = () => {
     const {
@@ -31,8 +33,25 @@ const ProductPage = () => {
         handlePageChange,
         productsPerPage,
         currentPage,
-        currentProducts
+        currentProducts,
+        favoriteProducts,
+        markFavoriteProduct,
     } = useProductData();
+
+    const [open, setOpen] = React.useState(false);
+    const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
+
+
+    const handleOpenAndClose = () => {
+
+        setOpen(!open);
+        setIsDrawerOpen(!isDrawerOpen);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+        setIsDrawerOpen(false);
+    };
 
     const buttons = [
         {
@@ -43,6 +62,10 @@ const ProductPage = () => {
             label: 'Get Product List',
             onClick: handleFetchProductListFromApi,
 
+        },
+        {
+            label: 'Favorites',
+            onClick: handleOpenAndClose,
         }
     ]
 
@@ -81,21 +104,19 @@ const ProductPage = () => {
                                     <TableCell>{product.productName}</TableCell>
                                     <TableCell>{product.calories}</TableCell>
                                     <TableCell>
-                                        <ul style={{ paddingLeft: '20px' }}>
-                                            {product.nutritionalInfo && Array.isArray(product.nutritionalInfo) ? (
-                                                product.nutritionalInfo.map((nutrient, index) => (
-                                                    <li key={index}>
-                                                        {nutrient.nutrientName}: {nutrient.nutrientValue}
-                                                    </li>
-                                                ))
-                                            ) : (
-                                                <li>No nutritional info available</li>
-                                            )}
-                                        </ul>
+                                        {product.nutritionalInfo && Array.isArray(product.nutritionalInfo) ? (
+                                            product.nutritionalInfo.map((nutrient, index) => (
+                                                <Box key={index}>
+                                                    {nutrient.nutrientName}: {nutrient.nutrientValue}
+                                                </Box>
+                                            ))
+                                        ) : (
+                                            <Box>No nutritional info available</Box>
+                                        )}
                                     </TableCell>
                                     <TableCell>
                                         {addedProducts.has(product.id) ? (
-                                            <div style={{ marginTop: '10px' }}>
+                                            <Box style={{ marginTop: '10px' }}>
                                                 <TextField
                                                     type="number"
                                                     value={quantity[product.id] || 1}
@@ -110,7 +131,7 @@ const ProductPage = () => {
                                                 >
                                                     Confirm
                                                 </Button>
-                                            </div>
+                                            </Box>
                                         ) : (
                                             <Button
                                                 variant="contained"
@@ -121,11 +142,28 @@ const ProductPage = () => {
                                             </Button>
                                         )}
                                     </TableCell>
-                                    <TableCell><IconButton><StarBorderRoundedIcon/></IconButton></TableCell>
+                                    <TableCell>
+                                        <IconButton onClick={() => markFavoriteProduct(product)}>
+                                            {favoriteProducts.some((p) => p.id === product.id) ? (
+                                                <StarRateRoundedIcon sx={{ color: '#FFD600' }} />
+                                            ) : (
+                                                <StarBorderRoundedIcon />
+                                            )}
+                                        </IconButton>
+                                    </TableCell>
+
                                 </TableRow>
                             ))}
                         </TableBody>
                     </Table>
+                    <Drawer
+                        anchor={'right'}
+                        open={isDrawerOpen}
+                        onClose={handleClose}>
+                        <Favorites
+                        favoriteProducts={favoriteProducts}
+                    /></Drawer>
+
                     <Pagination
                         count={Math.ceil(filteredProducts.length / productsPerPage)}
                         page={currentPage}

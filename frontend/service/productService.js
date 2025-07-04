@@ -35,3 +35,21 @@ export async function fetchProductListFromApi(){
     const data = await response.json();
     return data;
 }
+
+export async function postFavoriteProduct(productId) {
+    const response = await fetch(`${gateway}/product/setFavorite/${productId}`, {
+        method: 'POST',
+    });
+    if (!response.ok) {
+        throw new Error('Failed to add product to favorites.');
+    }
+    return response.ok;
+}
+export async function fetchFavoriteProducts() {
+    const response = await fetch(`${gateway}/product/favorite`);
+    if (!response.ok) {
+        throw new Error('Failed to fetch favorite products.');
+    }
+    const data = await response.json();
+    return data;
+}

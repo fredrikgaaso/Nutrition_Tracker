@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
-import { fetchProducts, handleAddProduct, fetchProductListFromApi } from '../service/productService';
+import { fetchProducts, handleAddProduct, fetchProductListFromApi, postFavoriteProduct, fetchFavoriteProducts} from '../service/productService';
 
 export const useProductData = () => {
     const { cartId } = useParams();
@@ -12,6 +12,7 @@ export const useProductData = () => {
     const [addedProducts, setAddedProducts] = useState(new Set());
     const [quantity, setQuantity] = useState({});
     const [currentPage, setCurrentPage] = useState(1);
+    const [favoriteProducts, setFavoriteProducts] = useState([]);
     const productsPerPage = 10;
     const indexOfLastProduct = currentPage * productsPerPage;
     const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
@@ -77,8 +78,39 @@ export const useProductData = () => {
             setLoading(false);
         }
     }
+    const handleFetchFavoriteProducts = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+            const data = await fetchFavoriteProducts();
+            setFavoriteProducts(data);
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+        console.log(favoriteProducts);
+
+    };
+    const markFavoriteProduct = async (product) => {
+        // Optimistically update favoriteProducts with product objects
+        setFavoriteProducts((prev) => {
+            const exists = prev.find((p) => p.id === product.id);
+            if (exists) {
+                return prev.filter((p) => p.id !== product.id);
+            } else {
+                return [...prev, product];
+            }
+        });
+        // Update backend, but do not set loading or re-fetch immediately
+        await postFavoriteProduct(product.id);
+        // Optionally, re-fetch in the background if you want to sync with backend
+        // handleFetchFavoriteProducts();
+    };
+
    useEffect(() => {
         handleFetchProducts();
+        handleFetchFavoriteProducts();
        }, []);
 
 
@@ -103,7 +135,10 @@ export const useProductData = () => {
         handlePageChange,
         productsPerPage,
         currentPage,
-        currentProducts
+        currentProducts,
+        favoriteProducts,
+        markFavoriteProduct,
+        fetchFavoriteProducts
 
     };
 

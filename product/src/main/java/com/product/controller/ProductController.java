@@ -3,7 +3,6 @@ package com.product.controller;
 import com.product.model.Product;
 import com.product.service.ProductApiService;
 import com.product.service.ProductService;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -62,5 +61,13 @@ public class ProductController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+    @GetMapping("/favorite")
+    public List<Product> getFavoriteProducts() {
+        List<Product> favoriteProducts = productService.findAllProducts().stream()
+                .filter(Product::isFavorite)
+                .toList();
+        log.info("Retrieved {} favorite products", favoriteProducts);
+        return favoriteProducts;
     }
 }
