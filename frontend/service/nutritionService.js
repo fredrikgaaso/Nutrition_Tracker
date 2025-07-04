@@ -1,3 +1,5 @@
+const gateway = import.meta.env.VITE_API_BASE_URL;
+
 export async function fetchNutritionalValue(cartId, desiredProtein, desiredCarbs, desiredFat) {
     console.log(`Setting desired nutritional values: Protein=${desiredProtein}, Carbs=${desiredCarbs}, Fat=${desiredFat}`);
     console.log(`Request body:`, JSON.stringify({
@@ -5,7 +7,7 @@ export async function fetchNutritionalValue(cartId, desiredProtein, desiredCarbs
         desiredCarbs: desiredCarbs,
         desiredFat: desiredFat,
     }));
-    const response = await fetch(`http://localhost:8000/cart/desiredNutrients/${cartId}`, {
+    const response = await fetch(`${gateway}/cart/desiredNutrients/${cartId}`, {
         method: "POST",
         headers: {
             'Content-Type': 'application/json',

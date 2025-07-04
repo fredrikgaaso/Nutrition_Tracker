@@ -1,5 +1,7 @@
+const gateway = import.meta.env.VITE_API_BASE_URL;
+
 export async function fetchCarts () {
-    const response = await fetch('http://localhost:8000/cart/all');
+    const response = await fetch(`${gateway}/cart/all`);
     if (!response.ok) {
         throw new Error('Failed to fetch shopping carts');
     }
@@ -8,7 +10,7 @@ export async function fetchCarts () {
     return data;
 }
 export async function createNewCart () {
-    const response = await fetch('http://localhost:8000/cart/create', {
+    const response = await fetch(`${gateway}/cart/create`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

@@ -1,7 +1,9 @@
+const gateway = import.meta.env.VITE_API_BASE_URL;
+
 export async function setAllergens(cartId, selectedAllergen) {
         console.log(`Setting allergens for cart ${cartId}:`, selectedAllergen);
         console.log(`Request body:`, JSON.stringify(selectedAllergen));
-        const response = await fetch(`http://localhost:8000/cart/setAllergens/${cartId}`, {
+        const response = await fetch(`${gateway}/cart/setAllergens/${cartId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

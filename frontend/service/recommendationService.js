@@ -1,5 +1,7 @@
+const gateway = import.meta.env.VITE_API_BASE_URL;
+
 export async function fetchRecommendations(cartId) {
-    const response = await fetch(`http://localhost:8000/recommendation/update/${cartId}`);
+    const response = await fetch(`${gateway}/recommendation/update/${cartId}`);
     if (!response.ok) {
         throw new Error('Failed to fetch recommendations');
     }

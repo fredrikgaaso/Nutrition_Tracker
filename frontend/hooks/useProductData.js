@@ -11,10 +11,22 @@ export const useProductData = () => {
     const [error, setError] = useState(null);
     const [addedProducts, setAddedProducts] = useState(new Set());
     const [quantity, setQuantity] = useState({});
+    const [currentPage, setCurrentPage] = useState(1);
+    const productsPerPage = 10;
+    const indexOfLastProduct = currentPage * productsPerPage;
+    const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
 
+    const sanitizeSearchTerm = (term) => {
+        return term.replace(/[^a-zA-Z0-9æøå\s]/g, '').trim();
+    }
     const filteredProducts = products.filter((product) =>
-        product.productName.toLowerCase().includes(searchTerm.toLowerCase()));
+        sanitizeSearchTerm(product.productName).toLowerCase().includes(searchTerm.toLowerCase()));
 
+    const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+
+    const handlePageChange = (event, value) => {
+        setCurrentPage(value);
+    }
     const handleQuantityChange = (productId, value) => {
         setQuantity((prev) => ({ ...prev, [productId]: value }));
     };
@@ -28,6 +40,13 @@ export const useProductData = () => {
           const response = await handleAddProduct(productId, cartId, quantity[productId] || 1);
             if (response) {
                 setAddedProducts((prev) => new Set(prev).add(productId));
+                    setAddedProducts((prev) => {
+                        const newSet = new Set(prev);
+                        newSet.delete(productId);
+                        return newSet;
+                    });
+
+
             }
         } catch (err) {
             console.error('Error adding product to cart:', err);
@@ -62,6 +81,8 @@ export const useProductData = () => {
         handleFetchProducts();
        }, []);
 
+
+
     return {
         searchTerm,
         setSearchTerm,
@@ -78,7 +99,12 @@ export const useProductData = () => {
         handleAddProductToCart,
         handleFetchProductListFromApi,
         handleFetchProducts,
-        handleNavigateToCart
+        handleNavigateToCart,
+        handlePageChange,
+        productsPerPage,
+        currentPage,
+        currentProducts
+
     };
 
 }
