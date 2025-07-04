@@ -24,6 +24,7 @@ public class Product {
     private String foodGroup;
     private String parentGroup;
     private double calories;
+    private boolean isFavorite;
 
 
 }

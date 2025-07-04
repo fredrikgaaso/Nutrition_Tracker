@@ -53,4 +53,14 @@ public class ProductController {
         return productService.findAllProducts();
     }
 
+    @PostMapping("/setFavorite/{id}")
+    public ResponseEntity<Product> setFavorite(@PathVariable Long id) {
+        if (id != null && productService.findOneProductById(id) != null) {
+            log.info("Setting favorite for product with id: {}", id);
+        Product product = productService.setFavorite(id);
+            return ResponseEntity.ok(product);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

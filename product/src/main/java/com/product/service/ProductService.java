@@ -30,4 +30,16 @@ public class ProductService {
         return productRepo.findAll();
 
     }
+    public Product setFavorite(Long id) {
+        Product product = productRepo.findOneProductById(id);
+        if (product != null) {
+                if (product.isFavorite()) {
+                    product.setFavorite(false);
+                } else {
+                    product.setFavorite(true);
+                }
+            productRepo.save(product);
+        }
+        return product;
+    }
 }
