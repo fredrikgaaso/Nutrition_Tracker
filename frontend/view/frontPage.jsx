@@ -32,7 +32,7 @@ const FrontPage = () => {
             </div>
             <Button
                 variant="contained"
-                color="secondary"
+                color="primary"
                 onClick={handleCreateNewCart}
                 style={{ marginTop: '16px' }}
             >
