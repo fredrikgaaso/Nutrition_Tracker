@@ -15,10 +15,13 @@ import {
     List,
     ListItem,
     Container,
-    Drawer
+    Drawer, Box
 } from '@mui/material';
 import { ButtonGrid } from "./layout/buttonGrid";
-import Favorites from "./dialogs/favorites";
+import Favorites from "./drawer/favorites";
+import {TopBar} from "./layout/topBar";
+import AllergenDialog from "./dialog/allergenDialog";
+import DesiredNutritionDialog from "./dialog/desiredNutritionDialog";
 
 const ShoppingCart = () => {
     const {
@@ -47,7 +50,13 @@ const ShoppingCart = () => {
     } = useProductData();
 
     const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
+    const [isAllergenDialogOpen, setIsAllergenDialogOpen] = React.useState(false);
+    const [isNutritionalDialogOpen, setIsNutritionalDialogOpen] = React.useState(false);
+    const [openNutritionalDialog, setOpenNutritionalDialog] = React.useState(false);
+    const [openAllergenDialog, setOpenAllergenDialog] = React.useState(false);
     const [open, setOpen] = React.useState(false);
+    const title = "Shopping Cart";
+    const subtitle = "Manage your shopping cart";
     const handleRemoveFavoriteProduct = (product) => {
         markFavoriteProduct(product);
     }
@@ -63,8 +72,26 @@ const ShoppingCart = () => {
         fetchShoppingCartData();
     }
 
+    const handleCloseAllergenDialog = () => {
+        setOpenAllergenDialog(false);
+        setIsAllergenDialogOpen(false);
 
-    const handleOpenAndClose = () => {
+    }
+    const handleCloseNutritionalDialog = () => {
+        setOpenNutritionalDialog(false);
+        setIsNutritionalDialogOpen(false);
+    }
+    const handleOpenAndCloseNutritionalDialog = () => {
+        setOpenNutritionalDialog(!openNutritionalDialog);
+        setIsNutritionalDialogOpen(!isNutritionalDialogOpen);
+    }
+    const handleOpenAndCloseAllergenDialog = () => {
+        setOpenAllergenDialog(!openAllergenDialog);
+        setIsAllergenDialogOpen(!isAllergenDialogOpen);
+
+    }
+
+    const handleOpenAndCloseFavorites = () => {
         setOpen(!open);
         setIsDrawerOpen(!isDrawerOpen);
     };
@@ -76,6 +103,24 @@ const ShoppingCart = () => {
 
     const buttons = [
         {
+            label: 'Allergens',
+            onClick: handleOpenAndCloseAllergenDialog,
+        },
+        {
+            label: 'Add Desired Nutrition',
+            onClick: handleOpenAndCloseNutritionalDialog,
+        },
+        {
+            label: 'Favorites',
+            onClick: handleOpenAndCloseFavorites,
+        },
+        {
+            label: showRecommendation ? 'Hide Recommendations' : 'Get Recommendations',
+            onClick: handleToggleRecommendation,
+        },
+        ];
+    const topBarButtons = [
+        {
             label: 'Go back to front page',
             onClick: handleNavigateToFrontpage,
         },
@@ -83,30 +128,15 @@ const ShoppingCart = () => {
             label: 'Go to Product Page',
             onClick: handleNavigateToProduct,
         },
-        {
-            label: showAllergens ? 'Hide Allergens' : 'Add Allergens',
-            onClick: handleToggleAllergens,
-        },
-        {
-            label: showRecommendation ? 'Hide Recommendations' : 'Get Recommendations',
-            onClick: handleToggleRecommendation,
-        },
-        {
-            label: showNutritionalValue ? 'Hide Nutritional Value' : 'Add nutritional value',
-            onClick: handleToggleNutritionalValue,
-        },
-        {
-            label: 'Show Favorites',
-            onClick: handleOpenAndClose,
-        }
-        ];
+    ]
 
     if (error) return <Typography color="error">{error}</Typography>;
     if (!shoppingCart || !shoppingCart.productsList) return <Typography>No shopping cart found</Typography>;
 
     return (
         <Container sx={{ marginTop: '20px', marginBottom: '20px' }}>
-           <ButtonGrid buttons={buttons}/>
+            <Box sx={{marginBottom: '80px'}}><TopBar title={title} subtitle={subtitle} topBarButtons={topBarButtons} /></Box>
+            <ButtonGrid buttons={buttons}/>
 
             {showRecommendation && <Recommendation cartId={cartId} />}
             {showAllergens && <Allergen cartId={cartId} />}
@@ -182,7 +212,6 @@ const ShoppingCart = () => {
                 anchor={'right'}
                 open={isDrawerOpen}
                 onClose={handleClose}>
-
                 <Favorites
                     favoriteProducts={favoriteProducts}
                     handleRemoveFavoriteProduct={handleRemoveFavoriteProduct}
@@ -191,11 +220,14 @@ const ShoppingCart = () => {
                     cartId={cartId}
                 />
             </Drawer>
+            <DesiredNutritionDialog open={isNutritionalDialogOpen} onClose={handleOpenAndCloseNutritionalDialog} />
+
             {shoppingCart.productsList.length === 0 && (
                 <Typography variant="h6" gutterBottom>
                     Your shopping cart is empty.
                 </Typography>
             )}
+            <AllergenDialog open={isAllergenDialogOpen} onClose={handleCloseAllergenDialog} />
         </Container>
     );
 };

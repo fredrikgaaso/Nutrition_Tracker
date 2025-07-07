@@ -14,7 +14,8 @@ import {
 import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
 import StarRateRoundedIcon from '@mui/icons-material/StarRateRounded';
 import { ButtonGrid } from './layout/buttonGrid';
-import Favorites from "./dialogs/favorites";
+import Favorites from "./drawer/favorites";
+import {TopBar} from "./layout/topBar";
 
 const ProductPage = () => {
     const {
@@ -40,7 +41,8 @@ const ProductPage = () => {
 
     const [open, setOpen] = React.useState(false);
     const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
-
+    const title = "Products";
+    const subtitle = "Browse all available products";
     const handleRemoveFavoriteProduct = (product) => {
         markFavoriteProduct(product);
     }
@@ -57,10 +59,6 @@ const ProductPage = () => {
 
     const buttons = [
         {
-            label: 'Back to Cart',
-            onClick: handleNavigateToCart,
-        },
-        {
             label: 'Get Product List',
             onClick: handleFetchProductListFromApi,
 
@@ -70,12 +68,20 @@ const ProductPage = () => {
             onClick: handleOpenAndClose,
         }
     ]
+    const topBarButtons = [
+        {
+            label: 'Back to Cart',
+            onClick: handleNavigateToCart,
+        },
+    ]
 
     if (error) return <p>{error}</p>;
     if (loading) return <p>Loading...</p>;
 
     return (
         <Container sx={{ marginTop: '20px', marginBottom: '20px' }}>
+            <Box sx={{marginBottom: '80px'}}><TopBar title={title} subtitle={subtitle} topBarButtons={topBarButtons} /></Box>
+
             <ButtonGrid buttons={buttons} />
             <Container sx={{ marginTop: '20px', marginBottom: '20px' }}>
                 <TextField
