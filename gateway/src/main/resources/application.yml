@@ -51,6 +51,7 @@ spring:
               - "GET"
               - "POST"
               - "OPTIONS"
+              - "DELETE"
             allow-credentials: true
 
       default-filters:
