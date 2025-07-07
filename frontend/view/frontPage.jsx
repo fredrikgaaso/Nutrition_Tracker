@@ -1,9 +1,25 @@
 import React from 'react';
 import { useFontPageData } from "../hooks/usefontPageData";
-import { Button, Typography, Container, Card, CardContent } from '@mui/material';
+import {Button, Typography, Container, Card, CardContent, IconButton} from '@mui/material';
+import NewCartDialog from "./dialog/newCartDialog";
+import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
+import DeleteRounded from "@mui/icons-material/DeleteRounded";
 
 const FrontPage = () => {
-    const { carts, error, handleRedirect, handleCreateNewCart } = useFontPageData();
+    const { carts, error, handleRedirect, handleCreateNewCart, handleDeleteCart } = useFontPageData();
+    const [openNewCartDialog, setOpenNewCartDialog] = React.useState(false);
+    const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
+
+
+    const handleOpenNewCartDialog = () => {
+        setIsDrawerOpen(true);
+        setOpenNewCartDialog(true);
+    }
+    const handleCloseNewCartDialog = () => {
+        setIsDrawerOpen(false);
+        setOpenNewCartDialog(false);
+    }
+
 
     return (
         <Container>
@@ -24,20 +40,26 @@ const FrontPage = () => {
                                 color="primary"
                                 onClick={() => handleRedirect(cart.id)}
                             >
-                                Go to Shopping Cart {cart.id}
+                                Go to Shopping Cart {cart.cartName}
                             </Button>
-                        </CardContent>
+                            <IconButton
+                                onClick={()=> handleDeleteCart(cart.id)}
+                            >
+                                <DeleteRounded />
+                            </IconButton>
+                    </CardContent>
                     </Card>
                 ))}
             </div>
             <Button
                 variant="contained"
                 color="primary"
-                onClick={handleCreateNewCart}
+                onClick={handleOpenNewCartDialog}
                 style={{ marginTop: '16px' }}
             >
                 Create new cart
             </Button>
+            <NewCartDialog handleCreateNewCart={handleCreateNewCart} onClose={handleCloseNewCartDialog} open={openNewCartDialog} handleRedirect={handleRedirect}/>
         </Container>
     );
 };

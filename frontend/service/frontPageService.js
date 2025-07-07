@@ -9,12 +9,15 @@ export async function fetchCarts () {
     console.log('Fetched shopping carts:', data);
     return data;
 }
-export async function createNewCart () {
+export async function createNewCart (cartName) {
     const response = await fetch(`${gateway}/cart/create`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
+        body: JSON.stringify({
+          cartName,
+        }),
     });
 
     if (!response.ok) {
@@ -24,4 +27,14 @@ export async function createNewCart () {
     const newCart = await response.json();
     console.log('Created new shopping cart:', newCart);
     return newCart;
+}
+
+export async function deleteCart (cartId) {
+    const response = await fetch(`${gateway}/cart/delete/${cartId}`, {
+        method: 'DELETE',
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to delete the cart');
+    }
 }
