@@ -35,8 +35,9 @@ export const useProductData = () => {
         navigate(`/shoppingCart/${cartId}`);
     }
 
-    const handleAddProductToCart = async (e, productId) => {
+    const handleAddProductToCart = async (e, productId, cartId) => {
         e.preventDefault();
+        console.log(`Adding product ${productId}, cart: ${cartId}, quantity: ${quantity[productId] || 1}` );
         try {
           const response = await handleAddProduct(productId, cartId, quantity[productId] || 1);
             if (response) {

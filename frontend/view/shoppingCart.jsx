@@ -1,14 +1,29 @@
 import React from 'react';
 import { useShoppingCartData } from "../hooks/useShoppingCartData";
+import { useProductData} from "../hooks/useProductData";
 import Recommendation from "./recommendation";
 import Allergen from "./allergen";
 import DesiredNutrition from "./desiredNutrition";
-import { Button, Typography, Table, TableHead, TableRow, TableCell, TableBody, List, ListItem, Container } from '@mui/material';
+import {
+    Button,
+    Typography,
+    Table,
+    TableHead,
+    TableRow,
+    TableCell,
+    TableBody,
+    List,
+    ListItem,
+    Container,
+    Drawer
+} from '@mui/material';
 import { ButtonGrid } from "./layout/buttonGrid";
+import Favorites from "./dialogs/favorites";
 
 const ShoppingCart = () => {
     const {
         shoppingCart,
+        setShoppingCart,
         cartId,
         error,
         showRecommendation,
@@ -21,8 +36,43 @@ const ShoppingCart = () => {
         handleToggleNutritionalValue,
         handleDeleteProductFromCart,
         calculatedNutritionalValue,
-        calculatedCalories
+        calculatedCalories,
+        fetchShoppingCartData
     } = useShoppingCartData();
+
+    const {
+        markFavoriteProduct,
+        favoriteProducts,
+        handleAddProductToCart,
+    } = useProductData();
+
+    const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
+    const [open, setOpen] = React.useState(false);
+    const handleRemoveFavoriteProduct = (product) => {
+        markFavoriteProduct(product);
+    }
+    const handleAddProductToCartFromFavorite = (e, product, cartId) => {
+    e.preventDefault();
+        handleAddProductToCart(e, product, cartId);
+        setShoppingCart(prevCart => ({
+            ...prevCart,
+            productsList: prevCart.productsList.some(p => p.id === product.id)
+                ? prevCart.productsList
+                : [...prevCart.productsList, product]
+        }));
+        fetchShoppingCartData();
+    }
+
+
+    const handleOpenAndClose = () => {
+        setOpen(!open);
+        setIsDrawerOpen(!isDrawerOpen);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+        setIsDrawerOpen(false);
+    };
 
     const buttons = [
         {
@@ -44,6 +94,10 @@ const ShoppingCart = () => {
         {
             label: showNutritionalValue ? 'Hide Nutritional Value' : 'Add nutritional value',
             onClick: handleToggleNutritionalValue,
+        },
+        {
+            label: 'Show Favorites',
+            onClick: handleOpenAndClose,
         }
         ];
 
@@ -116,6 +170,27 @@ const ShoppingCart = () => {
                     ))}
                 </TableBody>
             </Table>
+            <Drawer
+                sx={{
+                    width: 300,
+                    flexShrink: 0,
+                    '& .MuiDrawer-paper': {
+                        width: 300,
+                        boxSizing: 'border-box',
+                    },
+                }}
+                anchor={'right'}
+                open={isDrawerOpen}
+                onClose={handleClose}>
+
+                <Favorites
+                    favoriteProducts={favoriteProducts}
+                    handleRemoveFavoriteProduct={handleRemoveFavoriteProduct}
+                    handleAddProductToCartFromFavorite={handleAddProductToCartFromFavorite}
+                    addButton={true}
+                    cartId={cartId}
+                />
+            </Drawer>
             {shoppingCart.productsList.length === 0 && (
                 <Typography variant="h6" gutterBottom>
                     Your shopping cart is empty.
