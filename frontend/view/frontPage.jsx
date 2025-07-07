@@ -43,6 +43,10 @@ const FrontPage = () => {
                                 Go to Shopping Cart {cart.cartName}
                             </Button>
                             <IconButton
+                                sx={{
+                                    color: "error.main",
+
+                                }}
                                 onClick={()=> handleDeleteCart(cart.id)}
                             >
                                 <DeleteRounded />
