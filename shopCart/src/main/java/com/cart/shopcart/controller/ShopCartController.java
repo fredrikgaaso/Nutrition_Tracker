@@ -4,6 +4,7 @@ import com.cart.shopcart.dto.DesiredNutritionDTO;
 import com.cart.shopcart.eventdriven.ProductEvent;
 import com.cart.shopcart.model.ShopCart;
 import com.cart.shopcart.model.ShopProduct;
+import com.cart.shopcart.request.CartRequest;
 import com.cart.shopcart.service.CartService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -72,13 +73,19 @@ public class ShopCartController {
     }
 
     @PostMapping("/create")
-    public ShopCart createNewCart() {
-        return cartService.createNewCart();
+    public ShopCart createNewCart(@RequestBody CartRequest cartRequest) {
+        return cartService.createNewCart(cartRequest.getCartName());
     }
-
 
     @GetMapping("/all")
     public List<ShopCart> getAllCarts() {
         return cartService.getAllCarts();
     }
+
+    @DeleteMapping("/delete/{cartId}")
+    public void deleteCart(@PathVariable Long cartId) {
+        log.info("Deleting cart with ID: {}", cartId);
+        cartService.deleteCart(cartId);
+    }
 }
+

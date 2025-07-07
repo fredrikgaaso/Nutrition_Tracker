@@ -14,6 +14,7 @@ public class ShopCart{
     @Id
     @GeneratedValue
     private Long id;
+    private String cartName;
     @ManyToMany
     private List<ShopProduct> productsList;
     @ElementCollection

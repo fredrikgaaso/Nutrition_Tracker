@@ -42,9 +42,20 @@ public class CartService {
         return shopCartRepo.findOneCartById(cartId);
     }
 
-    public ShopCart createNewCart() {
+    public ShopCart createNewCart(String cartName) {
             ShopCart cart = new ShopCart();
+            cart.setCartName(cartName);
             return shopCartRepo.save(cart);
+    }
+
+    public void deleteCart(Long cartId) {
+        ShopCart cart = shopCartRepo.findOneCartById(cartId);
+        if (cart != null) {
+            log.info("Deleting cart with ID: {}", cartId);
+            shopCartRepo.delete(cart);
+        } else {
+            log.warn("Cart with ID: {} not found", cartId);
+        }
     }
 
     public void removeProduct(ProductEvent productEvent) {
