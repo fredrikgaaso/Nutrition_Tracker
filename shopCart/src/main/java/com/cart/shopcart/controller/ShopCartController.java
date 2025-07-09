@@ -36,15 +36,16 @@ public class ShopCartController {
     }
 
     @PostMapping("/add")
-    public void addProductToCart(@RequestBody ProductEvent productEvent) {
-       Long cartId = productEvent.getCartId();
-       Long productId = productEvent.getProductId();
-       int quantity = productEvent.getQuantity();
-       if (cartId == null || productId == null || quantity == 0) {
-           log.error("Invalid input: cartId={}, productId={}, quantity={}", cartId, productId, quantity);
-           throw new IllegalArgumentException("Invalid input");
-         }
+    public ShopCart addProductToCart(@RequestBody ProductEvent productEvent) {
+        Long cartId = productEvent.getCartId();
+        Long productId = productEvent.getProductId();
+        int quantity = productEvent.getQuantity();
+        if (cartId == null || productId == null || quantity == 0) {
+            log.error("Invalid input: cartId={}, productId={}, quantity={}", cartId, productId, quantity);
+            throw new IllegalArgumentException("Invalid input");
+        }
         cartService.addProductToCart(productEvent);
+        return cartService.getOneShopCart(cartId);
     }
 
     @PostMapping("/remove")

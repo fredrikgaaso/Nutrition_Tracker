@@ -45,6 +45,7 @@ spring:
           '[/**]':
             allowed-origins:
               - "http://localhost:1234"
+              - "http://100.127.68.23"
             allowed-headers:
               - "*"
             allowed-methods:

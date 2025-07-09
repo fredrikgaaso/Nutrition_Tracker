@@ -43,9 +43,9 @@ public class CartService {
     }
 
     public ShopCart createNewCart(String cartName) {
-            ShopCart cart = new ShopCart();
-            cart.setCartName(cartName);
-            return shopCartRepo.save(cart);
+        ShopCart cart = new ShopCart();
+        cart.setCartName(cartName);
+        return shopCartRepo.save(cart);
     }
 
     public void deleteCart(Long cartId) {
@@ -66,6 +66,7 @@ public class CartService {
         productEventPublisher.publishProductEvent(productEvent);
         shopCartRepo.save(cart);
     }
+
     public void setAllergens(Long cartId, Set<String> allergens) {
         log.info("allergens from setAllergens:" + allergens);
         ShopCart cart = shopCartRepo.findOneCartById(cartId);
@@ -77,7 +78,7 @@ public class CartService {
 
     public void setDesiredNutrients(Long cartId, int desiredProtein, int desiredCarbs, int desiredFat) {
         log.info("Setting desired nutrients for cartId: {}, Protein: {}, Carbs: {}, Fat: {}",
-                 cartId, desiredProtein, desiredCarbs, desiredFat);
+                cartId, desiredProtein, desiredCarbs, desiredFat);
         ShopCart cart = shopCartRepo.findOneCartById(cartId);
         cart.setDesiredProtein(desiredProtein);
         cart.setDesiredCarbs(desiredCarbs);
@@ -86,7 +87,7 @@ public class CartService {
     }
 
 
-    public void addProductToCart(ProductEvent productEvent) {
+    public ShopCart addProductToCart(ProductEvent productEvent) {
         try {
             ShopCart cart = shopCartRepo.findOneCartById(productEvent.getCartId());
             ShopProduct product = productRepo.findById(productEvent.getProductId()).orElseGet(() -> {
@@ -109,6 +110,7 @@ public class CartService {
             productEventPublisher.publishProductEvent(productEvent);
 
             shopCartRepo.saveAndFlush(cart);
+            return cart;
         } catch (Exception e) {
             log.error("Error adding product to cart", e);
             throw new RuntimeException("Failed to add product to cart", e);
